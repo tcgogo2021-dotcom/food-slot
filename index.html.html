@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>台中市北屯區・美食幸運拉霸機</title>
+<style>
+  * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Microsoft JhengHei", sans-serif; }
+  body { margin: 0; padding: 12px 6px; background: linear-gradient(135deg, #121224 0%, #1a2642 100%); color: #fff; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
+  
+  .top-bar { width: 100%; max-width: 960px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 4px; }
+  .region-badge { background: linear-gradient(90deg, #ff6b6b, #ee5253); color: #fff; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 900; box-shadow: 0 2px 8px rgba(238,82,83,0.4); letter-spacing: 0.5px; }
+  .sound-btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,215,0,0.4); color: #ffd700; padding: 5px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: bold; }
+  
+  .header { text-align: center; margin-bottom: 12px; }
+  .header h1 { margin: 0; font-size: 22px; color: #ffd700; text-shadow: 0 2px 10px rgba(255, 215, 0, 0.5); letter-spacing: 1px; }
+  .header p { margin: 4px 0 0; font-size: 12px; color: #b8c4e0; }
+
+  .main-wrapper { display: flex; flex-direction: row; justify-content: center; align-items: stretch; gap: 6px; width: 100%; max-width: 960px; }
+  
+  .ad-column { flex: 1; min-width: 0; max-width: 190px; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; }
+  .ad-title-bar { text-align: center; font-size: 10px; color: #ffd700; font-weight: bold; background: rgba(255,215,0,0.12); padding: 4px 2px; border-radius: 6px; border: 1px solid rgba(255,215,0,0.3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ad-card { flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 10px; padding: 6px 4px; text-decoration: none; color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; transition: transform 0.2s; min-height: 76px; }
+  .ad-card:active { transform: scale(0.97); }
+  .ad-card.vip { border-color: #ffd700; background: linear-gradient(145deg, rgba(255,215,0,0.22), rgba(233,69,96,0.18)); }
+  .ad-card.vacant { border-style: dashed; border-color: rgba(255,215,0,0.45); background: rgba(255,255,255,0.03); }
+  .ad-badge { position: absolute; top: 3px; right: 3px; background: #ffd700; color: #1a1a2e; font-size: 8px; font-weight: 900; padding: 1px 4px; border-radius: 3px; }
+  .ad-badge.hot { background: #ff4757; color: #fff; }
+  .ad-badge.open { background: #2ed573; color: #1a1a2e; }
+  .ad-shop { font-size: 11px; font-weight: 900; color: #fff; margin-top: 8px; margin-bottom: 2px; line-height: 1.2; word-break: break-word; }
+  .ad-offer { font-size: 9.5px; color: #ffeaa7; line-height: 1.2; word-break: break-word; }
+  .ad-vacant-text { font-size: 10px; color: #a4b0be; font-weight: bold; margin-top: 6px; line-height: 1.2; }
+
+  .center-stage { flex: 2.3; min-width: 0; max-width: 440px; display: flex; flex-direction: column; align-items: center; }
+
+  .filter-panel { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 215, 0, 0.35); border-radius: 12px; padding: 10px; width: 100%; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
+  .filter-header { display: flex; justify-content: space-between; align-items: center; }
+  .filter-header label { font-size: 11px; color: #ffd700; font-weight: bold; }
+  .stats-pill { font-size: 10px; color: #7bed9f; background: rgba(46,213,115,0.15); padding: 2px 7px; border-radius: 10px; font-weight: bold; }
+  select { width: 100%; padding: 8px 6px; border-radius: 8px; border: none; background: #fff; color: #1a1a2e; font-size: 13px; font-weight: bold; outline: none; cursor: pointer; }
+
+  .machine { background: linear-gradient(180deg, #e94560 0%, #c81d3b 100%); padding: 10px 8px; border-radius: 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.6), inset 0 2px 5px rgba(255,255,255,0.4); width: 100%; border: 3px solid #ffd700; transition: box-shadow 0.3s; }
+  .machine.jackpot-glow { animation: glowPulse 0.8s infinite alternate; }
+  @keyframes glowPulse { from { box-shadow: 0 0 12px #ffd700; } to { box-shadow: 0 0 28px #ffd700, 0 0 40px #ff4757; } }
+
+  .slots { display: flex; gap: 4px; background: #0f3460; padding: 6px 4px; border-radius: 10px; border: 2px solid #1a1a2e; }
+  .slot-box { flex: 1; min-width: 0; background: #fff; color: #1a1a2e; border-radius: 6px; height: 135px; position: relative; overflow: hidden; box-shadow: inset 0 8px 10px -6px rgba(0,0,0,0.5), inset 0 -8px 10px -6px rgba(0,0,0,0.5); }
+  .slot-label { font-size: 9px; color: #fff; background: rgba(15, 52, 96, 0.9); padding: 2px 0; position: absolute; top: 0; left: 0; right: 0; text-align: center; font-weight: bold; z-index: 10; }
+  
+  .reel-strip { position: absolute; top: 0; left: 0; right: 0; display: flex; flex-direction: column; will-change: transform; }
+  .reel-item { height: 135px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 18px 3px 4px; font-weight: 900; line-height: 1.25; color: #1a1a2e; word-break: break-word; }
+  .reel-emoji { font-size: 20px; margin-bottom: 3px; }
+  .reel-text { font-size: 11px; }
+  .reel-text.med { font-size: 10px; }
+  .reel-text.sm { font-size: 9px; }
+
+  .btn-spin { width: 100%; margin-top: 10px; padding: 12px 6px; font-size: 15px; font-weight: 900; color: #1a1a2e; background: linear-gradient(to bottom, #ffe066, #ffd700); border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 0 #b39700, 0 6px 12px rgba(0,0,0,0.3); transition: all 0.1s; }
+  .btn-spin:active { transform: translateY(3px); box-shadow: 0 1px 0 #b39700; }
+  .btn-spin:disabled { background: #888; box-shadow: none; color: #ccc; cursor: not-allowed; }
+
+  .result-card { display: none; margin-top: 12px; background: rgba(255,255,255,0.12); border: 1.5px solid #ffd700; border-radius: 14px; padding: 12px 10px; width: 100%; text-align: center; animation: fadeIn 0.4s ease; }
+  .res-shop-header { display: flex; justify-content: center; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+  .result-card h3 { margin: 0; color: #ffd700; font-size: 15px; line-height: 1.3; }
+  .dish-count-badge { background: #ff4757; color: #fff; font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: bold; }
+  .res-highlight { font-size: 13px; color: #fff; font-weight: bold; margin: 6px 0; background: rgba(0,0,0,0.25); padding: 6px 8px; border-radius: 8px; }
+  .res-address { font-size: 11px; color: #a4b0be; margin-bottom: 8px; }
+  
+  .menu-showcase { text-align: left; background: rgba(15, 52, 96, 0.6); border: 1px solid rgba(255,215,0,0.25); border-radius: 10px; padding: 8px 10px; margin-bottom: 10px; }
+  .menu-showcase-title { font-size: 11px; color: #ffd700; font-weight: bold; margin-bottom: 6px; display: flex; justify-content: space-between; }
+  .menu-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .menu-tag { background: rgba(255,255,255,0.15); color: #fff; font-size: 11px; padding: 3px 8px; border-radius: 6px; }
+  .menu-tag.picked { background: #ffd700; color: #1a1a2e; font-weight: 900; box-shadow: 0 0 8px rgba(255,215,0,0.6); }
+
+  .btn-map { display: block; width: 100%; background: #00b894; color: #fff; text-decoration: none; padding: 10px 8px; border-radius: 25px; font-weight: bold; font-size: 13px; box-shadow: 0 3px 8px rgba(0,184,148,0.3); }
+
+  .footer-area { margin-top: 16px; text-align: center; width: 100%; max-width: 960px; padding: 10px; border-top: 1px solid rgba(255,255,255,0.1); }
+  .footer-note { font-size: 11px; color: #a4b0be; margin-bottom: 6px; }
+  .btn-partner { display: inline-block; background: rgba(255,215,0,0.15); border: 1px solid #ffd700; color: #ffd700; font-size: 11px; padding: 5px 14px; border-radius: 20px; text-decoration: none; font-weight: bold; cursor: pointer; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  #confettiCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
+</style>
+</head>
+<body>
+
+<canvas id="confettiCanvas"></canvas>
+
+<div class="top-bar">
+  <span class="region-badge">📍 台中市・北屯區首發旗艦站</span>
+  <button class="sound-btn" id="soundToggle" onclick="toggleSound()">🔊 音效：開</button>
+</div>
+
+<div class="header">
+  <h1>🎰 北屯美食幸運拉霸機</h1>
+  <p>專攻北屯商圈精選好店・一鍵決定今天吃什麼</p>
+</div>
+
+<div class="main-wrapper">
+  <!-- 左側 5 格北屯黃金廣告看板 -->
+  <div class="ad-column">
+    <div class="ad-title-bar">🔥 北屯推薦名店</div>
+    <a class="ad-card vip" href="https://www.google.com/maps/search/?api=1&query=台中市北屯區屋馬燒肉崇德店" target="_blank">
+      <span class="ad-badge">VIP置頂</span>
+      <div class="ad-shop">屋馬燒肉 崇德店</div>
+      <div class="ad-offer">北屯燒肉霸主</div>
+    </a>
+    <a class="ad-card" href="https://www.google.com/maps/search/?api=1&query=台中市北屯區丰禾台味風格料理文心崇德店" target="_blank">
+      <span class="ad-badge hot">人氣台菜</span>
+      <div class="ad-shop">丰禾台味 文心崇德</div>
+      <div class="ad-offer">王品旗下傳承台菜</div>
+    </a>
+    <a class="ad-card" href="https://www.google.com/maps/search/?api=1&query=台中市北屯區藏壽司文心崇德店" target="_blank">
+      <span class="ad-badge hot">親子首選</span>
+      <div class="ad-shop">藏壽司 文心崇德</div>
+      <div class="ad-offer">鮮度君迴轉壽司</div>
+    </a>
+    <a class="ad-card vacant" href="javascript:void(0)" onclick="alert('【台中市北屯區・創始黃金廣告位 #4】\n北屯30萬人口精準曝光！歡迎北屯在地餐廳洽談合作！')">
+      <span class="ad-badge open">招商中</span>
+      <div class="ad-vacant-text">➕ 黃金版位招租</div>
+      <div class="ad-offer">北屯創始店優惠</div>
+    </a>
+    <a class="ad-card vacant" href="javascript:void(0)" onclick="alert('【台中市北屯區・創始黃金廣告位 #5】\n北屯30萬人口精準曝光！歡迎北屯在地餐廳洽談合作！')">
+      <span class="ad-badge open">招商中</span>
+      <div class="ad-vacant-text">➕ 黃金版位招租</div>
+      <div class="ad-offer">立即卡位搶曝光</div>
+    </a>
+  </div>
+
+  <!-- 中央主控與拉霸機 -->
+  <div class="center-stage">
+    <div class="filter-panel">
+      <div class="filter-header">
+        <label>🍽️ 選擇北屯料理類型</label>
+        <span class="stats-pill" id="dbStats">收錄 16 家北屯名店</span>
+      </div>
+      <select id="cuisineSelect" onchange="updateStats()">
+        <option value="all">🎲 全部料理隨機抽（全區精選）</option>
+        <option value="台式料理">🇹🇼 台式料理・合菜熱炒</option>
+        <option value="日式料理">🇯🇵 日式料理・拉麵壽司懷石</option>
+        <option value="韓式料理">🇰🇷 韓式料理・烤肉石鍋拌飯</option>
+        <option value="義式西餐">🇮🇹 義式西餐・義大利麵餐酒</option>
+        <option value="火鍋燒肉">🍲 火鍋・精緻燒肉吃到飽</option>
+        <option value="早午餐咖啡">🥐 早午餐・質感咖啡廳</option>
+        <option value="異國南洋">🌏 異國南洋・越式泰式風味</option>
+      </select>
+    </div>
+
+    <div class="machine" id="slotMachine">
+      <div class="slots">
+        <div class="slot-box">
+          <div class="slot-label">第一軸・精選菜色</div>
+          <div class="reel-strip" id="reel1">
+            <div class="reel-item"><span class="reel-emoji">🍽️</span><span class="reel-text">準備開轉</span></div>
+          </div>
+        </div>
+        <div class="slot-box">
+          <div class="slot-label">第二軸・北屯店家</div>
+          <div class="reel-strip" id="reel2">
+            <div class="reel-item"><span class="reel-emoji">🏪</span><span class="reel-text">精選名店</span></div>
+          </div>
+        </div>
+        <div class="slot-box">
+          <div class="slot-label">第三軸・餐點規模</div>
+          <div class="reel-strip" id="reel3">
+            <div class="reel-item"><span class="reel-emoji">📋</span><span class="reel-text">豐富菜色</span></div>
+          </div>
+        </div>
+      </div>
+      <button class="btn-spin" id="spinBtn" onclick="startSpin()">🎰 轉動北屯美食！</button>
+    </div>
+
+    <div class="result-card" id="resultCard">
+      <div class="res-shop-header">
+        <h3 id="resTitle">🎉 今日天選美食！</h3>
+        <span class="dish-count-badge" id="resCountBadge">收錄 8 道招牌菜</span>
+      </div>
+      <div class="res-highlight" id="resDesc">今日天選必點：【招牌菜】</div>
+      <div class="res-address" id="resAddress">📍 台中市北屯區...</div>
+      
+      <div class="menu-showcase">
+        <div class="menu-showcase-title">
+          <span>📖 該店精選完整菜單一覽</span>
+          <span id="menuCountText">共 8 道</span>
+        </div>
+        <div class="menu-tags" id="menuTagsContainer"></div>
+      </div>
+
+      <a class="btn-map" id="mapLink" href="#" target="_blank">📍 立即開啟 Google 地圖導航</a>
+    </div>
+  </div>
+
+  <!-- 右側 5 格北屯黃金廣告看板 -->
+  <div class="ad-column">
+    <div class="ad-title-bar">⭐ 商圈人氣推薦</div>
+    <a class="ad-card vip" href="https://www.google.com/maps/search/?api=1&query=台中市北屯區水相餐聚苑" target="_blank">
+      <span class="ad-badge">VIP置頂</span>
+      <div class="ad-shop">水相餐聚苑</div>
+      <div class="ad-offer">水湳經貿網美義法</div>
+    </a>
+    <a class="ad-card" href="https://www.google.com/maps/search/?api=1&query=台中市北屯區柴火火燄烤鴨館松竹店" target="_blank">
+      <span class="ad-badge hot">必吃烤鴨</span>
+      <div class="ad-shop">柴火火燄烤鴨 松竹</div>
+      <div class="ad-offer">全聚德技法片皮鴨</div>
+    </a>
+    <a class="ad-card" href="https://www.google.com/maps/search/?api=1&query=台中市北屯區JAI宅水湳店" target="_blank">
+      <span class="ad-badge hot">約會首選</span>
+      <div class="ad-shop">JAI宅 義大利麵</div>
+      <div class="ad-offer">森林系超人氣義麵</div>
+    </a>
+    <a class="ad-card vacant" href="javascript:void(0)" onclick="alert('【台中市北屯區・創始黃金廣告位 #9】\n北屯30萬人口精準曝光！歡迎北屯在地餐廳洽談合作！')">
+      <span class="ad-badge open">招商中</span>
+      <div class="ad-vacant-text">➕ 黃金版位招租</div>
+      <div class="ad-offer">曝光權重最高3倍</div>
+    </a>
+    <a class="ad-card vacant" href="javascript:void(0)" onclick="alert('【台中市北屯區・創始黃金廣告位 #10】\n北屯30萬人口精準曝光！歡迎北屯在地餐廳洽談合作！')">
+      <span class="ad-badge open">招商中</span>
+      <div class="ad-vacant-text">➕ 黃金版位招租</div>
+      <div class="ad-offer">歡迎洽詢創始專案</div>
+    </a>
+  </div>
+</div>
+
+<div class="footer-area">
+  <div class="footer-note">🚀 目前開放【台中市・北屯區】首發營運｜西屯區、北區、潭子區即將陸續開站</div>
+  <button class="btn-partner" onclick="alert('【北屯美食拉霸機・創始店家招商合作】\n\n1. 獨立 10 格黃金視覺看板長期曝光\n2. 拉霸轉盤權重加倍推薦（最高提升 3 倍抽中率）\n3. 完整收錄貴店招牌菜單與 Google 地圖一鍵導航\n\n歡迎北屯區餐飲老闆聯繫洽談！')">💼 北屯餐飲店家合作・廣告刊登洽詢</button>
+</div>
+
+<script>
+// 北屯區真實精選餐廳完整資料庫（包含料理分類、店名、地址、完整招牌菜單陣列、廣告權重）
+const beitunDatabase = [
+  {
+    cuisine: "台式料理",
+    emoji: "🍗",
+    shop: "丰禾 台味風格料理 文心崇德店",
+    address: "台中市北屯區文心路四段595號1樓",
+    menus: ["丰禾起家雞", "芋絲香米糕", "金沙海鮮煲", "梅汁梅花肉", "鐵板紅燒豆腐", "鳳梨尬蝦球", "黑麻油燒蛋", "清炒水蓮"],
+    weight: 3
+  },
+  {
+    cuisine: "台式料理",
+    emoji: "🦆",
+    shop: "柴火火燄烤鴨館 松竹店",
+    address: "台中市北屯區松竹路三段26號",
+    menus: ["櫻桃片皮鴨", "酸菜白肉鴨架湯", "鹽酥鴨架", "京醬肉絲", "金沙中卷", "干鍋花椰菜", "蟹黃豆腐煲"],
+    weight: 2
+  },
+  {
+    cuisine: "台式料理",
+    emoji: "🍲",
+    shop: "九號碼頭99食尚熱炒 崇德店",
+    address: "台中市北屯區崇德路三段171號",
+    menus: ["宮保雞丁", "五更腸旺", "蔥爆牛肉", "鳳梨蝦球", "三杯中卷", "客家小炒", "蒜泥白肉", "蛤蜊絲瓜", "麻油松阪豬", "鐵板豆腐"],
+    weight: 2
+  },
+  {
+    cuisine: "台式料理",
+    emoji: "🎋",
+    shop: "竹之鄉風味餐廳",
+    address: "台中市北屯區東山路二段1號",
+    menus: ["招牌耎肉", "竹筒飯", "竹筒蒸蛋", "麻油雞湯", "酥炸溪蝦", "炒山蘇", "白斬土雞"],
+    weight: 2
+  },
+  {
+    cuisine: "日式料理",
+    emoji: "🍣",
+    shop: "藏壽司 文心崇德店",
+    address: "台中市北屯區文心路四段603號",
+    menus: ["炙燒鮭魚肚", "熟成鮪魚", "炙燒起司鮮蝦", "北海道大帆立貝", "茶碗蒸", "炸蝦天婦羅烏龍麵", "豆乳甜甜圈"],
+    weight: 3
+  },
+  {
+    cuisine: "日式料理",
+    emoji: "🍜",
+    shop: "亼拉麵專門店",
+    address: "台中市北屯區昌平路二段12-15巷58號",
+    menus: ["巨蝦濃湯拉麵", "法式干貝雞白湯拉麵", "炙燒叉燒飯", "日式唐揚炸雞", "溏心蛋", "胡麻時蔬"],
+    weight: 2
+  },
+  {
+    cuisine: "日式料理",
+    emoji: "🍢",
+    shop: "吳留手串燒居酒屋 崇德店",
+    address: "台中市北屯區崇德路二段226號",
+    menus: ["明太子雞肉串", "鹽烤松阪豬", "醬燒牛五花串", "午仔魚一夜干", "培根捲鮮干貝", "日式炒烏龍", "帶皮玉米筍"],
+    weight: 2
+  },
+  {
+    cuisine: "日式料理",
+    emoji: "🍱",
+    shop: "雲日食事処",
+    address: "台中市北屯區大連路三段132號",
+    menus: ["厚切炸豬排定食", "照燒雞腿排定食", "鹽烤鯖魚定食", "和風牛肉壽喜燒", "炸蝦天婦羅丼", "茶碗蒸"],
+    weight: 2
+  },
+  {
+    cuisine: "韓式料理",
+    emoji: "🥘",
+    shop: "非常石鍋韓國料理 北屯總店",
+    address: "台中市北屯區北屯路222-11號",
+    menus: ["火烤石鍋拌飯", "海鮮豆腐鍋", "豬肉泡菜鍋", "海鮮煎餅", "春川辣炒雞", "韓式炸雞", "炒海鮮烏龍麵"],
+    weight: 2
+  },
+  {
+    cuisine: "韓式料理",
+    emoji: "🥩",
+    shop: "水赤床韓式烤肉 北屯崇德店",
+    address: "台中市北屯區崇德十路一段300號",
+    menus: ["厚切豬五花烤肉", "伊比利松阪豬", "美國肋眼牛排", "海鮮煎餅", "韓式大醬湯", "辣炒年糕", "拳頭飯糰"],
+    weight: 2
+  },
+  {
+    cuisine: "義式西餐",
+    emoji: "🍝",
+    shop: "JAI宅 義大利麵 水湳店",
+    address: "台中市北屯區中清路二段903號2樓",
+    menus: ["橘醬爆炸蛤蜊義大利麵", "明太子奶油鮮蝦麵", "日式焦糖檸檬炸雞", "麻辣奶油松阪豬筆管麵", "牛肝菌野菇燉飯", "烤牛肉維也納堡"],
+    weight: 3
+  },
+  {
+    cuisine: "義式西餐",
+    emoji: "🥂",
+    shop: "les aqua 水相餐聚苑",
+    address: "台中市北屯區經貿三路二段100號",
+    menus: ["爐烤美國肋眼牛排", "松露野菇燉飯", "干貝青醬義大利麵", "法式油封鴨腿", "火山熔岩起司麵包", "主廚精選甜點"],
+    weight: 3
+  },
+  {
+    cuisine: "火鍋燒肉",
+    emoji: "🔥",
+    shop: "屋馬燒肉 崇德店",
+    address: "台中市北屯區崇德路二段369號",
+    menus: ["日本A5和牛拼盤", "澳洲和牛牛舌", "伊比利豬梅花", "屋馬主廚沙拉", "海鮮粥", "北海道干貝", "哈根達斯冰淇淋"],
+    weight: 3
+  },
+  {
+    cuisine: "火鍋燒肉",
+    emoji: "🥩",
+    shop: "脂本燒肉 ZHIBEN 北屯店",
+    address: "台中市北屯區東山路一段369-6號",
+    menus: ["手切松阪豬", "極上牛小排", "月見和牛板腱", "蔥鹽牛舌", "炙燒比目魚丼飯", "雞湯無限暢飲"],
+    weight: 2
+  },
+  {
+    cuisine: "火鍋燒肉",
+    emoji: "🍲",
+    shop: "北澤壽喜燒吃到飽 崇德店",
+    address: "台中市北屯區崇德路二段140號",
+    menus: ["澳洲和牛吃到飽", "安格斯黑牛", "金湯酸菜魚鍋底", "招牌壽喜燒鍋", "鮮嫩雞腿肉", "新鮮時蔬自助吧"],
+    weight: 2
+  },
+  {
+    cuisine: "早午餐咖啡",
+    emoji: "🥐",
+    shop: "梨子咖啡館 崇德店",
+    address: "台中市北屯區崇德路三段1號",
+    menus: ["花生醬厚片早午餐", "青醬干貝海鮮燉飯", "壽喜燒唐揚雞義大利麵", "水果百匯熱鍋鬆餅", "手沖精品咖啡", "鮮果茶"],
+    weight: 2
+  },
+  {
+    cuisine: "早午餐咖啡",
+    emoji: "☕",
+    shop: "ORIGBLACK 北屯店",
+    address: "台中市北屯區順興街9號",
+    menus: ["香料爐烤雞腿排早午餐", "BBQ手撕豬薯來堡", "黑糖肉桂捲", "西西里檸檬咖啡", "焦糖布丁", "手沖單品"],
+    weight: 2
+  },
+  {
+    cuisine: "異國南洋",
+    emoji: "🍜",
+    shop: "陳記越南麵食",
+    address: "台中市北屯區昌平路一段",
+    menus: ["生牛肉河粉", "炸春捲涼拌米粉", "越式法國麵包", "酸辣海鮮河粉", "涼拌木瓜絲", "越式滴漏咖啡"],
+    weight: 2
+  }
+];
+
+let soundEnabled = true;
+let audioCtx = null;
+
+function initAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+  document.getElementById('soundToggle').innerText = soundEnabled ? "🔊 音效：開" : "🔇 音效：關";
+  if (soundEnabled) initAudio();
+}
+
+function playTone(freq, type, duration, vol) {
+  if (!soundEnabled) return;
+  try {
+    initAudio();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type || 'sine';
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    gain.gain.setValueAtTime(vol || 0.1, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (duration || 0.1));
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + (duration || 0.1));
+  } catch(e) {}
+}
+
+function playJackpotSound() {
+  if (!soundEnabled) return;
+  const notes = [523.25, 659.25, 783.99, 1046.50, 783.99, 1046.50];
+  notes.forEach(function(freq, idx) {
+    setTimeout(function() { playTone(freq, 'triangle', 0.22, 0.15); }, idx * 110);
+  });
+}
+
+function updateStats() {
+  const selCuisine = document.getElementById('cuisineSelect').value;
+  const matched = beitunDatabase.filter(function(item) {
+    return selCuisine === "all" || item.cuisine === selCuisine;
+  });
+  let totalDishes = 0;
+  for (let i = 0; i < matched.length; i++) {
+    totalDishes += matched[i].menus.length;
+  }
+  document.getElementById('dbStats').innerText = "收錄 " + matched.length + " 家店・共 " + totalDishes + " 道菜";
+}
+updateStats();
+
+function getSizeClass(str) {
+  if (!str) return "";
+  if (str.length >= 10) return "sm";
+  if (str.length >= 6) return "med";
+  return "";
+}
+
+function buildReel(reelId, itemsList, finalObj, fieldKey) {
+  const reel = document.getElementById(reelId);
+  let html = "";
+  for (let i = 0; i < itemsList.length; i++) {
+    const it = itemsList[i];
+    const txt = it[fieldKey];
+    html += '<div class="reel-item"><span class="reel-emoji">' + it.emoji + '</span><span class="reel-text ' + getSizeClass(txt) + '">' + txt + '</span></div>';
+  }
+  const finalTxt = finalObj[fieldKey];
+  html += '<div class="reel-item"><span class="reel-emoji">' + finalObj.emoji + '</span><span class="reel-text ' + getSizeClass(finalTxt) + '">' + finalTxt + '</span></div>';
+  reel.innerHTML = html;
+  reel.style.transition = "none";
+  reel.style.transform = "translateY(0px)";
+}
+
+function startSpin() {
+  initAudio();
+  const selCuisine = document.getElementById('cuisineSelect').value;
+
+  const filtered = beitunDatabase.filter(function(item) {
+    return selCuisine === "all" || item.cuisine === selCuisine;
+  });
+
+  // 建立加權抽籤池，並從選中店家的完整菜單中隨機抽出 1 道當作本次開獎主菜
+  let pool = [];
+  for (let i = 0; i < filtered.length; i++) {
+    for (let w = 0; w < filtered[i].weight; w++) {
+      pool.push(filtered[i]);
+    }
+  }
+
+  const chosenShop = pool[Math.floor(Math.random() * pool.length)];
+  const chosenDish = chosenShop.menus[Math.floor(Math.random() * chosenShop.menus.length)];
+  const dishCountLabel = "收錄 " + chosenShop.menus.length + " 道菜";
+
+  const finalResult = {
+    emoji: chosenShop.emoji,
+    dish: chosenDish,
+    shop: chosenShop.shop,
+    countLabel: dishCountLabel,
+    address: chosenShop.address,
+    menus: chosenShop.menus,
+    cuisine: chosenShop.cuisine
+  };
+
+  const btn = document.getElementById('spinBtn');
+  const card = document.getElementById('resultCard');
+  const machine = document.getElementById('slotMachine');
+  btn.disabled = true;
+  btn.innerText = "北屯好店搜尋中...";
+  card.style.display = "none";
+  machine.classList.remove('jackpot-glow');
+
+  // 建立滾輪過場假資料
+  function makeDummyList(len) {
+    let arr = [];
+    for (let i = 0; i < len; i++) {
+      const rShop = beitunDatabase[Math.floor(Math.random() * beitunDatabase.length)];
+      const rDish = rShop.menus[Math.floor(Math.random() * rShop.menus.length)];
+      arr.push({
+        emoji: rShop.emoji,
+        dish: rDish,
+        shop: rShop.shop,
+        countLabel: "收錄 " + rShop.menus.length + " 道菜"
+      });
+    }
+    return arr;
+  }
+
+  buildReel('reel1', makeDummyList(14), finalResult, 'dish');
+  buildReel('reel2', makeDummyList(20), finalResult, 'shop');
+  buildReel('reel3', makeDummyList(26), finalResult, 'countLabel');
+
+  const tickTimer = setInterval(function() { playTone(260 + Math.random() * 140, 'square', 0.03, 0.04); }, 85);
+
+  setTimeout(function() {
+    const r1 = document.getElementById('reel1');
+    r1.style.transition = "transform 1.3s cubic-bezier(0.15, 0.88, 0.32, 1.04)";
+    r1.style.transform = "translateY(-" + (14 * 135) + "px)";
+
+    const r2 = document.getElementById('reel2');
+    r2.style.transition = "transform 2.0s cubic-bezier(0.15, 0.88, 0.32, 1.04)";
+    r2.style.transform = "translateY(-" + (20 * 135) + "px)";
+
+    const r3 = document.getElementById('reel3');
+    r3.style.transition = "transform 2.7s cubic-bezier(0.12, 0.9, 0.28, 1.05)";
+    r3.style.transform = "translateY(-" + (26 * 135) + "px)";
+  }, 40);
+
+  setTimeout(function() { playTone(440, 'sine', 0.15, 0.15); }, 1340);
+  setTimeout(function() { playTone(554.37, 'sine', 0.15, 0.15); }, 2040);
+  setTimeout(function() {
+    clearInterval(tickTimer);
+    playJackpotSound();
+    machine.classList.add('jackpot-glow');
+    launchConfetti();
+    showResult(finalResult);
+  }, 2740);
+}
+
+function showResult(item) {
+  const btn = document.getElementById('spinBtn');
+  btn.disabled = false;
+  btn.innerText = "不滿意？再轉一次北屯好店！";
+
+  document.getElementById('resTitle').innerText = "🎉 " + item.shop;
+  document.getElementById('resCountBadge').innerText = "收錄 " + item.menus.length + " 道招牌菜";
+  document.getElementById('resDesc').innerText = "今日天選必點：【" + item.dish + "】（" + item.cuisine + "）";
+  document.getElementById('resAddress').innerText = "📍 " + item.address;
+  document.getElementById('menuCountText').innerText = "完整收錄共 " + item.menus.length + " 道";
+
+  const tagsContainer = document.getElementById('menuTagsContainer');
+  let tagsHtml = "";
+  for (let i = 0; i < item.menus.length; i++) {
+    const mName = item.menus[i];
+    const isPicked = (mName === item.dish);
+    tagsHtml += '<span class="menu-tag' + (isPicked ? ' picked' : '') + '">' + (isPicked ? '⭐ ' : '') + mName + '</span>';
+  }
+  tagsContainer.innerHTML = tagsHtml;
+
+  document.getElementById('mapLink').href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(item.address + " " + item.shop);
+  document.getElementById('resultCard').style.display = "block";
+}
+
+function launchConfetti() {
+  const canvas = document.getElementById('confettiCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const pieces = [];
+  const colors = ['#ffd700', '#ff4757', '#2ed573', '#1e90ff', '#ffa502'];
+  for (let i = 0; i < 65; i++) {
+    pieces.push({
+      x: canvas.width / 2, y: canvas.height / 2,
+      vx: (Math.random() - 0.5) * 14, vy: (Math.random() - 0.7) * 14,
+      size: Math.random() * 7 + 4, color: colors[Math.floor(Math.random() * colors.length)],
+      alpha: 1
+    });
+  }
+  function update() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let alive = false;
+    for (let i = 0; i < pieces.length; i++) {
+      const p = pieces[i];
+      p.x += p.vx; p.y += p.vy; p.vy += 0.35; p.alpha -= 0.018;
+      if (p.alpha > 0) {
+        alive = true;
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x, p.y, p.size, p.size);
+      }
+    }
+    if (alive) requestAnimationFrame(update);
+    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  update();
+}
+</script>
+</body>
+</html>
