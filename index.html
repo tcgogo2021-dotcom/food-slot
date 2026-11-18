@@ -105,255 +105,261 @@
       </div>
       <button class="btn-spin" id="spinBtn" onclick="startSpin()">北屯美食，開轉！</button>
     </div>
-🟢 營業中
-🎉 今日天選美食！
-
-
-
-
-
-
-在地首選丰禾台味 崇德王品集團台菜名店
-人氣網美JAI宅 水湳店爆量蛤蜊義大利麵
-版位招租北屯創始席位一鍵導航精準吸客
-版位招租限量廣告席位全區僅限 10 家名額
-版位招租特約合作席位點擊了解合作方案
-
-
-目前營運站點：台中市北屯區（第一示範基地）｜店家合作洽詢
-
+    <div class="result-card" id="resultCard">
+      <div class="status-pill" id="resStatus">🟢 營業中</div>
+      <h3 id="resTitle">🎉 今日天選美食！</h3>
+      <div class="meta" id="resMeta"></div>
+      <div class="dish-tags" id="resDishes"></div>
+      <div id="resActionArea"></div>
+    </div>
+  </div>
+  <div class="ad-column">
+    <a class="ad-card" href="https://google.com" target="_blank"><span class="ad-tag">在地首選</span><div class="ad-title">丰禾台味 崇德</div><div class="ad-sub">王品集團台菜名店</div></a>
+    <a class="ad-card" href="https://google.com" target="_blank"><span class="ad-tag">人氣網美</span><div class="ad-title">JAI宅 水湳店</div><div class="ad-sub">爆量蛤蜊義大利麵</div></a>
+    <div class="ad-card vacant" onclick="alert('北屯黃金廣告位招租中！')"><span class="ad-tag">版位招租</span><div class="ad-title">北屯創始席位</div><div class="ad-sub">一鍵導航精準吸客</div></div>
+    <div class="ad-card vacant" onclick="alert('北屯黃金廣告位招租中！')"><span class="ad-tag">版位招租</span><div class="ad-title">限量廣告席位</div><div class="ad-sub">全區僅限 10 家名額</div></div>
+    <div class="ad-card vacant" onclick="alert('北屯黃金廣告位招租中！')"><span class="ad-tag">版位招租</span><div class="ad-title">特約合作席位</div><div class="ad-sub">點擊了解合作方案</div></div>
+  </div>
+</div>
+<div class="footer-biz">目前營運站點：台中市北屯區（第一示範基地）｜<span onclick="alert('歡迎北屯在地店家聯繫合作！')">店家合作洽詢</span></div>
+<script>
 const rawDB = [
-"銅板小吃|🍜|老向的店|北平路商圈|10:30-22:00|蚌麵,清蒸鴨腿麵,東坡肉飯,紅油抄手,麻辣乾麵",
-"銅板小吃|🦪|大腸蚵仔麵線|昌平路商圈|06:30-13:30|綜合大腸蚵仔麵線,清麵線,滷大腸頭,蒜泥鮮蚵",
-"銅板小吃|🍳|台北蚵仔煎|一點利市場周邊|11:00-21:00|招牌蚵仔煎,蝦仁煎,花枝羹湯,魯肉飯",
-"銅板小吃|🍚|松竹麵攤肉燥飯|松竹路商圈|11:00-20:30|古早味肉燥飯,陽春乾麵,隔間肉湯,滷油豆腐",
-"銅板小吃|🥟|角間煎餃|昌平路商圈|06:00-12:30|高麗菜冰花煎餃,韭菜煎餃,酸辣湯,古早味豆漿",
-"銅板小吃|🍲|北屯阿婆炒麵|北屯市場|06:00-13:00|台中傳統炒麵,豬血湯,綜合湯,東泉辣椒醬拌麵",
-"銅板小吃|🥩|昌平炸粿蚵嗲|昌平路二段|14:00-19:30|現炸蚵嗲,肉嗲,炸米糕,炸韭菜條,蘿蔔糕",
-"銅板小吃|🍜|徐家莊手打麵|北平路三段|11:00-20:00|招牌手打炒麵,木須炒麵,酸辣湯餃,滷味拼盤",
-"銅板小吃|🥟|鑫旺角茶餐廳小吃|北平路商圈|11:00-21:00|鮮蝦雲吞麵,叉燒包,蘿蔔糕,絲襪奶茶",
-"銅板小吃|🍚|東山路控肉飯|東山路一段|10:30-20:30|肥瘦相間控肉飯,腳庫飯,白菜滷,筍乾,味噌湯",
-"銅板小吃|🍜|河北路牛肉麵|河北路二段|11:00-20:30|紅燒半筋半肉麵,清燉牛肉麵,水餃,涼拌小黃瓜",
-"銅板小吃|🥠|綏遠路蔥油餅|綏遠路商圈|14:00-19:00|九層塔加蛋蔥油餅,起司抓餅,豬肉餡餅,小米粥",
-"銅板小吃|🍲|崇德肉圓伯|崇德路二段|11:00-19:30|低溫油泡肉圓,四神湯,貢丸湯,甜不辣",
-"銅板小吃|🍚|文心嘉義火雞肉飯|文心路四段|10:30-21:00|火雞肉片飯,雞魯飯,荷包蛋,下水湯,燙青菜",
-"銅板小吃|🥟|北平黃昏市場水餃|北平路三段|15:00-20:00|手工韭菜水餃,高麗菜鮮肉餃,玉米濃湯,滷豆干",
-"銅板小吃|🍜|大坑豬頭三炸粿|東山路二段|09:30-17:00|大骨筍湯,招牌蚵嗲,炸地瓜,炸香菇,米腸",
-"銅板小吃|🍢|一點利市場關東煮|遼寧路一段|14:30-20:00|黑輪,白蘿蔔,高麗菜捲,苦瓜封,柴魚高湯",
-"銅板小吃|🍚|四平路鴨肉飯|四平路商圈|11:00-20:00|煙燻鴨肉飯,當歸鴨麵線,米血糕,鴨肉切盤",
-"銅板小吃|🍜|興安路乾意麵|興安路一段|06:30-14:00|古早味乾意麵,餛飩湯,粉腸湯,滷蛋海帶",
-"銅板小吃|🫓|天津路胡椒餅|天津路服飾商圈|14:00-20:30|炭烤赤肉胡椒餅,起司牛肉餅,紅豆酥餅,甜燒餅",
-"銅板小吃|🍲|梅川東路當歸土虱|梅川東路四段|16:30-24:00|藥燉排骨,當歸土虱頭,麻油麵線,滷肉飯",
-"銅板小吃|🥟|軍功路湯包專賣|軍功路一段|06:00-13:30|爆汁鮮肉湯包,絲瓜蝦仁湯包,酸辣湯,紅茶豆漿",
-"銅板小吃|🍜|崇德路陽春麵老店|崇德路一段|11:00-20:30|麻醬乾麵,餛飩麵,滷味豆干海帶,貢丸湯",
-"銅板小吃|🍚|北屯路排骨酥麵|北屯路商圈|11:00-21:00|古早味排骨酥麵,筒仔米糕,金針排骨湯,燙青菜",
-"銅板小吃|🥟|遼寧路蒸餃酸辣湯|遼寧路一段|11:00-20:30|鮮肉蒸餃,花素蒸餃,招牌酸辣湯,小米粥",
-"宵夜炸物|🍗|炸滋滋無骨鹽酥雞|昌平路商圈|16:00-01:00|無骨鹽酥雞,酥炸魷魚圈,甜不辣,百頁豆腐,四季豆",
-"宵夜炸物|🍢|永留香臭豆腐|太原路三段|15:30-23:00|脆皮臭豆腐,麻辣鴨血豆腐煲,大腸麵線,泡菜",
-"宵夜炸物|🔥|北平路炭烤雞排|北平路三段|16:30-00:30|蜜汁炭烤大雞排,烤甜不辣,烤米血,烤雞屁股",
-"宵夜炸物|🌶️|昌平麻辣乾鍋滷味|昌平路一段|17:00-01:00|麻辣鴨血,王子麵,高麗菜,鴨腸,老油條",
-"宵夜炸物|🍗|崇德惡魔厚切雞排|崇德路二段|15:30-23:30|原味厚切雞排,辣味雞排,煉乳銀絲捲,甘梅地瓜",
-"宵夜炸物|🍢|文心路深夜串燒屋|文心路四段|17:30-01:30|明太子雞肉串,培根捲金針菇,鹽烤秋刀魚,烤麻糬",
-"宵夜炸物|🥟|松竹永和豆漿大王|松竹路二段|18:00-10:00|燒餅油條,起司蛋餅,小籠湯包,冰豆漿,蘿蔔糕加蛋",
-"宵夜炸物|🍗|東山路美式炸雞桶|東山路一段|11:00-23:00|卡啦脆雞腿,洋蔥圈,波浪薯條,雞米花",
-"宵夜炸物|🍲|北屯深夜砂鍋粥|崇德路一段|17:30-01:30|鮮蝦干貝砂鍋粥,鮑魚雞肉粥,炒水蓮,炸豆腐",
-"宵夜炸物|🌶️|興安路冷滷味攤|興安路二段|16:30-23:30|煙燻鴨翅,滷雞爪凍,滷豆干,海帶結,酸菜",
-"宵夜炸物|🍗|水湳市場鹽水雞|中清路二段|16:30-23:30|去骨煙燻雞胸,雞腿肉,花椰菜,玉米筍,鳥蛋",
-"宵夜炸物|🔥|太原路焦糖滷味|太原路三段|17:00-00:30|焦糖滷鴨頭,甜不辣,貢丸,豬血糕,百頁",
-"宵夜炸物|🍔|北屯24H麥當勞|崇德路二段|00:00-24:00|大麥克,勁辣雞腿堡,麥克雞塊,大薯,玉米濃湯",
-"宵夜炸物|🍜|崇德深夜清粥小菜|崇德路一段|17:00-02:00|地瓜稀飯,菜脯蛋,紅燒肉,滷虱目魚肚,炒空心菜",
-"宵夜炸物|🍗|軍功路深夜鹽酥雞|軍功路一段|17:00-01:00|招牌鹽酥雞,炸三角骨,銀絲捲,甜不辣",
-"宵夜炸物|🍢|四平路炭烤串燒|四平路商圈|18:00-01:30|烤雞腿肉串,烤香菇,烤豆皮,烤甜不辣",
-"台式熱炒|🍲|丰禾台味風格料理|崇德路三段|11:30-21:30|丰禾起家雞,黑麻油燒蛋,糖醋鱸魚,芋絲米糕",
-"台式熱炒|🍗|東山棧甕缸雞|東山路一段|11:00-21:30|招牌甕缸雞,雞油燜筍,酥炸溪蝦,炒山蘇",
-"台式熱炒|🦆|柴火火燄烤鴨|松竹路三段|11:30-21:30|片皮櫻桃烤鴨,酸菜鴨架湯,鹽酥鴨架,京醬肉絲",
-"台式熱炒|🦆|御記烤鴨松竹總店|松竹路二段|10:30-20:00|一鴨二吃片皮鴨,甜麵醬蔥段,大火爆炒鴨骨,滷鴨翅",
-"台式熱炒|🦐|崇德99元現炒|崇德路二段|16:30-01:00|宮保雞丁,鳳梨蝦球,三杯中卷,客家小炒,蚵仔酥",
-"台式熱炒|🐓|大坑竹之鄉風味餐|東山路二段|11:00-20:30|耖米飯,白斬土雞,筍乾扣肉,麻油川七",
-"台式熱炒|🍱|北平路排骨飯大王|北平路三段|10:30-20:30|古早味炸排骨飯,蜜汁雞腿飯,鱈魚便當,三杯雞飯",
-"台式熱炒|🦆|昌平路鵝肉城|昌平路一段|16:00-23:30|鹽水鵝肉切盤,鵝油拌飯,下水湯,桂竹筍,炒蛤蜊",
-"台式熱炒|🐟|文心路活魚海鮮餐廳|文心路四段|11:00-21:30|清蒸石斑魚,金沙中卷,避風塘炒蟹,海鮮炒麵",
-"台式熱炒|🍲|太原路薑母鴨|太原路三段|16:00-01:00|炭火薑母鴨,鴨肉丸,凍豆腐,高麗菜,麻油麵線",
-"台式熱炒|🐑|松竹路正宗羊肉爐|松竹路一段|16:30-00:30|當歸帶皮羊肉爐,羊大骨,涮羊肉片,腐乳醬",
-"台式熱炒|🍱|水湳池上木片便當|中清路二段|10:30-20:00|招牌木片便當,炸雞腿飯,控肉便當,鯖魚便當",
-"台式熱炒|🦐|軍功路海鮮熱炒|軍功路二段|17:00-00:30|蒜泥白肉,蔥爆牛肉,椒鹽龍珠,苦瓜鹹蛋",
-"台式熱炒|🐔|大坑龍莊烤乳豬|東山路二段|11:00-21:00|脆皮烤乳豬,桶仔雞,山藥排骨湯,炒檳榔花",
-"台式熱炒|🍱|崇德路燒臘三寶飯|崇德路二段|10:30-20:00|脆皮燒肉三寶飯,蜜汁叉燒飯,油雞腿飯,例湯",
-"台式熱炒|🍲|北平路砂鍋魚頭|北平路三段|11:30-21:00|招牌砂鍋魚頭,炒高麗菜,炸豆腐,魯肉飯",
-"日式料理|🍣|藏壽司 文心崇德店|文心路四段|11:00-22:00|炙燒鮭魚肚,北海道大帆立貝,鮮蝦天婦羅手卷,茶碗蒸",
-"日式料理|🍱|樹太老日本定食|崇德路二段|11:00-21:30|炸里肌肉豬排定食,起司藍帶豬排,照燒雞腿定食,和風炸雞",
-"日式料理|🍜|崇德豚骨拉麵屋|崇德路二段|11:30-21:00|濃厚豚骨叉燒拉麵,辛味噌拉麵,日式唐揚雞,溏心蛋",
-"日式料理|🍣|北平路平價壽司丼|北平路三段|11:00-20:30|綜合生魚片丼,炙燒比目魚丼,花壽司拼盤,鮮魚味噌湯",
-"日式料理|🍛|文心日式咖哩專門|文心路四段|11:00-21:00|炸豬排歐姆蛋咖哩,漢堡排咖哩飯,可樂餅,炸牡蠣",
-"日式料理|🍢|松竹路深夜居酒屋|松竹路二段|17:30-01:00|明太子山藥,鹽烤松阪豬,午仔魚一夜干,鮭魚烤飯糰",
-"日式料理|🍱|昌平路日式定食|昌平路一段|11:30-20:30|鹽烤鯖魚定食,薑汁燒肉丼,親子丼,日式玉子燒",
-"日式料理|🍜|水湳烏龍麵專門店|中清路二段|11:00-21:00|明太子拌烏龍麵,牛肉湯烏龍麵,炸蝦天婦羅,炸地瓜",
-"日式料理|🍣|崇德迴轉壽司|崇德路三段|11:00-21:30|極上鮪魚大腹,鮭魚卵軍艦,玉子燒握壽司,花蛤味噌湯",
-"日式料理|🥩|北屯日式和牛漢堡排|崇德路二段|11:30-21:00|直火炭烤和牛漢堡排,越光米白飯,生食級蛋黃,味增湯",
-"日式料理|🐙|一點利章魚燒小丸子|遼寧路一段|14:00-20:30|原味柴魚章魚燒,明太子起司章魚燒,芥末海苔章魚燒",
-"日式料理|🍱|東山路鰻魚飯專賣|東山路一段|11:30-20:30|蒲燒鰻魚重箱飯,白燒鰻魚,鰻肝清湯,和風沙拉",
-"日式料理|🍛|昌平路日式豬排丼|昌平路一段|11:00-20:30|滑蛋炸豬排丼,唐揚雞咖哩飯,可樂餅,味噌湯",
-"火鍋燒肉|🥩|屋馬燒肉 崇德店|崇德路二段|11:00-24:00|日本A5和牛拼盤,伊比利豬梅花,屋馬主廚沙拉,海鮮粥",
-"火鍋燒肉|🍲|輕井澤鍋物 崇德店|崇德路二段|11:00-02:00|和風培根牛肉鍋,四川麻辣鴨血鍋,梅花豬肉鍋,紅茶冰沙",
-"火鍋燒肉|🥩|山鯨燒肉 漢口崇德|漢口路四段|11:30-23:30|極上和牛雙人套餐,太空菇,松露和牛可頌,鮮榨果汁",
-"火鍋燒肉|🍲|石二鍋 崇德店|崇德路二段|11:30-22:00|爆香石頭鍋,雪花牛肉鍋,愛呷肉拼盤,冬瓜檸檬冰沙",
-"火鍋燒肉|🍲|築間幸福鍋物 北屯店|崇德路二段|11:00-03:00|招牌石頭湯底,霜降牛肉鍋,海鮮總匯鍋,自助蔬菜冰淇淋吧",
-"火鍋燒肉|🥩|燒肉Smile 景賢店|景賢路商圈|11:00-03:00|個人和牛盛合套餐,牛五花雙拼,野菜沙拉自助吧,蔥花玉子拌飯",
-"火鍋燒肉|🍲|北平路三媽臭臭鍋|北平路三段|11:00-23:00|大腸臭臭鍋,海鮮豆腐鍋,泡菜鍋,麻辣鍋,白飯飲料吃到飽",
-"火鍋燒肉|🍲|文心路老四川麻辣鍋|文心路四段|11:30-01:30|絕選麻辣鴛鴦鍋,川味涼粉,滷水大腸頭,雪花牛",
-"火鍋燒肉|🥩|崇德韓國銅盤烤肉|崇德路二段|11:30-22:00|秘製牛五花銅盤烤肉,梅花豬烤肉,海鮮煎餅,韓式小菜無限續",
-"火鍋燒肉|🍲|松竹路酸菜白肉鍋|松竹路二段|11:30-21:30|東北酸菜白肉鍋,手工川丸子,五花白肉片,蔥油餅",
-"火鍋燒肉|🍲|昌平路平價小火鍋|昌平路一段|11:00-22:30|牛奶起司鍋,沙茶牛肉鍋,藥膳羊肉鍋,爆米花冰淇淋",
-"火鍋燒肉|🥩|水湳精緻燒肉餐酒|中清路二段|17:00-01:00|厚切牛舌,橫膈膜燒肉,明太子拌飯,生啤酒",
-"火鍋燒肉|🍲|東山路石頭小火鍋|東山路一段|11:00-22:00|蒜香爆炒牛肉鍋,海鮮總匯鍋,鴨血豆腐,冰淇淋",
-"韓式異國|🥘|非常石鍋韓式料理|北屯路商圈|11:30-21:30|起司春川辣炒雞,泡菜豬肉石鍋拌飯,海鮮煎餅,人蔘雞湯",
-"韓式異國|🍲|涓豆腐 台中崇德店|崇德路二段|11:30-22:00|海陸綜合嫩豆腐煲,韓式炸雞,石鍋紫米飯,黑糖香柚豆花",
-"韓式異國|🌶️|瓦城泰國料理 崇德店|崇德路二段|11:30-21:30|原味月亮蝦餅,泰式打拋豬,檸檬清蒸魚,摩摩喳喳",
-"韓式異國|🍜|北平路越南河粉|北平路三段|11:00-20:30|生牛肉河粉,炸春捲,越式法國麵包,涼拌木瓜絲",
-"韓式異國|🍗|崇德韓式炸雞專賣|崇德路二段|11:30-22:30|洋釀半半炸雞,蜂蜜蒜味炸雞,辣炒年糕,醃蘿蔔",
-"韓式異國|🍛|文心路印度咖哩屋|文心路四段|11:30-21:00|奶油雞肉咖哩,蒜味烤餅 Naan,坦都里烤雞,印度拉茶",
-"韓式異國|🍜|昌平路泰式船麵|昌平路一段|11:30-20:30|泰式瀑布牛肉船麵,綠咖哩雞飯,泰式奶茶,炸雞翅",
-"韓式異國|🥘|松竹路韓式部隊鍋|松竹路二段|11:30-21:30|經典火腿起司部隊鍋,韓式魚板串,海苔拳頭飯,辣味炸雞",
-"義式美式|🍝|JAI宅 水湳店|中清路二段|11:00-21:30|橘醬爆炸蛤蜊義大利麵,明太子奶油宅宅麵,提拉米蘇",
-"義式美式|🥂|水相餐聚苑|經貿三路二段|11:30-22:00|火山起司麵包,黑松露野菇燉飯,爐烤牛排,莓果氣泡飲",
-"義式美式|🍕|薄多義義式手工披薩|崇德路二段|11:30-21:30|瑪格麗特皇后披薩,青醬雞肉麵,佛卡夏佐醬,炸雞翅",
-"義式美式|🍔|崇德美式手工牛肉堡|崇德路二段|11:30-21:30|花生醬培根牛肉堡,雙層起司堡,松露薯條,奶昔",
-"義式美式|🥩|文心路平價牛排館|文心路四段|11:00-22:00|厚切沙朗牛排,香煎雞腿排,酥皮濃湯,鐵板麵",
-"義式美式|🍝|北平路平價義大利麵|北平路三段|11:00-20:30|奶油培根義大利麵,番茄肉醬焗烤飯,玉米濃湯,紅茶",
-"義式美式|🍕|松竹路窯烤披薩車|松竹路二段|15:00-22:00|夏威夷鳳梨披薩,總匯海鮮披薩,蒜香麵包,可樂",
-"義式美式|🌮|水湳墨西哥捲餅屋|中清路二段|11:30-21:00|手撕豬肉塔可餅,起司牛肉捲餅,莎莎醬玉米片",
-"早午餐甜點|☕|KafeD 咖啡滴水湳旗艦|經貿路二段|09:00-20:00|德式年輪厚夾心,精品手沖咖啡,鮭魚開放三明治",
-"早午餐甜點|🥐|崇德質感早午餐拼盤|崇德路二段|08:00-15:30|唐揚雞可頌拼盤,班尼迪克蛋,鮮奶茶,薯泥沙拉",
-"早午餐甜點|🥪|昌平路傳統早餐店|昌平路一段|05:30-12:00|粉漿蛋餅,豬排總匯吐司,鐵板麵加蛋,大冰奶",
-"早午餐甜點|🍧|北平路古早味豆花|北平路三段|12:00-22:00|綜合粉圓花生豆花,紅豆湯圓,嫩仙草凍,黑糖剉冰",
-"早午餐甜點|🧋|崇德路人氣手搖飲|崇德路二段|10:00-22:00|珍珠鮮奶茶,翡翠檸檬綠,芝士奶蓋烏龍,黑糖波霸鮮奶",
-"早午餐甜點|🍰|水湳文青千層蛋糕|中清路二段|12:00-19:30|法式水果千層,小山園抹茶千層,巴斯克乳酪,拿鐵",
-"早午餐甜點|🥞|松竹路舒芙蕾鬆餅|松竹路二段|11:00-20:00|焦糖布蕾舒芙蕾,草莓生乳鬆餅,伯爵鮮奶茶",
-"早午餐甜點|🥯|文心路手作貝果咖啡|文心路四段|08:00-17:00|藍莓乳酪貝果,煙燻鮭魚貝果,美式黑咖啡",
-"早午餐甜點|🍡|大坑東東芋圓|東山路二段|09:00-22:00|招牌綜合芋圓冰,熱紅豆芋圓湯,仙草芋圓,薏仁芋圓",
-"早午餐甜點|🧋|昌平路鮮果茶飲|昌平路二段|10:00-22:00|滿杯水果茶,楊枝甘露,甘蔗青茶,四季春珍波椰",
-"早午餐甜點|🥐|四平路文青早午餐|四平路商圈|08:00-15:00|嫩煎雞腿排拼盤,法式吐司,鮮奶茶,脆薯"
+  "銅板小吃|🍜|老向的店|北平路商圈|10:30-22:00|蚌麵,清蒸鴨腿麵,東坡肉飯,紅油抄手,麻辣乾麵",
+  "銅板小吃|🦪|大腸蚵仔麵線|昌平路商圈|06:30-13:30|綜合大腸蚵仔麵線,清麵線,滷大腸頭,蒜泥鮮蚵",
+  "銅板小吃|🍳|台北蚵仔煎|一點利市場周邊|11:00-21:00|招牌蚵仔煎,蝦仁煎,花枝羹湯,魯肉飯",
+  "銅板小吃|🍚|松竹麵攤肉燥飯|松竹路商圈|11:00-20:30|古早味肉燥飯,陽春乾麵,隔間肉湯,滷油豆腐",
+  "銅板小吃|🥟|角間煎餃|昌平路商圈|06:00-12:30|高麗菜冰花煎餃,韭菜煎餃,酸辣湯,古早味豆漿",
+  "銅板小吃|🍲|北屯阿婆炒麵|北屯市場|06:00-13:00|台中傳統炒麵,豬血湯,綜合湯,東泉辣椒醬拌麵",
+  "銅板小吃|🥩|昌平炸粿蚵嗲|昌平路二段|14:00-19:30|現炸蚵嗲,肉嗲,炸米糕,炸韭菜條,蘿蔔糕",
+  "銅板小吃|🍜|徐家莊手打麵|北平路三段|11:00-20:00|招牌手打炒麵,木須炒麵,酸辣湯餃,滷味拼盤",
+  "銅板小吃|🥟|鑫旺角茶餐廳小吃|北平路商圈|11:00-21:00|鮮蝦雲吞麵,叉燒包,蘿蔔糕,絲襪奶茶",
+  "銅板小吃|🍚|東山路控肉飯|東山路一段|10:30-20:30|肥瘦相間控肉飯,腳庫飯,白菜滷,筍乾,味噌湯",
+  "銅板小吃|🍜|河北路牛肉麵|河北路二段|11:00-20:30|紅燒半筋半肉麵,清燉牛肉麵,水餃,涼拌小黃瓜",
+  "銅板小吃|🥠|綏遠路蔥油餅|綏遠路商圈|14:00-19:00|九層塔加蛋蔥油餅,起司抓餅,豬肉餡餅,小米粥",
+  "銅板小吃|🍲|崇德肉圓伯|崇德路二段|11:00-19:30|低溫油泡肉圓,四神湯,貢丸湯,甜不辣",
+  "銅板小吃|🍚|文心嘉義火雞肉飯|文心路四段|10:30-21:00|火雞肉片飯,雞魯飯,荷包蛋,下水湯,燙青菜",
+  "銅板小吃|🥟|北平黃昏市場水餃|北平路三段|15:00-20:00|手工韭菜水餃,高麗菜鮮肉餃,玉米濃湯,滷豆干",
+  "銅板小吃|🍜|大坑豬頭三炸粿|東山路二段|09:30-17:00|大骨筍湯,招牌蚵嗲,炸地瓜,炸香菇,米腸",
+  "銅板小吃|🍢|一點利市場關東煮|遼寧路一段|14:30-20:00|黑輪,白蘿蔔,高麗菜捲,苦瓜封,柴魚高湯",
+  "銅板小吃|🍚|四平路鴨肉飯|四平路商圈|11:00-20:00|煙燻鴨肉飯,當歸鴨麵線,米血糕,鴨肉切盤",
+  "銅板小吃|🍜|興安路乾意麵|興安路一段|06:30-14:00|古早味乾意麵,餛飩湯,粉腸湯,滷蛋海帶",
+  "銅板小吃|🫓|天津路胡椒餅|天津路服飾商圈|14:00-20:30|炭烤赤肉胡椒餅,起司牛肉餅,紅豆酥餅,甜燒餅",
+  "銅板小吃|🍲|梅川東路當歸土虱|梅川東路四段|16:30-24:00|藥燉排骨,當歸土虱頭,麻油麵線,滷肉飯",
+  "銅板小吃|🥟|軍功路湯包專賣|軍功路一段|06:00-13:30|爆汁鮮肉湯包,絲瓜蝦仁湯包,酸辣湯,紅茶豆漿",
+  "銅板小吃|🍜|崇德路陽春麵老店|崇德路一段|11:00-20:30|麻醬乾麵,餛飩麵,滷味豆干海帶,貢丸湯",
+  "銅板小吃|🍚|北屯路排骨酥麵|北屯路商圈|11:00-21:00|古早味排骨酥麵,筒仔米糕,金針排骨湯,燙青菜",
+  "銅板小吃|🥟|遼寧路蒸餃酸辣湯|遼寧路一段|11:00-20:30|鮮肉蒸餃,花素蒸餃,招牌酸辣湯,小米粥",
+  "宵夜炸物|🍗|炸滋滋無骨鹽酥雞|昌平路商圈|16:00-01:00|無骨鹽酥雞,酥炸魷魚圈,甜不辣,百頁豆腐,四季豆",
+  "宵夜炸物|🍢|永留香臭豆腐|太原路三段|15:30-23:00|脆皮臭豆腐,麻辣鴨血豆腐煲,大腸麵線,泡菜",
+  "宵夜炸物|🔥|北平路炭烤雞排|北平路三段|16:30-00:30|蜜汁炭烤大雞排,烤甜不辣,烤米血,烤雞屁股",
+  "宵夜炸物|🌶️|昌平麻辣乾鍋滷味|昌平路一段|17:00-01:00|麻辣鴨血,王子麵,高麗菜,鴨腸,老油條",
+  "宵夜炸物|🍗|崇德惡魔厚切雞排|崇德路二段|15:30-23:30|原味厚切雞排,辣味雞排,煉乳銀絲捲,甘梅地瓜",
+  "宵夜炸物|🍢|文心路深夜串燒屋|文心路四段|17:30-01:30|明太子雞肉串,培根捲金針菇,鹽烤秋刀魚,烤麻糬",
+  "宵夜炸物|🥟|松竹永和豆漿大王|松竹路二段|18:00-10:00|燒餅油條,起司蛋餅,小籠湯包,冰豆漿,蘿蔔糕加蛋",
+  "宵夜炸物|🍗|東山路美式炸雞桶|東山路一段|11:00-23:00|卡啦脆雞腿,洋蔥圈,波浪薯條,雞米花",
+  "宵夜炸物|🍲|北屯深夜砂鍋粥|崇德路一段|17:30-01:30|鮮蝦干貝砂鍋粥,鮑魚雞肉粥,炒水蓮,炸豆腐",
+  "宵夜炸物|🌶️|興安路冷滷味攤|興安路二段|16:30-23:30|煙燻鴨翅,滷雞爪凍,滷豆干,海帶結,酸菜",
+  "宵夜炸物|🍗|水湳市場鹽水雞|中清路二段|16:30-23:30|去骨煙燻雞胸,雞腿肉,花椰菜,玉米筍,鳥蛋",
+  "宵夜炸物|🔥|太原路焦糖滷味|太原路三段|17:00-00:30|焦糖滷鴨頭,甜不辣,貢丸,豬血糕,百頁",
+  "宵夜炸物|🍔|北屯24H麥當勞|崇德路二段|00:00-24:00|大麥克,勁辣雞腿堡,麥克雞塊,大薯,玉米濃湯",
+  "宵夜炸物|🍜|崇德深夜清粥小菜|崇德路一段|17:00-02:00|地瓜稀飯,菜脯蛋,紅燒肉,滷虱目魚肚,炒空心菜",
+  "宵夜炸物|🍗|軍功路深夜鹽酥雞|軍功路一段|17:00-01:00|招牌鹽酥雞,炸三角骨,銀絲捲,甜不辣",
+  "宵夜炸物|🍢|四平路炭烤串燒|四平路商圈|18:00-01:30|烤雞腿肉串,烤香菇,烤豆皮,烤甜不辣",
+  "台式熱炒|🍲|丰禾台味風格料理|崇德路三段|11:30-21:30|丰禾起家雞,黑麻油燒蛋,糖醋鱸魚,芋絲米糕",
+  "台式熱炒|🍗|東山棧甕缸雞|東山路一段|11:00-21:30|招牌甕缸雞,雞油燜筍,酥炸溪蝦,炒山蘇",
+  "台式熱炒|🦆|柴火火燄烤鴨|松竹路三段|11:30-21:30|片皮櫻桃烤鴨,酸菜鴨架湯,鹽酥鴨架,京醬肉絲",
+  "台式熱炒|🦆|御記烤鴨松竹總店|松竹路二段|10:30-20:00|一鴨二吃片皮鴨,甜麵醬蔥段,大火爆炒鴨骨,滷鴨翅",
+  "台式熱炒|🦐|崇德99元現炒|崇德路二段|16:30-01:00|宮保雞丁,鳳梨蝦球,三杯中卷,客家小炒,蚵仔酥",
+  "台式熱炒|🐓|大坑竹之鄉風味餐|東山路二段|11:00-20:30|耖米飯,白斬土雞,筍乾扣肉,麻油川七",
+  "台式熱炒|🍱|北平路排骨飯大王|北平路三段|10:30-20:30|古早味炸排骨飯,蜜汁雞腿飯,鱈魚便當,三杯雞飯",
+  "台式熱炒|🦆|昌平路鵝肉城|昌平路一段|16:00-23:30|鹽水鵝肉切盤,鵝油拌飯,下水湯,桂竹筍,炒蛤蜊",
+  "台式熱炒|🐟|文心路活魚海鮮餐廳|文心路四段|11:00-21:30|清蒸石斑魚,金沙中卷,避風塘炒蟹,海鮮炒麵",
+  "台式熱炒|🍲|太原路薑母鴨|太原路三段|16:00-01:00|炭火薑母鴨,鴨肉丸,凍豆腐,高麗菜,麻油麵線",
+  "台式熱炒|🐑|松竹路正宗羊肉爐|松竹路一段|16:30-00:30|當歸帶皮羊肉爐,羊大骨,涮羊肉片,腐乳醬",
+  "台式熱炒|🍱|水湳池上木片便當|中清路二段|10:30-20:00|招牌木片便當,炸雞腿飯,控肉便當,鯖魚便當",
+  "台式熱炒|🦐|軍功路海鮮熱炒|軍功路二段|17:00-00:30|蒜泥白肉,蔥爆牛肉,椒鹽龍珠,苦瓜鹹蛋",
+  "台式熱炒|🐔|大坑龍莊烤乳豬|東山路二段|11:00-21:00|脆皮烤乳豬,桶仔雞,山藥排骨湯,炒檳榔花",
+  "台式熱炒|🍱|崇德路燒臘三寶飯|崇德路二段|10:30-20:00|脆皮燒肉三寶飯,蜜汁叉燒飯,油雞腿飯,例湯",
+  "台式熱炒|🍲|北平路砂鍋魚頭|北平路三段|11:30-21:00|招牌砂鍋魚頭,炒高麗菜,炸豆腐,魯肉飯",
+  "日式料理|🍣|藏壽司 文心崇德店|文心路四段|11:00-22:00|炙燒鮭魚肚,北海道大帆立貝,鮮蝦天婦羅手卷,茶碗蒸",
+  "日式料理|🍱|樹太老日本定食|崇德路二段|11:00-21:30|炸里肌肉豬排定食,起司藍帶豬排,照燒雞腿定食,和風炸雞",
+  "日式料理|🍜|崇德豚骨拉麵屋|崇德路二段|11:30-21:00|濃厚豚骨叉燒拉麵,辛味噌拉麵,日式唐揚雞,溏心蛋",
+  "日式料理|🍣|北平路平價壽司丼|北平路三段|11:00-20:30|綜合生魚片丼,炙燒比目魚丼,花壽司拼盤,鮮魚味噌湯",
+  "日式料理|🍛|文心日式咖哩專門|文心路四段|11:00-21:00|炸豬排歐姆蛋咖哩,漢堡排咖哩飯,可樂餅,炸牡蠣",
+  "日式料理|🍢|松竹路深夜居酒屋|松竹路二段|17:30-01:00|明太子山藥,鹽烤松阪豬,午仔魚一夜干,鮭魚烤飯糰",
+  "日式料理|🍱|昌平路日式定食|昌平路一段|11:30-20:30|鹽烤鯖魚定食,薑汁燒肉丼,親子丼,日式玉子燒",
+  "日式料理|🍜|水湳烏龍麵專門店|中清路二段|11:00-21:00|明太子拌烏龍麵,牛肉湯烏龍麵,炸蝦天婦羅,炸地瓜",
+  "日式料理|🍣|崇德迴轉壽司|崇德路三段|11:00-21:30|極上鮪魚大腹,鮭魚卵軍艦,玉子燒握壽司,花蛤味噌湯",
+  "日式料理|🥩|北屯日式和牛漢堡排|崇德路二段|11:30-21:00|直火炭烤和牛漢堡排,越光米白飯,生食級蛋黃,味增湯",
+  "日式料理|🐙|一點利章魚燒小丸子|遼寧路一段|14:00-20:30|原味柴魚章魚燒,明太子起司章魚燒,芥末海苔章魚燒",
+  "日式料理|🍱|東山路鰻魚飯專賣|東山路一段|11:30-20:30|蒲燒鰻魚重箱飯,白燒鰻魚,鰻肝清湯,和風沙拉",
+  "日式料理|🍛|昌平路日式豬排丼|昌平路一段|11:00-20:30|滑蛋炸豬排丼,唐揚雞咖哩飯,可樂餅,味噌湯",
+  "火鍋燒肉|🥩|屋馬燒肉 崇德店|崇德路二段|11:00-24:00|日本A5和牛拼盤,伊比利豬梅花,屋馬主廚沙拉,海鮮粥",
+  "火鍋燒肉|🍲|輕井澤鍋物 崇德店|崇德路二段|11:00-02:00|和風培根牛肉鍋,四川麻辣鴨血鍋,梅花豬肉鍋,紅茶冰沙",
+  "火鍋燒肉|🥩|山鯨燒肉 漢口崇德|漢口路四段|11:30-23:30|極上和牛雙人套餐,太空菇,松露和牛可頌,鮮榨果汁",
+  "火鍋燒肉|🍲|石二鍋 崇德店|崇德路二段|11:30-22:00|爆香石頭鍋,雪花牛肉鍋,愛呷肉拼盤,冬瓜檸檬冰沙",
+  "火鍋燒肉|🍲|築間幸福鍋物 北屯店|崇德路二段|11:00-03:00|招牌石頭湯底,霜降牛肉鍋,海鮮總匯鍋,自助蔬菜冰淇淋吧",
+  "火鍋燒肉|🥩|燒肉Smile 景賢店|景賢路商圈|11:00-03:00|個人和牛盛合套餐,牛五花雙拼,野菜沙拉自助吧,蔥花玉子拌飯",
+  "火鍋燒肉|🍲|北平路三媽臭臭鍋|北平路三段|11:00-23:00|大腸臭臭鍋,海鮮豆腐鍋,泡菜鍋,麻辣鍋,白飯飲料吃到飽",
+  "火鍋燒肉|🍲|文心路老四川麻辣鍋|文心路四段|11:30-01:30|絕選麻辣鴛鴦鍋,川味涼粉,滷水大腸頭,雪花牛",
+  "火鍋燒肉|🥩|崇德韓國銅盤烤肉|崇德路二段|11:30-22:00|秘製牛五花銅盤烤肉,梅花豬烤肉,海鮮煎餅,韓式小菜無限續",
+  "火鍋燒肉|🍲|松竹路酸菜白肉鍋|松竹路二段|11:30-21:30|東北酸菜白肉鍋,手工川丸子,五花白肉片,蔥油餅",
+  "火鍋燒肉|🍲|昌平路平價小火鍋|昌平路一段|11:00-22:30|牛奶起司鍋,沙茶牛肉鍋,藥膳羊肉鍋,爆米花冰淇淋",
+  "火鍋燒肉|🥩|水湳精緻燒肉餐酒|中清路二段|17:00-01:00|厚切牛舌,橫膈膜燒肉,明太子拌飯,生啤酒",
+  "火鍋燒肉|🍲|東山路石頭小火鍋|東山路一段|11:00-22:00|蒜香爆炒牛肉鍋,海鮮總匯鍋,鴨血豆腐,冰淇淋",
+  "韓式異國|🥘|非常石鍋韓式料理|北屯路商圈|11:30-21:30|起司春川辣炒雞,泡菜豬肉石鍋拌飯,海鮮煎餅,人蔘雞湯",
+  "韓式異國|🍲|涓豆腐 台中崇德店|崇德路二段|11:30-22:00|海陸綜合嫩豆腐煲,韓式炸雞,石鍋紫米飯,黑糖香柚豆花",
+  "韓式異國|🌶️|瓦城泰國料理 崇德店|崇德路二段|11:30-21:30|原味月亮蝦餅,泰式打拋豬,檸檬清蒸魚,摩摩喳喳",
+  "韓式異國|🍜|北平路越南河粉|北平路三段|11:00-20:30|生牛肉河粉,炸春捲,越式法國麵包,涼拌木瓜絲",
+  "韓式異國|🍗|崇德韓式炸雞專賣|崇德路二段|11:30-22:30|洋釀半半炸雞,蜂蜜蒜味炸雞,辣炒年糕,醃蘿蔔",
+  "韓式異國|🍛|文心路印度咖哩屋|文心路四段|11:30-21:00|奶油雞肉咖哩,蒜味烤餅 Naan,坦都里烤雞,印度拉茶",
+  "韓式異國|🍜|昌平路泰式船麵|昌平路一段|11:30-20:30|泰式瀑布牛肉船麵,綠咖哩雞飯,泰式奶茶,炸雞翅",
+  "韓式異國|🥘|松竹路韓式部隊鍋|松竹路二段|11:30-21:30|經典火腿起司部隊鍋,韓式魚板串,海苔拳頭飯,辣味炸雞",
+  "義式美式|🍝|JAI宅 水湳店|中清路二段|11:00-21:30|橘醬爆炸蛤蜊義大利麵,明太子奶油宅宅麵,提拉米蘇",
+  "義式美式|🥂|水相餐聚苑|經貿三路二段|11:30-22:00|火山起司麵包,黑松露野菇燉飯,爐烤牛排,莓果氣泡飲",
+  "義式美式|🍕|薄多義義式手工披薩|崇德路二段|11:30-21:30|瑪格麗特皇后披薩,青醬雞肉麵,佛卡夏佐醬,炸雞翅",
+  "義式美式|🍔|崇德美式手工牛肉堡|崇德路二段|11:30-21:30|花生醬培根牛肉堡,雙層起司堡,松露薯條,奶昔",
+  "義式美式|🥩|文心路平價牛排館|文心路四段|11:00-22:00|厚切沙朗牛排,香煎雞腿排,酥皮濃湯,鐵板麵",
+  "義式美式|🍝|北平路平價義大利麵|北平路三段|11:00-20:30|奶油培根義大利麵,番茄肉醬焗烤飯,玉米濃湯,紅茶",
+  "義式美式|🍕|松竹路窯烤披薩車|松竹路二段|15:00-22:00|夏威夷鳳梨披薩,總匯海鮮披薩,蒜香麵包,可樂",
+  "義式美式|🌮|水湳墨西哥捲餅屋|中清路二段|11:30-21:00|手撕豬肉塔可餅,起司牛肉捲餅,莎莎醬玉米片",
+  "早午餐甜點|☕|KafeD 咖啡滴水湳旗艦|經貿路二段|09:00-20:00|德式年輪厚夾心,精品手沖咖啡,鮭魚開放三明治",
+  "早午餐甜點|🥐|崇德質感早午餐拼盤|崇德路二段|08:00-15:30|唐揚雞可頌拼盤,班尼迪克蛋,鮮奶茶,薯泥沙拉",
+  "早午餐甜點|🥪|昌平路傳統早餐店|昌平路一段|05:30-12:00|粉漿蛋餅,豬排總匯吐司,鐵板麵加蛋,大冰奶",
+  "早午餐甜點|🍧|北平路古早味豆花|北平路三段|12:00-22:00|綜合粉圓花生豆花,紅豆湯圓,嫩仙草凍,黑糖剉冰",
+  "早午餐甜點|🧋|崇德路人氣手搖飲|崇德路二段|10:00-22:00|珍珠鮮奶茶,翡翠檸檬綠,芝士奶蓋烏龍,黑糖波霸鮮奶",
+  "早午餐甜點|🍰|水湳文青千層蛋糕|中清路二段|12:00-19:30|法式水果千層,小山園抹茶千層,巴斯克乳酪,拿鐵",
+  "早午餐甜點|🥞|松竹路舒芙蕾鬆餅|松竹路二段|11:00-20:00|焦糖布蕾舒芙蕾,草莓生乳鬆餅,伯爵鮮奶茶",
+  "早午餐甜點|🥯|文心路手作貝果咖啡|文心路四段|08:00-17:00|藍莓乳酪貝果,煙燻鮭魚貝果,美式黑咖啡",
+  "早午餐甜點|🍡|大坑東東芋圓|東山路二段|09:00-22:00|招牌綜合芋圓冰,熱紅豆芋圓湯,仙草芋圓,薏仁芋圓",
+  "早午餐甜點|🧋|昌平路鮮果茶飲|昌平路二段|10:00-22:00|滿杯水果茶,楊枝甘露,甘蔗青茶,四季春珍波椰",
+  "早午餐甜點|🥐|四平路文青早午餐|四平路商圈|08:00-15:00|嫩煎雞腿排拼盤,法式吐司,鮮奶茶,脆薯"
 ];
 const beitunShops = rawDB.map(line => {
-const p = line.split("|");
-return { cat: p.at(0), emoji: p.at(1), shop: p.at(2), area: p.at(3), hours: p.at(4), dishes: p.at(5).split(",") };
+  const p = line.split("|");
+  return { cat: p.at(0), emoji: p.at(1), shop: p.at(2), area: p.at(3), hours: p.at(4), dishes: p.at(5).split(",") };
 });
 function parseTimeStr(s) { return Number(s.slice(0, 2)) + Number(s.slice(3, 5)) / 60; }
 function checkIsOpen(h) {
-if (h === "00:00-24:00") return true;
-const st = parseTimeStr(h.slice(0, 5)), en = parseTimeStr(h.slice(6, 11));
-const now = new Date(), cur = now.getHours() + now.getMinutes() / 60;
-return en > st ? (cur >= st && cur < en) : (cur >= st || cur < en);
+  if (h === "00:00-24:00") return true;
+  const st = parseTimeStr(h.slice(0, 5)), en = parseTimeStr(h.slice(6, 11));
+  const now = new Date(), cur = now.getHours() + now.getMinutes() / 60;
+  return en > st ? (cur >= st && cur < en) : (cur >= st || cur < en);
 }
 function formatHoursText(h) { return h === "00:00-24:00" ? "24小時營業" : h.replace("-", " ~ "); }
 function updateLiveClock() {
-const n = new Date();
-document.getElementById('liveClock').innerText = "🕒 " + String(n.getHours()).padStart(2,'0') + ":" + String(n.getMinutes()).padStart(2,'0');
+  const n = new Date();
+  document.getElementById('liveClock').innerText = "🕒 " + String(n.getHours()).padStart(2,'0') + ":" + String(n.getMinutes()).padStart(2,'0');
 }
 setInterval(updateLiveClock, 10000); updateLiveClock();
+
 let soundEnabled = true, audioCtx = null;
 function initAudio() {
-if (!audioCtx) { const AC = window.AudioContext || window.webkitAudioContext; if (AC) audioCtx = new AC(); }
-if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  if (!audioCtx) { const AC = window.AudioContext || window.webkitAudioContext; if (AC) audioCtx = new AC(); }
+  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
 }
 function toggleSound() { soundEnabled = !soundEnabled; document.getElementById('soundBtn').innerText = soundEnabled ? "🔊 音效開" : "🔇 靜音"; }
 function playTick() {
-if (!soundEnabled || !audioCtx) return;
-const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-o.type = 'triangle'; o.frequency.setValueAtTime(520, audioCtx.currentTime);
-g.gain.setValueAtTime(0.05, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
-o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.04);
+  if (!soundEnabled || !audioCtx) return;
+  const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+  o.type = 'triangle'; o.frequency.setValueAtTime(520, audioCtx.currentTime);
+  g.gain.setValueAtTime(0.05, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+  o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.04);
 }
 function playStop(st) {
-if (!soundEnabled || !audioCtx) return;
-const f = st === 1 ? 392 : (st === 2 ? 493.88 : 587.33);
-const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-o.type = 'sine'; o.frequency.setValueAtTime(f, audioCtx.currentTime);
-g.gain.setValueAtTime(0.14, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.16);
-o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.16);
+  if (!soundEnabled || !audioCtx) return;
+  const f = st === 1 ? 392 : (st === 2 ? 493.88 : 587.33);
+  const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+  o.type = 'sine'; o.frequency.setValueAtTime(f, audioCtx.currentTime);
+  g.gain.setValueAtTime(0.14, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.16);
+  o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.16);
 }
 function playWinSound() {
-if (!soundEnabled || !audioCtx) return;
-[523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
-const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-o.type = 'triangle'; o.frequency.setValueAtTime(f, audioCtx.currentTime + i * 0.09);
-g.gain.setValueAtTime(0.16, audioCtx.currentTime + i * 0.09); g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.09 + 0.4);
-o.connect(g); g.connect(audioCtx.destination); o.start(audioCtx.currentTime + i * 0.09); o.stop(audioCtx.currentTime + i * 0.09 + 0.4);
-});
+  if (!soundEnabled || !audioCtx) return;
+  [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
+    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    o.type = 'triangle'; o.frequency.setValueAtTime(f, audioCtx.currentTime + i * 0.09);
+    g.gain.setValueAtTime(0.16, audioCtx.currentTime + i * 0.09); g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.09 + 0.4);
+    o.connect(g); g.connect(audioCtx.destination); o.start(audioCtx.currentTime + i * 0.09); o.stop(audioCtx.currentTime + i * 0.09 + 0.4);
+  });
 }
 function playLoseSound() {
-if (!soundEnabled || !audioCtx) return;
-[311.13, 277.18, 233.08].forEach((f, i) => {
-const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-o.type = 'sawtooth'; o.frequency.setValueAtTime(f, audioCtx.currentTime + i * 0.22);
-g.gain.setValueAtTime(0.10, audioCtx.currentTime + i * 0.22); g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.22 + 0.35);
-o.connect(g); g.connect(audioCtx.destination); o.start(audioCtx.currentTime + i * 0.22); o.stop(audioCtx.currentTime + i * 0.22 + 0.35);
-});
+  if (!soundEnabled || !audioCtx) return;
+  [311.13, 277.18, 233.08].forEach((f, i) => {
+    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    o.type = 'sawtooth'; o.frequency.setValueAtTime(f, audioCtx.currentTime + i * 0.22);
+    g.gain.setValueAtTime(0.10, audioCtx.currentTime + i * 0.22); g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.22 + 0.35);
+    o.connect(g); g.connect(audioCtx.destination); o.start(audioCtx.currentTime + i * 0.22); o.stop(audioCtx.currentTime + i * 0.22 + 0.35);
+  });
 }
 function getFilteredShops() {
-const cat = document.getElementById('cuisineSelect').value, openOnly = document.getElementById('openOnlyCheck').checked;
-return beitunShops.filter(s => (cat === "all" || s.cat === cat) && (!openOnly || checkIsOpen(s.hours)));
+  const cat = document.getElementById('cuisineSelect').value, openOnly = document.getElementById('openOnlyCheck').checked;
+  return beitunShops.filter(s => (cat === "all" || s.cat === cat) && (!openOnly || checkIsOpen(s.hours)));
 }
 function updateStats() {
-const list = getFilteredShops(), dishes = list.reduce((sum, s) => sum + s.dishes.length, 0);
-document.getElementById('statsLine').innerText = 符合條件：${list.length} 家北屯店家・共 ${dishes} 道菜色;
+  const list = getFilteredShops(), dishes = list.reduce((sum, s) => sum + s.dishes.length, 0);
+  document.getElementById('statsLine').innerText = `符合條件：${list.length} 家北屯店家・共 ${dishes} 道菜色`;
 }
 updateStats();
+
 function buildReel(el, arr, fin) {
-let h = arr.map(x => <div class="reel-item"><div class="reel-emoji">${x.emoji}</div><div class="reel-text">${x.text}</div></div>).join("");
-h += <div class="reel-item"><div class="reel-emoji">${fin.emoji}</div><div class="reel-text">${fin.text}</div></div>;
-el.innerHTML = h; el.style.transition = "none"; el.style.transform = "translateY(0px)";
+  let h = arr.map(x => `<div class="reel-item"><div class="reel-emoji">${x.emoji}</div><div class="reel-text">${x.text}</div></div>`).join("");
+  h += `<div class="reel-item"><div class="reel-emoji">${fin.emoji}</div><div class="reel-text">${fin.text}</div></div>`;
+  el.innerHTML = h; el.style.transition = "none"; el.style.transform = "translateY(0px)";
 }
 function animateReel(el, len, ms, st, cb) {
-let t = 0, max = Math.floor(ms / 100);
-const iv = setInterval(() => { playTick(); if (++t >= max) clearInterval(iv); }, 100);
-requestAnimationFrame(() => requestAnimationFrame(() => { el.style.transition = transform ${ms}ms cubic-bezier(0.12, 0.88, 0.24, 1.03); el.style.transform = translateY(${-(len * 112)}px); }));
-setTimeout(() => { clearInterval(iv); playStop(st); if (cb) cb(); }, ms);
+  let t = 0, max = Math.floor(ms / 100);
+  const iv = setInterval(() => { playTick(); if (++t >= max) clearInterval(iv); }, 100);
+  requestAnimationFrame(() => requestAnimationFrame(() => { el.style.transition = `transform ${ms}ms cubic-bezier(0.12, 0.88, 0.24, 1.03)`; el.style.transform = `translateY(${-(len * 112)}px)`; }));
+  setTimeout(() => { clearInterval(iv); playStop(st); if (cb) cb(); }, ms);
 }
 function startSpin() {
-initAudio();
-const list = getFilteredShops();
-if (list.length === 0) { alert("目前這個時段該料理分類剛好都在休息中喔！請取消勾選「僅抽目前營業中店家」試試手氣！"); return; }
-const shop = list.at(Math.floor(Math.random() * list.length));
-const dish = shop.dishes.at(Math.floor(Math.random() * shop.dishes.length));
-const open = checkIsOpen(shop.hours);
-const btn = document.getElementById('spinBtn'), card = document.getElementById('resultCard'), m = document.getElementById('machineBox');
-btn.disabled = true; btn.innerText = "轉輪高速滾動中..."; card.style.display = "none"; m.classList.remove('win-glow');
-const d1 = [], d2 = [], d3 = [];
-for (let i = 0; i < 14; i++) { const r = beitunShops.at(Math.floor(Math.random() * beitunShops.length)); d1.push({ emoji: r.emoji, text: r.dishes.at(0) }); }
-for (let i = 0; i < 20; i++) { const r = beitunShops.at(Math.floor(Math.random() * beitunShops.length)); d2.push({ emoji: "🏪", text: r.shop }); }
-for (let i = 0; i < 26; i++) { const o = Math.random() > 0.4; d3.push({ emoji: o ? "🟢" : "🔴", text: o ? "營業中！" : "休息中" }); }
-buildReel(document.getElementById('strip1'), d1, { emoji: shop.emoji, text: dish });
-buildReel(document.getElementById('strip2'), d2, { emoji: "🏪", text: shop.shop });
-buildReel(document.getElementById('strip3'), d3, { emoji: open ? "🟢" : "🔴", text: open ? "營業中！" : "休息中" });
-animateReel(document.getElementById('strip1'), d1.length, 1400, 1, null);
-animateReel(document.getElementById('strip2'), d2.length, 2100, 2, null);
-animateReel(document.getElementById('strip3'), d3.length, 2900, 3, () => showResult(shop, dish, open));
+  initAudio();
+  const list = getFilteredShops();
+  if (list.length === 0) { alert("目前這個時段該料理分類剛好都在休息中喔！請取消勾選「僅抽目前營業中店家」試試手氣！"); return; }
+  const shop = list.at(Math.floor(Math.random() * list.length));
+  const dish = shop.dishes.at(Math.floor(Math.random() * shop.dishes.length));
+  const open = checkIsOpen(shop.hours);
+  const btn = document.getElementById('spinBtn'), card = document.getElementById('resultCard'), m = document.getElementById('machineBox');
+  btn.disabled = true; btn.innerText = "轉輪高速滾動中..."; card.style.display = "none"; m.classList.remove('win-glow');
+  const d1 = [], d2 = [], d3 = [];
+  for (let i = 0; i < 14; i++) { const r = beitunShops.at(Math.floor(Math.random() * beitunShops.length)); d1.push({ emoji: r.emoji, text: r.dishes.at(0) }); }
+  for (let i = 0; i < 20; i++) { const r = beitunShops.at(Math.floor(Math.random() * beitunShops.length)); d2.push({ emoji: "🏪", text: r.shop }); }
+  for (let i = 0; i < 26; i++) { const o = Math.random() > 0.4; d3.push({ emoji: o ? "🟢" : "🔴", text: o ? "營業中！" : "休息中" }); }
+  buildReel(document.getElementById('strip1'), d1, { emoji: shop.emoji, text: dish });
+  buildReel(document.getElementById('strip2'), d2, { emoji: "🏪", text: shop.shop });
+  buildReel(document.getElementById('strip3'), d3, { emoji: open ? "🟢" : "🔴", text: open ? "營業中！" : "休息中" });
+  animateReel(document.getElementById('strip1'), d1.length, 1400, 1, null);
+  animateReel(document.getElementById('strip2'), d2.length, 2100, 2, null);
+  animateReel(document.getElementById('strip3'), d3.length, 2900, 3, () => showResult(shop, dish, open));
 }
 function showResult(shop, dish, open) {
-const btn = document.getElementById('spinBtn'), card = document.getElementById('resultCard'), st = document.getElementById('resStatus'), act = document.getElementById('resActionArea');
-btn.disabled = false; btn.innerText = open ? "手氣超旺，再轉一次！" : "殘念休息中，再轉一次！";
-if (open) {
-playWinSound(); document.getElementById('machineBox').classList.add('win-glow'); launchConfetti();
-card.classList.remove('closed-card'); st.className = "status-pill status-open"; st.innerText = "🟢 中獎！目前正在營業中";
-document.getElementById('resTitle').innerText = 🎉 【${shop.area}】${shop.shop};
-act.innerHTML = <a class="btn-map" href="https://google.com{encodeURIComponent("台中市北屯區 " + shop.shop)}" target="_blank">📍 立即開啟 Google 地圖導航</a>;
-} else {
-playLoseSound(); card.classList.add('closed-card'); st.className = "status-pill status-closed"; st.innerText = "🔴 殘念！店家目前休息中";
-document.getElementById('resTitle').innerText = 😅 【${shop.area}】${shop.shop};
-act.innerHTML = <button class="btn-retry" onclick="startSpin()">🔄 沒開門不算，再轉一次！</button>;
-}
-document.getElementById('resMeta').innerText = 營業時間：${formatHoursText(shop.hours)}｜共收錄 ${shop.dishes.length} 道菜;
-document.getElementById('resDishes').innerHTML = shop.dishes.map(d => d === dish ? <span class="dish-tag highlight">★ ${d}</span> : <span class="dish-tag">${d}</span>).join("");
-card.style.display = "block";
+  const btn = document.getElementById('spinBtn'), card = document.getElementById('resultCard'), st = document.getElementById('resStatus'), act = document.getElementById('resActionArea');
+  btn.disabled = false; btn.innerText = open ? "手氣超旺，再轉一次！" : "殘念休息中，再轉一次！";
+  if (open) {
+    playWinSound(); document.getElementById('machineBox').classList.add('win-glow'); launchConfetti();
+    card.classList.remove('closed-card'); st.className = "status-pill status-open"; st.innerText = "🟢 中獎！目前正在營業中";
+    document.getElementById('resTitle').innerText = `🎉 【${shop.area}】${shop.shop}`;
+    act.innerHTML = `<a class="btn-map" href="https://google.com{encodeURIComponent("台中市北屯區 " + shop.shop)}" target="_blank">📍 立即開啟 Google 地圖導航</a>`;
+  } else {
+    playLoseSound(); card.classList.add('closed-card'); st.className = "status-pill status-closed"; st.innerText = "🔴 殘念！店家目前休息中";
+    document.getElementById('resTitle').innerText = `😅 【${shop.area}】${shop.shop}`;
+    act.innerHTML = `<button class="btn-retry" onclick="startSpin()">🔄 沒開門不算，再轉一次！</button>`;
+  }
+  document.getElementById('resMeta').innerText = `營業時間：${formatHoursText(shop.hours)}｜共收錄 ${shop.dishes.length} 道菜`;
+  document.getElementById('resDishes').innerHTML = shop.dishes.map(d => d === dish ? `<span class="dish-tag highlight">★ ${d}</span>` : `<span class="dish-tag">${d}</span>`).join("");
+  card.style.display = "block";
 }
 function launchConfetti() {
-const c = document.getElementById('confettiCanvas'), ctx = c.getContext('2d'); c.width = window.innerWidth; c.height = window.innerHeight;
-const cols = ['#ffd700', '#ff4757', '#2ed573', '#1e90ff', '#ffa502', '#ffffff'];
-let pts = Array.from({length: 85}, () => ({ x: c.width/2, y: c.height/2-40, vx: (Math.random()-0.5)*14, vy: (Math.random()-0.7)*14-2, s: Math.random()*6+4, col: cols.at(Math.floor(Math.random()*6)), a: 1 }));
-(function render() {
-ctx.clearRect(0, 0, c.width, c.height); let alive = false;
-pts.forEach(p => { if (p.a > 0) { alive = true; p.x += p.vx; p.y += p.vy; p.vy += 0.35; p.a -= 0.018; ctx.globalAlpha = Math.max(0, p.a); ctx.fillStyle = p.col; ctx.fillRect(p.x, p.y, p.s, p.s); } });
-if (alive) requestAnimationFrame(render); else ctx.clearRect(0, 0, c.width, c.height);
-})();
+  const c = document.getElementById('confettiCanvas'), ctx = c.getContext('2d'); c.width = window.innerWidth; c.height = window.innerHeight;
+  const cols = ['#ffd700', '#ff4757', '#2ed573', '#1e90ff', '#ffa502', '#ffffff'];
+  let pts = Array.from({length: 85}, () => ({ x: c.width/2, y: c.height/2-40, vx: (Math.random()-0.5)*14, vy: (Math.random()-0.7)*14-2, s: Math.random()*6+4, col: cols.at(Math.floor(Math.random()*6)), a: 1 }));
+  (function render() {
+    ctx.clearRect(0, 0, c.width, c.height); let alive = false;
+    pts.forEach(p => { if (p.a > 0) { alive = true; p.x += p.vx; p.y += p.vy; p.vy += 0.35; p.a -= 0.018; ctx.globalAlpha = Math.max(0, p.a); ctx.fillStyle = p.col; ctx.fillRect(p.x, p.y, p.s, p.s); } });
+    if (alive) requestAnimationFrame(render); else ctx.clearRect(0, 0, c.width, c.height);
+  })();
 }
+</script>
+</body>
+</html>
