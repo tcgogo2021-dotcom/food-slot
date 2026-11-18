@@ -114,14 +114,23 @@ function isOpenNow(s) {
 }
 function updateClock() {
   const n = new Date();
-  document.getElementById("liveClock").innerText = "🕒 " + String(n.getHours()).padStart(2, "0") + ":" + String(n.getMinutes()).padStart(2, "0");
+  const hh = n.getHours() < 10 ? "0" + n.getHours() : "" + n.getHours();
+  const mm = n.getMinutes() < 10 ? "0" + n.getMinutes() : "" + n.getMinutes();
+  document.getElementById("liveClock").innerText = "🕒 " + hh + ":" + mm;
 }
 setInterval(updateClock, 10000); updateClock();
 
 function getList() {
   const c = document.getElementById("catSelect").value;
   const only = document.getElementById("openCheck").checked;
-  return shopsV2.filter(s => (c === "all" || s.cat === c) && (!only || isOpenNow(s)));
+  const res = [];
+  for (let i = 0; i < shopsV2.length; i++) {
+    const s = shopsV2[i];
+    if ((c === "all" || s.cat === c) && (!only || isOpenNow(s))) {
+      res.push(s);
+    }
+  }
+  return res;
 }
 function updateCount() {
   document.getElementById("countText").innerText = "符合：" + getList().length + " 家店";
@@ -131,16 +140,21 @@ updateCount();
 function spinV2() {
   const list = getList();
   if (list.length === 0) { alert("目前該分類都在休息中喔！請取消勾選「僅抽營業中」試試！"); return; }
-  const item = list.at(Math.floor(Math.random() * list.length));
+  const idx = Math.floor(Math.random() * list.length);
+  const item = list[idx];
   const open = isOpenNow(item);
   document.getElementById("s1").innerText = item.dish;
   document.getElementById("s2").innerText = item.shop;
   document.getElementById("s3").innerText = open ? "🟢 營業中" : "🔴 休息中";
   const box = document.getElementById("resBox");
   box.className = open ? "result-card" : "result-card closed";
-document.getElementById("resText").innerText = (open ? "🎉 中獎！【" : "🔴 殘念休息中！【") + item.area + "】" + item.shop;
-document.getElementById("resHours").innerText = "必點：" + item.dish + "（營業時間 " + item.open + ":00 ~ " + (item.close > 24 ? "0" + (item.close - 24) : item.close) + ":00）";
-document.getElementById("resAction").innerHTML = open
-? '<a class="btn-map" href="google.com' + encodeURIComponent("台中市北屯區 " + item.shop) + '" target="_blank">📍 Google 地圖導航'
-: '沒開門不算，再轉一次吧！';
-box.style.display = "block";
+  document.getElementById("resText").innerText = (open ? "🎉 中獎！【" : "🔴 殘念休息中！【") + item.area + "】" + item.shop;
+  document.getElementById("resHours").innerText = "必點：" + item.dish;
+  document.getElementById("resAction").innerHTML = open
+    ? '<a class="btn-map" href="https://google.com' + encodeURIComponent("台中市北屯區 " + item.shop) + '" target="_blank">📍 Google 地圖導航</a>'
+    : '<div style="margin-top:6px;color:#ff7675;font-size:12px;">沒開門不算，再轉一次吧！</div>';
+  box.style.display = "block";
+}
+</script>
+</body>
+</html>
