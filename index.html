@@ -235,131 +235,304 @@ const rawDB = [
   "早午餐甜點|🧋|昌平路鮮果茶飲|昌平路二段|10:00-22:00|滿杯水果茶,楊枝甘露,甘蔗青茶,四季春珍波椰",
   "早午餐甜點|🥐|四平路文青早午餐|四平路商圈|08:00-15:00|嫩煎雞腿排拼盤,法式吐司,鮮奶茶,脆薯"
 ];
-const beitunShops = rawDB.map(line => {
-  const p = line.split("|");
-  return { cat: p.at(0), emoji: p.at(1), shop: p.at(2), area: p.at(3), hours: p.at(4), dishes: p.at(5).split(",") };
-});
-function parseTimeStr(s) { return Number(s.slice(0, 2)) + Number(s.slice(3, 5)) / 60; }
+const beitunShops = [];
+for (let i = 0; i < rawDB.length; i++) {
+  const p = rawDB[i].split("|");
+  beitunShops.push({
+    cat: p[0],
+    emoji: p[1],
+    shop: p[2],
+    area: p[3],
+    hours: p[4],
+    dishes: p[5].split(",")
+  });
+}
+
+function parseTimeStr(s) {
+  return Number(s.slice(0, 2)) + Number(s.slice(3, 5)) / 60;
+}
+
 function checkIsOpen(h) {
   if (h === "00:00-24:00") return true;
-  const st = parseTimeStr(h.slice(0, 5)), en = parseTimeStr(h.slice(6, 11));
-  const now = new Date(), cur = now.getHours() + now.getMinutes() / 60;
-  return en > st ? (cur >= st && cur < en) : (cur >= st || cur < en);
+  const st = parseTimeStr(h.slice(0, 5));
+  const en = parseTimeStr(h.slice(6, 11));
+  const now = new Date();
+  const cur = now.getHours() + now.getMinutes() / 60;
+  if (en > st) {
+    return cur >= st && cur < en;
+  } else {
+    return cur >= st || cur < en;
+  }
 }
-function formatHoursText(h) { return h === "00:00-24:00" ? "24小時營業" : h.replace("-", " ~ "); }
+
+function formatHoursText(h) {
+  return h === "00:00-24:00" ? "24小時營業" : h.replace("-", " ~ ");
+}
+
 function updateLiveClock() {
   const n = new Date();
-  document.getElementById('liveClock').innerText = "🕒 " + String(n.getHours()).padStart(2,'0') + ":" + String(n.getMinutes()).padStart(2,'0');
+  const hh = String(n.getHours()).padStart(2, "0");
+  const mm = String(n.getMinutes()).padStart(2, "0");
+  document.getElementById("liveClock").innerText = "🕒 " + hh + ":" + mm;
 }
-setInterval(updateLiveClock, 10000); updateLiveClock();
+setInterval(updateLiveClock, 10000);
+updateLiveClock();
 
-let soundEnabled = true, audioCtx = null;
+let soundEnabled = true;
+let audioCtx = null;
+
 function initAudio() {
-  if (!audioCtx) { const AC = window.AudioContext || window.webkitAudioContext; if (AC) audioCtx = new AC(); }
-  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  if (!audioCtx) {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (AC) audioCtx = new AC();
+  }
+  if (audioCtx && audioCtx.state === "suspended") {
+    audioCtx.resume();
+  }
 }
-function toggleSound() { soundEnabled = !soundEnabled; document.getElementById('soundBtn').innerText = soundEnabled ? "🔊 音效開" : "🔇 靜音"; }
+
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+  document.getElementById("soundBtn").innerText = soundEnabled ? "🔊 音效開" : "🔇 靜音";
+}
+
 function playTick() {
   if (!soundEnabled || !audioCtx) return;
-  const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-  o.type = 'triangle'; o.frequency.setValueAtTime(520, audioCtx.currentTime);
-  g.gain.setValueAtTime(0.05, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
-  o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.04);
+  const o = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.type = "triangle";
+  o.frequency.setValueAtTime(520, audioCtx.currentTime);
+  g.gain.setValueAtTime(0.05, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+  o.connect(g);
+  g.connect(audioCtx.destination);
+  o.start();
+  o.stop(audioCtx.currentTime + 0.04);
 }
+
 function playStop(st) {
   if (!soundEnabled || !audioCtx) return;
   const f = st === 1 ? 392 : (st === 2 ? 493.88 : 587.33);
-  const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-  o.type = 'sine'; o.frequency.setValueAtTime(f, audioCtx.currentTime);
-  g.gain.setValueAtTime(0.14, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.16);
-  o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.16);
+  const o = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.type = "sine";
+  o.frequency.setValueAtTime(f, audioCtx.currentTime);
+  g.gain.setValueAtTime(0.14, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.16);
+  o.connect(g);
+  g.connect(audioCtx.destination);
+  o.start();
+  o.stop(audioCtx.currentTime + 0.16);
 }
+
 function playWinSound() {
   if (!soundEnabled || !audioCtx) return;
-  [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
-    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-    o.type = 'triangle'; o.frequency.setValueAtTime(f, audioCtx.currentTime + i * 0.09);
-    g.gain.setValueAtTime(0.16, audioCtx.currentTime + i * 0.09); g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.09 + 0.4);
-    o.connect(g); g.connect(audioCtx.destination); o.start(audioCtx.currentTime + i * 0.09); o.stop(audioCtx.currentTime + i * 0.09 + 0.4);
-  });
+  const notes = [523.25, 659.25, 783.99, 1046.50];
+  for (let i = 0; i < notes.length; i++) {
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = "triangle";
+    o.frequency.setValueAtTime(notes[i], audioCtx.currentTime + i * 0.09);
+    g.gain.setValueAtTime(0.16, audioCtx.currentTime + i * 0.09);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.09 + 0.4);
+    o.connect(g);
+    g.connect(audioCtx.destination);
+    o.start(audioCtx.currentTime + i * 0.09);
+    o.stop(audioCtx.currentTime + i * 0.09 + 0.4);
+  }
 }
+
 function playLoseSound() {
   if (!soundEnabled || !audioCtx) return;
-  [311.13, 277.18, 233.08].forEach((f, i) => {
-    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-    o.type = 'sawtooth'; o.frequency.setValueAtTime(f, audioCtx.currentTime + i * 0.22);
-    g.gain.setValueAtTime(0.10, audioCtx.currentTime + i * 0.22); g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.22 + 0.35);
-    o.connect(g); g.connect(audioCtx.destination); o.start(audioCtx.currentTime + i * 0.22); o.stop(audioCtx.currentTime + i * 0.22 + 0.35);
-  });
+  const notes = [311.13, 277.18, 233.08];
+  for (let i = 0; i < notes.length; i++) {
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = "sawtooth";
+    o.frequency.setValueAtTime(notes[i], audioCtx.currentTime + i * 0.22);
+    g.gain.setValueAtTime(0.10, audioCtx.currentTime + i * 0.22);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.22 + 0.35);
+    o.connect(g);
+    g.connect(audioCtx.destination);
+    o.start(audioCtx.currentTime + i * 0.22);
+    o.stop(audioCtx.currentTime + i * 0.22 + 0.35);
+  }
 }
+
 function getFilteredShops() {
-  const cat = document.getElementById('cuisineSelect').value, openOnly = document.getElementById('openOnlyCheck').checked;
-  return beitunShops.filter(s => (cat === "all" || s.cat === cat) && (!openOnly || checkIsOpen(s.hours)));
+  const cat = document.getElementById("cuisineSelect").value;
+  const openOnly = document.getElementById("openOnlyCheck").checked;
+  const res = [];
+  for (let i = 0; i < beitunShops.length; i++) {
+    const s = beitunShops[i];
+    const matchCat = (cat === "all" || s.cat === cat);
+    const matchOpen = (!openOnly || checkIsOpen(s.hours));
+    if (matchCat && matchOpen) {
+      res.push(s);
+    }
+  }
+  return res;
 }
+
 function updateStats() {
-  const list = getFilteredShops(), dishes = list.reduce((sum, s) => sum + s.dishes.length, 0);
-  document.getElementById('statsLine').innerText = `符合條件：${list.length} 家北屯店家・共 ${dishes} 道菜色`;
+  const list = getFilteredShops();
+  let dishes = 0;
+  for (let i = 0; i < list.length; i++) {
+    dishes += list[i].dishes.length;
+  }
+  document.getElementById("statsLine").innerText = "符合條件：" + list.length + " 家北屯店家・共 " + dishes + " 道菜色";
 }
 updateStats();
 
 function buildReel(el, arr, fin) {
-  let h = arr.map(x => `<div class="reel-item"><div class="reel-emoji">${x.emoji}</div><div class="reel-text">${x.text}</div></div>`).join("");
-  h += `<div class="reel-item"><div class="reel-emoji">${fin.emoji}</div><div class="reel-text">${fin.text}</div></div>`;
-  el.innerHTML = h; el.style.transition = "none"; el.style.transform = "translateY(0px)";
+  let h = "";
+  for (let i = 0; i < arr.length; i++) {
+    h += '<div class="reel-item"><div class="reel-emoji">' + arr[i].emoji + '</div><div class="reel-text">' + arr[i].text + '</div></div>';
+  }
+  h += '<div class="reel-item"><div class="reel-emoji">' + fin.emoji + '</div><div class="reel-text">' + fin.text + '</div></div>';
+  el.innerHTML = h;
+  el.style.transition = "none";
+  el.style.transform = "translateY(0px)";
 }
+
 function animateReel(el, len, ms, st, cb) {
-  let t = 0, max = Math.floor(ms / 100);
-  const iv = setInterval(() => { playTick(); if (++t >= max) clearInterval(iv); }, 100);
-  requestAnimationFrame(() => requestAnimationFrame(() => { el.style.transition = `transform ${ms}ms cubic-bezier(0.12, 0.88, 0.24, 1.03)`; el.style.transform = `translateY(${-(len * 112)}px)`; }));
-  setTimeout(() => { clearInterval(iv); playStop(st); if (cb) cb(); }, ms);
+  let t = 0;
+  const max = Math.floor(ms / 100);
+  const iv = setInterval(function() {
+    playTick();
+    t++;
+    if (t >= max) clearInterval(iv);
+  }, 100);
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      el.style.transition = "transform " + ms + "ms cubic-bezier(0.12, 0.88, 0.24, 1.03)";
+      el.style.transform = "translateY(" + (-(len * 112)) + "px)";
+    });
+  });
+  setTimeout(function() {
+    clearInterval(iv);
+    playStop(st);
+    if (cb) cb();
+  }, ms);
 }
+
 function startSpin() {
   initAudio();
   const list = getFilteredShops();
-  if (list.length === 0) { alert("目前這個時段該料理分類剛好都在休息中喔！請取消勾選「僅抽目前營業中店家」試試手氣！"); return; }
-  const shop = list.at(Math.floor(Math.random() * list.length));
-  const dish = shop.dishes.at(Math.floor(Math.random() * shop.dishes.length));
-  const open = checkIsOpen(shop.hours);
-  const btn = document.getElementById('spinBtn'), card = document.getElementById('resultCard'), m = document.getElementById('machineBox');
-  btn.disabled = true; btn.innerText = "轉輪高速滾動中..."; card.style.display = "none"; m.classList.remove('win-glow');
-  const d1 = [], d2 = [], d3 = [];
-  for (let i = 0; i < 14; i++) { const r = beitunShops.at(Math.floor(Math.random() * beitunShops.length)); d1.push({ emoji: r.emoji, text: r.dishes.at(0) }); }
-  for (let i = 0; i < 20; i++) { const r = beitunShops.at(Math.floor(Math.random() * beitunShops.length)); d2.push({ emoji: "🏪", text: r.shop }); }
-  for (let i = 0; i < 26; i++) { const o = Math.random() > 0.4; d3.push({ emoji: o ? "🟢" : "🔴", text: o ? "營業中！" : "休息中" }); }
-  buildReel(document.getElementById('strip1'), d1, { emoji: shop.emoji, text: dish });
-  buildReel(document.getElementById('strip2'), d2, { emoji: "🏪", text: shop.shop });
-  buildReel(document.getElementById('strip3'), d3, { emoji: open ? "🟢" : "🔴", text: open ? "營業中！" : "休息中" });
-  animateReel(document.getElementById('strip1'), d1.length, 1400, 1, null);
-  animateReel(document.getElementById('strip2'), d2.length, 2100, 2, null);
-  animateReel(document.getElementById('strip3'), d3.length, 2900, 3, () => showResult(shop, dish, open));
-}
-function showResult(shop, dish, open) {
-  const btn = document.getElementById('spinBtn'), card = document.getElementById('resultCard'), st = document.getElementById('resStatus'), act = document.getElementById('resActionArea');
-  btn.disabled = false; btn.innerText = open ? "手氣超旺，再轉一次！" : "殘念休息中，再轉一次！";
-  if (open) {
-    playWinSound(); document.getElementById('machineBox').classList.add('win-glow'); launchConfetti();
-    card.classList.remove('closed-card'); st.className = "status-pill status-open"; st.innerText = "🟢 中獎！目前正在營業中";
-    document.getElementById('resTitle').innerText = `🎉 【${shop.area}】${shop.shop}`;
-    act.innerHTML = `<a class="btn-map" href="https://google.com{encodeURIComponent("台中市北屯區 " + shop.shop)}" target="_blank">📍 立即開啟 Google 地圖導航</a>`;
-  } else {
-    playLoseSound(); card.classList.add('closed-card'); st.className = "status-pill status-closed"; st.innerText = "🔴 殘念！店家目前休息中";
-    document.getElementById('resTitle').innerText = `😅 【${shop.area}】${shop.shop}`;
-    act.innerHTML = `<button class="btn-retry" onclick="startSpin()">🔄 沒開門不算，再轉一次！</button>`;
+  if (list.length === 0) {
+    alert("目前這個時段該料理分類剛好都在休息中喔！請取消勾選「僅抽目前營業中店家」試試手氣！");
+    return;
   }
-  document.getElementById('resMeta').innerText = `營業時間：${formatHoursText(shop.hours)}｜共收錄 ${shop.dishes.length} 道菜`;
-  document.getElementById('resDishes').innerHTML = shop.dishes.map(d => d === dish ? `<span class="dish-tag highlight">★ ${d}</span>` : `<span class="dish-tag">${d}</span>`).join("");
+  const shop = list[Math.floor(Math.random() * list.length)];
+  const dish = shop.dishes[Math.floor(Math.random() * shop.dishes.length)];
+  const open = checkIsOpen(shop.hours);
+  const btn = document.getElementById("spinBtn");
+  const card = document.getElementById("resultCard");
+  const m = document.getElementById("machineBox");
+  btn.disabled = true;
+  btn.innerText = "轉輪高速滾動中...";
+  card.style.display = "none";
+  m.classList.remove("win-glow");
+
+  const d1 = [], d2 = [], d3 = [];
+  for (let i = 0; i < 14; i++) {
+    const r = beitunShops[Math.floor(Math.random() * beitunShops.length)];
+    d1.push({ emoji: r.emoji, text: r.dishes[0] });
+  }
+  for (let i = 0; i < 20; i++) {
+    const r = beitunShops[Math.floor(Math.random() * beitunShops.length)];
+    d2.push({ emoji: "🏪", text: r.shop });
+  }
+  for (let i = 0; i < 26; i++) {
+    const o = Math.random() > 0.4;
+    d3.push({ emoji: o ? "🟢" : "🔴", text: o ? "營業中！" : "休息中" });
+  }
+
+  buildReel(document.getElementById("strip1"), d1, { emoji: shop.emoji, text: dish });
+  buildReel(document.getElementById("strip2"), d2, { emoji: "🏪", text: shop.shop });
+  buildReel(document.getElementById("strip3"), d3, { emoji: open ? "🟢" : "🔴", text: open ? "營業中！" : "休息中" });
+
+  animateReel(document.getElementById("strip1"), d1.length, 1400, 1, null);
+  animateReel(document.getElementById("strip2"), d2.length, 2100, 2, null);
+  animateReel(document.getElementById("strip3"), d3.length, 2900, 3, function() {
+    showResult(shop, dish, open);
+  });
+}
+
+function showResult(shop, dish, open) {
+  const btn = document.getElementById("spinBtn");
+  const card = document.getElementById("resultCard");
+  const st = document.getElementById("resStatus");
+  const act = document.getElementById("resActionArea");
+  btn.disabled = false;
+  btn.innerText = open ? "手氣超旺，再轉一次！" : "殘念休息中，再轉一次！";
+
+  if (open) {
+    playWinSound();
+    document.getElementById("machineBox").classList.add("win-glow");
+    launchConfetti();
+    card.classList.remove("closed-card");
+    st.className = "status-pill status-open";
+    st.innerText = "🟢 中獎！目前正在營業中";
+    document.getElementById("resTitle").innerText = "🎉 【" + shop.area + "】" + shop.shop;
+    act.innerHTML = '<a class="btn-map" href="https://google.com' + encodeURIComponent("台中市北屯區 " + shop.shop) + '" target="_blank">📍 立即開啟 Google 地圖導航</a>';
+  } else {
+    playLoseSound();
+    card.classList.add("closed-card");
+    st.className = "status-pill status-closed";
+    st.innerText = "🔴 殘念！店家目前休息中";
+    document.getElementById("resTitle").innerText = "😅 【" + shop.area + "】" + shop.shop;
+    act.innerHTML = '<button class="btn-retry" onclick="startSpin()">🔄 沒開門不算，再轉一次！</button>';
+  }
+
+  document.getElementById("resMeta").innerText = "營業時間：" + formatHoursText(shop.hours) + "｜共收錄 " + shop.dishes.length + " 道菜";
+  let tagsHtml = "";
+  for (let i = 0; i < shop.dishes.length; i++) {
+    const d = shop.dishes[i];
+    if (d === dish) {
+      tagsHtml += '<span class="dish-tag highlight">★ ' + d + '</span>';
+    } else {
+      tagsHtml += '<span class="dish-tag">' + d + '</span>';
+    }
+  }
+  document.getElementById("resDishes").innerHTML = tagsHtml;
   card.style.display = "block";
 }
+
 function launchConfetti() {
-  const c = document.getElementById('confettiCanvas'), ctx = c.getContext('2d'); c.width = window.innerWidth; c.height = window.innerHeight;
-  const cols = ['#ffd700', '#ff4757', '#2ed573', '#1e90ff', '#ffa502', '#ffffff'];
-  let pts = Array.from({length: 85}, () => ({ x: c.width/2, y: c.height/2-40, vx: (Math.random()-0.5)*14, vy: (Math.random()-0.7)*14-2, s: Math.random()*6+4, col: cols.at(Math.floor(Math.random()*6)), a: 1 }));
-  (function render() {
-    ctx.clearRect(0, 0, c.width, c.height); let alive = false;
-    pts.forEach(p => { if (p.a > 0) { alive = true; p.x += p.vx; p.y += p.vy; p.vy += 0.35; p.a -= 0.018; ctx.globalAlpha = Math.max(0, p.a); ctx.fillStyle = p.col; ctx.fillRect(p.x, p.y, p.s, p.s); } });
-    if (alive) requestAnimationFrame(render); else ctx.clearRect(0, 0, c.width, c.height);
-  })();
-}
-</script>
-</body>
-</html>
+  const c = document.getElementById("confettiCanvas");
+  const ctx = c.getContext("2d");
+  c.width = window.innerWidth;
+  c.height = window.innerHeight;
+  const cols = ["#ffd700", "#ff4757", "#2ed573", "#1e90ff", "#ffa502", "#ffffff"];
+  const pts = [];
+  for (let i = 0; i < 85; i++) {
+    pts.push({
+      x: c.width / 2,
+      y: c.height / 2 - 40,
+      vx: (Math.random() - 0.5) * 14,
+      vy: (Math.random() - 0.7) * 14 - 2,
+      s: Math.random() * 6 + 4,
+      col: cols[Math.floor(Math.random() * cols.length)],
+      a: 1
+    });
+  }
+  function render() {
+    ctx.clearRect(0, 0, c.width, c.height);
+    let alive = false;
+    for (let i = 0; i < pts.length; i++) {
+      const p = pts[i];
+      if (p.a > 0) {
+        alive = true;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.35;
+        p.a -= 0.018;
+        ctx.globalAlpha = Math.max(0, p.a);
+        ctx.fillStyle = p.col;
+        ctx.fillRect(p.x, p.y, p.s, p.s);
+      }
+    }
+    if (alive) {
+      requestAnimationFrame(render);
+    } else {
