@@ -237,16 +237,18 @@ const rawDB = [
 ];
 const beitunShops = [];
 for (let i = 0; i < rawDB.length; i++) {
-  const p = rawDB[i].split("|");
+  const line = rawDB.at(i);
+  const p = line.split("|");
   beitunShops.push({
-    cat: p[0],
-    emoji: p[1],
-    shop: p[2],
-    area: p[3],
-    hours: p[4],
-    dishes: p[5].split(",")
+    cat: p.at(0),
+    emoji: p.at(1),
+    shop: p.at(2),
+    area: p.at(3),
+    hours: p.at(4),
+    dishes: p.at(5).split(",")
   });
 }
+
 
 function parseTimeStr(s) {
   return Number(s.slice(0, 2)) + Number(s.slice(3, 5)) / 60;
