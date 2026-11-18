@@ -3,10 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>台中市北屯區・美食幸運拉霸機 v1.0</title>
+<title>台中市北屯區・美食幸運拉霸機 v2.0</title>
 <style>
   * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Microsoft JhengHei", sans-serif; }
   body { margin: 0; padding: 12px 6px; background: linear-gradient(135deg, #141424 0%, #1a2238 100%); color: #fff; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+  .top-bar { width: 100%; max-width: 960px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 6px; }
+  .region-badge { background: #e94560; color: #fff; font-size: 12px; font-weight: bold; padding: 4px 12px; border-radius: 20px; }
+  .clock-badge { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,215,0,0.4); color: #ffe066; font-size: 12px; font-weight: bold; padding: 4px 10px; border-radius: 20px; }
   .header { text-align: center; margin-bottom: 12px; }
   .header h1 { margin: 0; font-size: 20px; color: #ffd700; }
   .header p { margin: 4px 0 0; font-size: 12px; color: #b0b8d1; }
@@ -19,20 +22,28 @@
   .ad-title { font-size: 11px; font-weight: bold; line-height: 1.2; margin-bottom: 2px; }
   .ad-sub { font-size: 9px; color: #ffe066; }
   .center-stage { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; }
+  .filter-panel { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,215,0,0.3); border-radius: 12px; padding: 10px; width: 100%; margin-bottom: 10px; }
+  select { width: 100%; padding: 8px; border-radius: 8px; border: none; background: #fff; color: #1a1a2e; font-size: 13px; font-weight: bold; outline: none; }
+  .open-row { margin-top: 8px; font-size: 12px; color: #ffe066; display: flex; justify-content: space-between; align-items: center; }
   .machine { background: #e94560; padding: 14px 8px; border-radius: 18px; width: 100%; border: 3px solid #ffd700; box-shadow: 0 8px 20px rgba(0,0,0,0.5); }
   .slots { display: flex; gap: 5px; background: #0f3460; padding: 10px 6px; border-radius: 10px; }
   .slot-box { flex: 1; background: #fff; color: #1a1a2e; border-radius: 8px; height: 100px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 4px; }
   .slot-label { font-size: 9px; color: #888; margin-bottom: 4px; font-weight: bold; }
   .slot-text { font-size: 13px; font-weight: 900; line-height: 1.2; }
   .btn-spin { width: 100%; margin-top: 14px; padding: 14px; font-size: 16px; font-weight: bold; color: #1a1a2e; background: #ffd700; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 0 #b39700; }
-  .result-card { display: none; margin-top: 12px; background: rgba(255,255,255,0.12); border: 1px solid #ffd700; border-radius: 12px; padding: 12px; width: 100%; text-align: center; }
+  .result-card { display: none; margin-top: 12px; background: rgba(255,255,255,0.12); border: 1.5px solid #ffd700; border-radius: 12px; padding: 12px; width: 100%; text-align: center; }
+  .result-card.closed { border-color: #ff6b6b; background: rgba(255,75,75,0.15); }
   .btn-map { display: inline-block; margin-top: 8px; background: #00b894; color: #fff; text-decoration: none; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: bold; }
 </style>
 </head>
 <body>
+<div class="top-bar">
+  <span class="region-badge">📍 台中市・北屯區 v2.0</span>
+  <span class="clock-badge" id="liveClock">🕒 --:--</span>
+</div>
 <div class="header">
-  <h1>🎰 北屯區美食幸運拉霸機 v1.0</h1>
-  <p>基礎核心與左右 10 格黃金廣告版位驗證版</p>
+  <h1>🎰 北屯區美食幸運拉霸機</h1>
+  <p>加入料理分類與即時對時營業狀態判定</p>
 </div>
 <div class="main-arena">
   <div class="ad-column">
@@ -43,17 +54,35 @@
     <div class="ad-card vacant" onclick="alert('北屯黃金廣告位招租中！')"><span class="ad-tag">招租 5</span><div class="ad-title">商圈特約席位</div><div class="ad-sub">歡迎名店進駐</div></div>
   </div>
   <div class="center-stage">
+    <div class="filter-panel">
+      <select id="catSelect" onchange="updateCount()">
+        <option value="all">🎲 全部料理隨機抽</option>
+        <option value="銅板小吃">🥢 銅板小吃</option>
+        <option value="宵夜炸物">🍗 宵夜炸物</option>
+        <option value="台式熱炒">🇹🇼 台式熱炒</option>
+        <option value="日式料理">🇯🇵 日式料理</option>
+        <option value="火鍋燒肉">🍲 火鍋燒肉</option>
+        <option value="韓式異國">🇰🇷 韓式異國</option>
+        <option value="義式美式">🇮🇹 義式美式</option>
+        <option value="早午餐甜點">🧋 早午餐甜點</option>
+      </select>
+      <div class="open-row">
+        <label><input type="checkbox" id="openCheck" onchange="updateCount()"> 🟢 僅抽營業中</label>
+        <span id="countText">統計中...</span>
+      </div>
+    </div>
     <div class="machine">
       <div class="slots">
         <div class="slot-box"><div class="slot-label">第一軸・菜色</div><div class="slot-text" id="s1">❓</div></div>
         <div class="slot-box"><div class="slot-label">第二軸・店家</div><div class="slot-text" id="s2">❓</div></div>
-        <div class="slot-box"><div class="slot-label">第三軸・商圈</div><div class="slot-text" id="s3">❓</div></div>
+        <div class="slot-box"><div class="slot-label">第三軸・狀態</div><div class="slot-text" id="s3">❓</div></div>
       </div>
-      <button class="btn-spin" onclick="spinV1()">北屯美食，開轉！</button>
+      <button class="btn-spin" onclick="spinV2()">北屯美食，開轉！</button>
     </div>
     <div class="result-card" id="resBox">
-      <div id="resText" style="font-weight:bold;color:#ffd700;font-size:15px;"></div>
-      <a class="btn-map" id="mapBtn" href="#" target="_blank">📍 Google 地圖導航</a>
+      <div id="resText" style="font-weight:bold;font-size:14px;"></div>
+      <div id="resHours" style="font-size:12px;color:#ccc;margin-top:4px;"></div>
+      <div id="resAction"></div>
     </div>
   </div>
   <div class="ad-column">
@@ -65,22 +94,53 @@
   </div>
 </div>
 <script>
-const listV1 = [
-  { dish: "大腸蚵仔麵線", shop: "昌平路大腸麵線", area: "昌平商圈" },
-  { dish: "無骨鹽酥雞", shop: "炸滋滋無骨鹽酥雞", area: "昌平商圈" },
-  { dish: "日本A5和牛", shop: "屋馬燒肉 崇德店", area: "崇德商圈" },
-  { dish: "招牌甕缸雞", shop: "東山棧甕缸雞", area: "大坑東山" },
-  { dish: "蚌麵", shop: "老向的店", area: "北平商圈" }
+const shopsV2 = [
+  { cat: "銅板小吃", dish: "大腸蚵仔麵線", shop: "昌平路大腸麵線", area: "昌平商圈", open: 6.5, close: 13.5 },
+  { cat: "銅板小吃", dish: "招牌蚵仔煎", shop: "台北蚵仔煎", area: "一點利市場", open: 11, close: 21 },
+  { cat: "宵夜炸物", dish: "無骨鹽酥雞", shop: "炸滋滋無骨鹽酥雞", area: "昌平商圈", open: 16, close: 25 },
+  { cat: "台式熱炒", dish: "招牌甕缸雞", shop: "東山棧甕缸雞", area: "大坑東山", open: 11, close: 21.5 },
+  { cat: "日式料理", dish: "炙燒鮭魚肚", shop: "藏壽司 文心崇德店", area: "文心崇德", open: 11, close: 22 },
+  { cat: "火鍋燒肉", dish: "日本A5和牛", shop: "屋馬燒肉 崇德店", area: "崇德商圈", open: 11, close: 24 },
+  { cat: "韓式異國", dish: "月亮蝦餅", shop: "瓦城泰國料理 崇德店", area: "崇德商圈", open: 11.5, close: 21.5 },
+  { cat: "義式美式", dish: "爆炸蛤蜊麵", shop: "JAI宅 水湳店", area: "水湳商圈", open: 11, close: 21.5 },
+  { cat: "早午餐甜點", dish: "粉漿蛋餅", shop: "昌平路傳統早餐店", area: "昌平商圈", open: 5.5, close: 12 },
+  { cat: "早午餐甜點", dish: "綜合芋圓冰", shop: "大坑東東芋圓", area: "大坑東山", open: 9, close: 22 }
 ];
-function spinV1() {
-  const item = listV1.at(Math.floor(Math.random() * listV1.length));
+function isOpenNow(s) {
+  const now = new Date();
+  const cur = now.getHours() + now.getMinutes() / 60;
+  if (s.close > 24) return cur >= s.open || cur < (s.close - 24);
+  return cur >= s.open && cur < s.close;
+}
+function updateClock() {
+  const n = new Date();
+  document.getElementById("liveClock").innerText = "🕒 " + String(n.getHours()).padStart(2, "0") + ":" + String(n.getMinutes()).padStart(2, "0");
+}
+setInterval(updateClock, 10000); updateClock();
+
+function getList() {
+  const c = document.getElementById("catSelect").value;
+  const only = document.getElementById("openCheck").checked;
+  return shopsV2.filter(s => (c === "all" || s.cat === c) && (!only || isOpenNow(s)));
+}
+function updateCount() {
+  document.getElementById("countText").innerText = "符合：" + getList().length + " 家店";
+}
+updateCount();
+
+function spinV2() {
+  const list = getList();
+  if (list.length === 0) { alert("目前該分類都在休息中喔！請取消勾選「僅抽營業中」試試！"); return; }
+  const item = list.at(Math.floor(Math.random() * list.length));
+  const open = isOpenNow(item);
   document.getElementById("s1").innerText = item.dish;
   document.getElementById("s2").innerText = item.shop;
-  document.getElementById("s3").innerText = item.area;
-  document.getElementById("resText").innerText = "🎉 今日抽中：【" + item.area + "】" + item.shop + "（必點：" + item.dish + "）";
-  document.getElementById("mapBtn").href = "https://google.com" + encodeURIComponent("台中市北屯區 " + item.shop);
-  document.getElementById("resBox").style.display = "block";
-}
-</script>
-</body>
-</html>
+  document.getElementById("s3").innerText = open ? "🟢 營業中" : "🔴 休息中";
+  const box = document.getElementById("resBox");
+  box.className = open ? "result-card" : "result-card closed";
+document.getElementById("resText").innerText = (open ? "🎉 中獎！【" : "🔴 殘念休息中！【") + item.area + "】" + item.shop;
+document.getElementById("resHours").innerText = "必點：" + item.dish + "（營業時間 " + item.open + ":00 ~ " + (item.close > 24 ? "0" + (item.close - 24) : item.close) + ":00）";
+document.getElementById("resAction").innerHTML = open
+? '<a class="btn-map" href="google.com' + encodeURIComponent("台中市北屯區 " + item.shop) + '" target="_blank">📍 Google 地圖導航'
+: '沒開門不算，再轉一次吧！';
+box.style.display = "block";
