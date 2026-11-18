@@ -235,14 +235,14 @@ const beitunShops = [
 { cat: "早午餐甜點", emoji: "🥐", shop: "四平路文青早午餐", area: "四平路商圈", hours: "08:00-15:00", dishes: ["嫩煎雞腿排拼盤", "法式吐司", "鮮奶茶", "脆薯"] }
 ];
 function parseTimeStr(str) {
-const parts = str.split(":");
-return parseInt(parts[0], 10) + parseInt(parts[1], 10) / 60;
+const hh = Number(str.slice(0, 2));
+const mm = Number(str.slice(3, 5));
+return hh + mm / 60;
 }
 function checkIsOpen(hoursStr) {
 if (hoursStr === "00:00-24:00") return true;
-const range = hoursStr.split("-");
-const start = parseTimeStr(range[0]);
-const end = parseTimeStr(range[1]);
+const start = parseTimeStr(hoursStr.slice(0, 5));
+const end = parseTimeStr(hoursStr.slice(6, 11));
 const now = new Date();
 const currentDec = now.getHours() + now.getMinutes() / 60;
 if (end > start) {
@@ -288,11 +288,11 @@ osc.stop(audioCtx.currentTime + 0.04);
 }
 function playStop(stage) {
 if (!soundEnabled || !audioCtx) return;
-const freqs = [392, 493.88, 587.33];
+const freq = stage === 1 ? 392 : (stage === 2 ? 493.88 : 587.33);
 const osc = audioCtx.createOscillator();
 const gain = audioCtx.createGain();
 osc.type = 'sine';
-osc.frequency.setValueAtTime(freqs[stage - 1] || 440, audioCtx.currentTime);
+osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
 gain.gain.setValueAtTime(0.14, audioCtx.currentTime);
 gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.16);
 osc.connect(gain);
@@ -349,9 +349,9 @@ document.getElementById('statsLine').innerText = 符合條件：${list.length} �
 updateStats();
 function buildReel(stripEl, itemsArray, finalObj) {
 let html = "";
-for (let i = 0; i < itemsArray.length; i++) {
-html += <div class="reel-item"><div class="reel-emoji">${itemsArray[i].emoji}</div><div class="reel-text">${itemsArray[i].text}</div></div>;
-}
+itemsArray.forEach(item => {
+html += <div class="reel-item"><div class="reel-emoji">${item.emoji}</div><div class="reel-text">${item.text}</div></div>;
+});
 html += <div class="reel-item"><div class="reel-emoji">${finalObj.emoji}</div><div class="reel-text">${finalObj.text}</div></div>;
 stripEl.innerHTML = html;
 stripEl.style.transition = "none";
@@ -385,8 +385,8 @@ if (filtered.length === 0) {
 alert("目前這個時段該料理分類剛好都在休息中喔！請取消勾選「僅抽目前營業中店家」試試手氣！");
 return;
 }
-const chosenShop = filtered[Math.floor(Math.random() * filtered.length)];
-const chosenDish = chosenShop.dishes[Math.floor(Math.random() * chosenShop.dishes.length)];
+const chosenShop = filtered.at(Math.floor(Math.random() * filtered.length));
+const chosenDish = chosenShop.dishes.at(Math.floor(Math.random() * chosenShop.dishes.length));
 const isOpenNow = checkIsOpen(chosenShop.hours);
 const btn = document.getElementById('spinBtn');
 const card = document.getElementById('resultCard');
@@ -397,11 +397,11 @@ card.style.display = "none";
 machine.classList.remove('win-glow');
 const dummies1 = [], dummies2 = [], dummies3 = [];
 for (let i = 0; i < 14; i++) {
-const r = beitunShops[Math.floor(Math.random() * beitunShops.length)];
-dummies1.push({ emoji: r.emoji, text: r.dishes[Math.floor(Math.random() * r.dishes.length)] });
+const r = beitunShops.at(Math.floor(Math.random() * beitunShops.length));
+dummies1.push({ emoji: r.emoji, text: r.dishes.at(Math.floor(Math.random() * r.dishes.length)) });
 }
 for (let i = 0; i < 20; i++) {
-const r = beitunShops[Math.floor(Math.random() * beitunShops.length)];
+const r = beitunShops.at(Math.floor(Math.random() * beitunShops.length));
 dummies2.push({ emoji: "🏪", text: r.shop });
 }
 for (let i = 0; i < 26; i++) {
@@ -467,7 +467,7 @@ y: canvas.height / 2 - 40,
 vx: (Math.random() - 0.5) * 14,
 vy: (Math.random() - 0.7) * 14 - 2,
 size: Math.random() * 6 + 4,
-color: colors[Math.floor(Math.random() * colors.length)],
+color: colors.at(Math.floor(Math.random() * colors.length)),
 alpha: 1
 });
 }
