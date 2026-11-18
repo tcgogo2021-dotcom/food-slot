@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>台中市北屯區・美食幸運拉霸機 v3.0</title>
+<title>台中市北屯區・百大美食幸運拉霸機 v4.0</title>
 <style>
   * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Microsoft JhengHei", sans-serif; }
   body { margin: 0; padding: 12px 6px; background: linear-gradient(135deg, #141424 0%, #1a2238 100%); color: #fff; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
@@ -34,12 +34,15 @@
   .btn-spin:disabled { background: #888; box-shadow: none; color: #ccc; }
   .result-card { display: none; margin-top: 12px; background: rgba(255,255,255,0.12); border: 1.5px solid #ffd700; border-radius: 12px; padding: 12px; width: 100%; text-align: center; }
   .result-card.closed { border-color: #ff6b6b; background: rgba(255,75,75,0.15); }
-  .btn-map { display: inline-block; margin-top: 8px; background: #00b894; color: #fff; text-decoration: none; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: bold; }
+  .dish-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; margin: 8px 0; }
+  .dtag { background: rgba(255,255,255,0.15); padding: 2px 7px; border-radius: 10px; font-size: 11px; }
+  .dtag.hit { background: #ffd700; color: #1a1a2e; font-weight: bold; }
+  .btn-map { display: inline-block; margin-top: 6px; background: #00b894; color: #fff; text-decoration: none; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: bold; }
 </style>
 </head>
 <body>
 <div class="top-bar">
-  <span class="region-badge">📍 北屯區 v3.0</span>
+  <span class="region-badge">📍 北屯百大美食 v4.0</span>
   <span class="clock-badge" id="liveClock">🕒 --:--</span>
   <button class="snd-btn" id="sndBtn" onclick="togSnd()">🔊 音效開</button>
 </div>
@@ -55,15 +58,15 @@
   <div class="center-stage">
     <div class="filter-panel">
       <select id="catSelect" onchange="updateCount()">
-        <option value="all">🎲 全部料理隨機抽</option>
-        <option value="銅板小吃">🥢 銅板小吃</option>
-        <option value="宵夜炸物">🍗 宵夜炸物</option>
-        <option value="台式熱炒">🇹🇼 台式熱炒</option>
-        <option value="日式料理">🇯🇵 日式料理</option>
-        <option value="火鍋燒肉">🍲 火鍋燒肉</option>
-        <option value="韓式異國">🇰🇷 韓式異國</option>
-        <option value="義式美式">🇮🇹 義式美式</option>
-        <option value="早午餐甜點">🧋 早午餐甜點</option>
+        <option value="all">🎲 全部北屯百大美食隨機抽</option>
+        <option value="銅板小吃">🥢 銅板小吃・麵線滷肉飯蚵仔煎</option>
+        <option value="宵夜炸物">🍗 宵夜炸物・鹹酥雞串燒滷味</option>
+        <option value="台式熱炒">🇹🇼 台式熱炒・便當鵝肉甕缸雞</option>
+        <option value="日式料理">🇯🇵 日式料理・拉麵壽司丼飯</option>
+        <option value="火鍋燒肉">🍲 火鍋燒肉・和牛麻辣鍋</option>
+        <option value="韓式異國">🇰🇷 韓式異國・泰式越南印度菜</option>
+        <option value="義式美式">🇮🇹 義式美式・義大利麵披薩牛排</option>
+        <option value="早午餐甜點">🧋 早午餐甜點・豆花芋圓手搖飲</option>
       </select>
       <div class="open-row">
         <label><input type="checkbox" id="openCheck" onchange="updateCount()"> 🟢 僅抽營業中</label>
@@ -76,11 +79,12 @@
         <div class="slot-box"><div class="slot-label">第二軸・店家</div><div class="slot-text" id="s2">❓</div></div>
         <div class="slot-box"><div class="slot-label">第三軸・狀態</div><div class="slot-text" id="s3">❓</div></div>
       </div>
-      <button class="btn-spin" id="spinBtn" onclick="spinV2()">北屯美食，開轉！</button>
+      <button class="btn-spin" id="spinBtn" onclick="spinV4()">北屯美食，開轉！</button>
     </div>
     <div class="result-card" id="resBox">
       <div id="resText" style="font-weight:bold;font-size:14px;"></div>
       <div id="resHours" style="font-size:12px;color:#ccc;margin-top:4px;"></div>
+      <div class="dish-tags" id="resTags"></div>
       <div id="resAction"></div>
     </div>
   </div>
@@ -93,17 +97,117 @@
   </div>
 </div>
 <script>
-const shopsV2 = [
-  { cat: "銅板小吃", dish: "大腸蚵仔麵線", shop: "昌平路大腸麵線", area: "昌平商圈", open: 6.5, close: 13.5 },
-  { cat: "銅板小吃", dish: "招牌蚵仔煎", shop: "台北蚵仔煎", area: "一點利市場", open: 11, close: 21 },
-  { cat: "宵夜炸物", dish: "無骨鹽酥雞", shop: "炸滋滋無骨鹽酥雞", area: "昌平商圈", open: 16, close: 25 },
-  { cat: "台式熱炒", dish: "招牌甕缸雞", shop: "東山棧甕缸雞", area: "大坑東山", open: 11, close: 21.5 },
-  { cat: "日式料理", dish: "炙燒鮭魚肚", shop: "藏壽司 文心崇德店", area: "文心崇德", open: 11, close: 22 },
-  { cat: "火鍋燒肉", dish: "日本A5和牛", shop: "屋馬燒肉 崇德店", area: "崇德商圈", open: 11, close: 24 },
-  { cat: "韓式異國", dish: "月亮蝦餅", shop: "瓦城泰國料理 崇德店", area: "崇德商圈", open: 11.5, close: 21.5 },
-  { cat: "義式美式", dish: "爆炸蛤蜊麵", shop: "JAI宅 水湳店", area: "水湳商圈", open: 11, close: 21.5 },
-  { cat: "早午餐甜點", dish: "粉漿蛋餅", shop: "昌平路傳統早餐店", area: "昌平商圈", open: 5.5, close: 12 },
-  { cat: "早午餐甜點", dish: "綜合芋圓冰", shop: "大坑東東芋圓", area: "大坑東山", open: 9, close: 22 }
+const shopsV4 = [
+  { cat: "銅板小吃", shop: "老向的店", area: "北平路商圈", open: 10.5, close: 22, dishes: ["蚌麵", "清蒸鴨腿麵", "東坡肉飯", "紅油抄手", "麻辣乾麵"] },
+  { cat: "銅板小吃", shop: "大腸蚵仔麵線", area: "昌平路商圈", open: 6.5, close: 13.5, dishes: ["綜合大腸蚵仔麵線", "清麵線", "滷大腸頭", "蒜泥鮮蚵"] },
+  { cat: "銅板小吃", shop: "台北蚵仔煎", area: "一點利市場", open: 11, close: 21, dishes: ["招牌蚵仔煎", "蝦仁煎", "花枝羹湯", "魯肉飯"] },
+  { cat: "銅板小吃", shop: "松竹麵攤肉燥飯", area: "松竹路商圈", open: 11, close: 20.5, dishes: ["古早味肉燥飯", "陽春乾麵", "隔間肉湯", "滷油豆腐"] },
+  { cat: "銅板小吃", shop: "角間煎餃", area: "昌平路商圈", open: 6, close: 12.5, dishes: ["高麗菜冰花煎餃", "韭菜煎餃", "酸辣湯", "古早味豆漿"] },
+  { cat: "銅板小吃", shop: "北屯阿婆炒麵", area: "北屯市場", open: 6, close: 13, dishes: ["台中傳統炒麵", "豬血湯", "綜合湯", "東泉辣椒醬拌麵"] },
+  { cat: "銅板小吃", shop: "昌平炸粿蚵嗲", area: "昌平路二段", open: 14, close: 19.5, dishes: ["現炸蚵嗲", "肉嗲", "炸米糕", "炸韭菜條", "蘿蔔糕"] },
+  { cat: "銅板小吃", shop: "徐家莊手打麵", area: "北平路三段", open: 11, close: 20, dishes: ["招牌手打炒麵", "木須炒麵", "酸辣湯餃", "滷味拼盤"] },
+  { cat: "銅板小吃", shop: "鑫旺角茶餐廳小吃", area: "北平路商圈", open: 11, close: 21, dishes: ["鮮蝦雲吞麵", "叉燒包", "蘿蔔糕", "絲襪奶茶"] },
+  { cat: "銅板小吃", shop: "東山路控肉飯", area: "東山路一段", open: 10.5, close: 20.5, dishes: ["肥瘦相間控肉飯", "腳庫飯", "白菜滷", "筍乾", "味噌湯"] },
+  { cat: "銅板小吃", shop: "河北路牛肉麵", area: "河北路二段", open: 11, close: 20.5, dishes: ["紅燒半筋半肉麵", "清燉牛肉麵", "水餃", "涼拌小黃瓜"] },
+  { cat: "銅板小吃", shop: "綏遠路蔥油餅", area: "綏遠路商圈", open: 14, close: 19, dishes: ["九層塔加蛋蔥油餅", "起司抓餅", "豬肉餡餅", "小米粥"] },
+  { cat: "銅板小吃", shop: "崇德肉圓伯", area: "崇德路二段", open: 11, close: 19.5, dishes: ["低溫油泡肉圓", "四神湯", "貢丸湯", "甜不辣"] },
+  { cat: "銅板小吃", shop: "文心嘉義火雞肉飯", area: "文心路四段", open: 10.5, close: 21, dishes: ["火雞肉片飯", "雞魯飯", "荷包蛋", "下水湯", "燙青菜"] },
+  { cat: "銅板小吃", shop: "北平黃昏市場水餃", area: "北平路三段", open: 15, close: 20, dishes: ["手工韭菜水餃", "高麗菜鮮肉餃", "玉米濃湯", "滷豆干"] },
+  { cat: "銅板小吃", shop: "大坑豬頭三炸粿", area: "東山路二段", open: 9.5, close: 17, dishes: ["大骨筍湯", "招牌蚵嗲", "炸地瓜", "炸香菇", "米腸"] },
+  { cat: "銅板小吃", shop: "一點利市場關東煮", area: "遼寧路一段", open: 14.5, close: 20, dishes: ["黑輪", "白蘿蔔", "高麗菜捲", "苦瓜封", "柴魚高湯"] },
+  { cat: "銅板小吃", shop: "四平路鴨肉飯", area: "四平路商圈", open: 11, close: 20, dishes: ["煙燻鴨肉飯", "當歸鴨麵線", "米血糕", "鴨肉切盤"] },
+  { cat: "銅板小吃", shop: "興安路乾意麵", area: "興安路一段", open: 6.5, close: 14, dishes: ["古早味乾意麵", "餛飩湯", "粉腸湯", "滷蛋海帶"] },
+  { cat: "銅板小吃", shop: "天津路胡椒餅", area: "天津路商圈", open: 14, close: 20.5, dishes: ["炭烤赤肉胡椒餅", "起司牛肉餅", "紅豆酥餅", "甜燒餅"] },
+  { cat: "銅板小吃", shop: "梅川東路當歸土虱", area: "梅川東路四段", open: 16.5, close: 24, dishes: ["藥燉排骨", "當歸土虱頭", "麻油麵線", "滷肉飯"] },
+  { cat: "銅板小吃", shop: "軍功路湯包專賣", area: "軍功路一段", open: 6, close: 13.5, dishes: ["爆汁鮮肉湯包", "絲瓜蝦仁湯包", "酸辣湯", "紅茶豆漿"] },
+  { cat: "銅板小吃", shop: "崇德路陽春麵老店", area: "崇德路一段", open: 11, close: 20.5, dishes: ["麻醬乾麵", "餛飩麵", "滷味豆干海帶", "貢丸湯"] },
+  { cat: "銅板小吃", shop: "北屯路排骨酥麵", area: "北屯路商圈", open: 11, close: 21, dishes: ["古早味排骨酥麵", "筒仔米糕", "金針排骨湯", "燙青菜"] },
+  { cat: "銅板小吃", shop: "遼寧路蒸餃酸辣湯", area: "遼寧路一段", open: 11, close: 20.5, dishes: ["鮮肉蒸餃", "花素蒸餃", "招牌酸辣湯", "小米粥"] },
+  { cat: "宵夜炸物", shop: "炸滋滋無骨鹽酥雞", area: "昌平路商圈", open: 16, close: 25, dishes: ["無骨鹽酥雞", "酥炸魷魚圈", "甜不辣", "百頁豆腐", "四季豆"] },
+  { cat: "宵夜炸物", shop: "永留香臭豆腐", area: "太原路三段", open: 15.5, close: 23, dishes: ["脆皮臭豆腐", "麻辣鴨血豆腐煲", "大腸麵線", "泡菜"] },
+  { cat: "宵夜炸物", shop: "北平路炭烤雞排", area: "北平路三段", open: 16.5, close: 24.5, dishes: ["蜜汁炭烤大雞排", "烤甜不辣", "烤米血", "烤雞屁股"] },
+  { cat: "宵夜炸物", shop: "昌平麻辣乾鍋滷味", area: "昌平路一段", open: 17, close: 25, dishes: ["麻辣鴨血", "王子麵", "高麗菜", "鴨腸", "老油條"] },
+  { cat: "宵夜炸物", shop: "崇德惡魔厚切雞排", area: "崇德路二段", open: 15.5, close: 23.5, dishes: ["原味厚切雞排", "辣味雞排", "煉乳銀絲捲", "甘梅地瓜"] },
+  { cat: "宵夜炸物", shop: "文心路深夜串燒屋", area: "文心路四段", open: 17.5, close: 25.5, dishes: ["明太子雞肉串", "培根捲金針菇", "鹽烤秋刀魚", "烤麻糬"] },
+  { cat: "宵夜炸物", shop: "松竹永和豆漿大王", area: "松竹路二段", open: 18, close: 34, dishes: ["燒餅油條", "起司蛋餅", "小籠湯包", "冰豆漿", "蘿蔔糕加蛋"] },
+  { cat: "宵夜炸物", shop: "東山路美式炸雞桶", area: "東山路一段", open: 11, close: 23, dishes: ["卡啦脆雞腿", "洋蔥圈", "波浪薯條", "雞米花"] },
+  { cat: "宵夜炸物", shop: "北屯深夜砂鍋粥", area: "崇德路一段", open: 17.5, close: 25.5, dishes: ["鮮蝦干貝砂鍋粥", "鮑魚雞肉粥", "炒水蓮", "炸豆腐"] },
+  { cat: "宵夜炸物", shop: "興安路冷滷味攤", area: "興安路二段", open: 16.5, close: 23.5, dishes: ["煙燻鴨翅", "滷雞爪凍", "滷豆干", "海帶結", "酸菜"] },
+  { cat: "宵夜炸物", shop: "水湳市場鹽水雞", area: "中清路二段", open: 16.5, close: 23.5, dishes: ["去骨煙燻雞胸", "雞腿肉", "花椰菜", "玉米筍", "鳥蛋"] },
+  { cat: "宵夜炸物", shop: "太原路焦糖滷味", area: "太原路三段", open: 17, close: 24.5, dishes: ["焦糖滷鴨頭", "甜不辣", "貢丸", "豬血糕", "百頁"] },
+  { cat: "宵夜炸物", shop: "北屯24H麥當勞", area: "崇德路二段", open: 0, close: 24, dishes: ["大麥克", "勁辣雞腿堡", "麥克雞塊", "大薯", "玉米濃湯"] },
+  { cat: "宵夜炸物", shop: "崇德深夜清粥小菜", area: "崇德路一段", open: 17, close: 26, dishes: ["地瓜稀飯", "菜脯蛋", "紅燒肉", "滷虱目魚肚", "炒空心菜"] },
+  { cat: "宵夜炸物", shop: "軍功路深夜鹽酥雞", area: "軍功路一段", open: 17, close: 25, dishes: ["招牌鹽酥雞", "炸三角骨", "銀絲捲", "甜不辣"] },
+  { cat: "宵夜炸物", shop: "四平路炭烤串燒", area: "四平路商圈", open: 18, close: 25.5, dishes: ["烤雞腿肉串", "烤香菇", "烤豆皮", "烤甜不辣"] },
+  { cat: "台式熱炒", shop: "丰禾台味風格料理", area: "崇德路三段", open: 11.5, close: 21.5, dishes: ["丰禾起家雞", "黑麻油燒蛋", "糖醋鱸魚", "芋絲米糕"] },
+  { cat: "台式熱炒", shop: "東山棧甕缸雞", area: "東山路一段", open: 11, close: 21.5, dishes: ["招牌甕缸雞", "雞油燜筍", "酥炸溪蝦", "炒山蘇"] },
+  { cat: "台式熱炒", shop: "柴火火燄烤鴨", area: "松竹路三段", open: 11.5, close: 21.5, dishes: ["片皮櫻桃烤鴨", "酸菜鴨架湯", "鹽酥鴨架", "京醬肉絲"] },
+  { cat: "台式熱炒", shop: "御記烤鴨松竹總店", area: "松竹路二段", open: 10.5, close: 20, dishes: ["一鴨二吃片皮鴨", "甜麵醬蔥段", "大火爆炒鴨骨", "滷鴨翅"] },
+  { cat: "台式熱炒", shop: "崇德99元現炒", area: "崇德路二段", open: 16.5, close: 25, dishes: ["宮保雞丁", "鳳梨蝦球", "三杯中卷", "客家小炒", "蚵仔酥"] },
+  { cat: "台式熱炒", shop: "大坑竹之鄉風味餐", area: "東山路二段", open: 11, close: 20.5, dishes: ["耖米飯", "白斬土雞", "筍乾扣肉", "麻油川七"] },
+  { cat: "台式熱炒", shop: "北平路排骨飯大王", area: "北平路三段", open: 10.5, close: 20.5, dishes: ["古早味炸排骨飯", "蜜汁雞腿飯", "鱈魚便當", "三杯雞飯"] },
+  { cat: "台式熱炒", shop: "昌平路鵝肉城", area: "昌平路一段", open: 16, close: 23.5, dishes: ["鹽水鵝肉切盤", "鵝油拌飯", "下水湯", "桂竹筍", "炒蛤蜊"] },
+  { cat: "台式熱炒", shop: "文心路活魚海鮮餐廳", area: "文心路四段", open: 11, close: 21.5, dishes: ["清蒸石斑魚", "金沙中卷", "避風塘炒蟹", "海鮮炒麵"] },
+  { cat: "台式熱炒", shop: "太原路薑母鴨", area: "太原路三段", open: 16, close: 25, dishes: ["炭火薑母鴨", "鴨肉丸", "凍豆腐", "高麗菜", "麻油麵線"] },
+  { cat: "台式熱炒", shop: "松竹路正宗羊肉爐", area: "松竹路一段", open: 16.5, close: 24.5, dishes: ["當歸帶皮羊肉爐", "羊大骨", "涮羊肉片", "腐乳醬"] },
+  { cat: "台式熱炒", shop: "水湳池上木片便當", area: "中清路二段", open: 10.5, close: 20, dishes: ["招牌木片便當", "炸雞腿飯", "控肉便當", "鯖魚便當"] },
+  { cat: "台式熱炒", shop: "軍功路海鮮熱炒", area: "軍功路二段", open: 17, close: 24.5, dishes: ["蒜泥白肉", "蔥爆牛肉", "椒鹽龍珠", "苦瓜鹹蛋"] },
+  { cat: "台式熱炒", shop: "大坑龍莊烤乳豬", area: "東山路二段", open: 11, close: 21, dishes: ["脆皮烤乳豬", "桶仔雞", "山藥排骨湯", "炒檳榔花"] },
+  { cat: "台式熱炒", shop: "崇德路燒臘三寶飯", area: "崇德路二段", open: 10.5, close: 20, dishes: ["脆皮燒肉三寶飯", "蜜汁叉燒飯", "油雞腿飯", "例湯"] },
+  { cat: "台式熱炒", shop: "北平路砂鍋魚頭", area: "北平路三段", open: 11.5, close: 21, dishes: ["招牌砂鍋魚頭", "炒高麗菜", "炸豆腐", "魯肉飯"] },
+  { cat: "日式料理", shop: "藏壽司 文心崇德店", area: "文心路四段", open: 11, close: 22, dishes: ["炙燒鮭魚肚", "北海道大帆立貝", "鮮蝦天婦羅手卷", "茶碗蒸"] },
+  { cat: "日式料理", shop: "樹太老日本定食", area: "崇德路二段", open: 11, close: 21.5, dishes: ["炸里肌肉豬排定食", "起司藍帶豬排", "照燒雞腿定食", "和風炸雞"] },
+  { cat: "日式料理", shop: "崇德豚骨拉麵屋", area: "崇德路二段", open: 11.5, close: 21, dishes: ["濃厚豚骨叉燒拉麵", "辛味噌拉麵", "日式唐揚雞", "溏心蛋"] },
+  { cat: "日式料理", shop: "北平路平價壽司丼", area: "北平路三段", open: 11, close: 20.5, dishes: ["綜合生魚片丼", "炙燒比目魚丼", "花壽司拼盤", "鮮魚味噌湯"] },
+  { cat: "日式料理", shop: "文心日式咖哩專門", area: "文心路四段", open: 11, close: 21, dishes: ["炸豬排歐姆蛋咖哩", "漢堡排咖哩飯", "可樂餅", "炸牡蠣"] },
+  { cat: "日式料理", shop: "松竹路深夜居酒屋", area: "松竹路二段", open: 17.5, close: 25, dishes: ["明太子山藥", "鹽烤松阪豬", "午仔魚一夜干", "鮭魚烤飯糰"] },
+  { cat: "日式料理", shop: "昌平路日式定食", area: "昌平路一段", open: 11.5, close: 20.5, dishes: ["鹽烤鯖魚定食", "薑汁燒肉丼", "親子丼", "日式玉子燒"] },
+  { cat: "日式料理", shop: "水湳烏龍麵專門店", area: "中清路二段", open: 11, close: 21, dishes: ["明太子拌烏龍麵", "牛肉湯烏龍麵", "炸蝦天婦羅", "炸地瓜"] },
+  { cat: "日式料理", shop: "崇德迴轉壽司", area: "崇德路三段", open: 11, close: 21.5, dishes: ["極上鮪魚大腹", "鮭魚卵軍艦", "玉子燒握壽司", "花蛤味噌湯"] },
+  { cat: "日式料理", shop: "北屯日式和牛漢堡排", area: "崇德路二段", open: 11.5, close: 21, dishes: ["直火炭烤和牛漢堡排", "越光米白飯", "生食級蛋黃", "味增湯"] },
+  { cat: "日式料理", shop: "一點利章魚燒小丸子", area: "遼寧路一段", open: 14, close: 20.5, dishes: ["原味柴魚章魚燒", "明太子起司章魚燒", "芥末海苔章魚燒"] },
+  { cat: "日式料理", shop: "東山路鰻魚飯專賣", area: "東山路一段", open: 11.5, close: 20.5, dishes: ["蒲燒鰻魚重箱飯", "白燒鰻魚", "鰻肝清湯", "和風沙拉"] },
+  { cat: "日式料理", shop: "昌平路日式豬排丼", area: "昌平路一段", open: 11, close: 20.5, dishes: ["滑蛋炸豬排丼", "唐揚雞咖哩飯", "可樂餅", "味噌湯"] },
+  { cat: "火鍋燒肉", shop: "屋馬燒肉 崇德店", area: "崇德路二段", open: 11, close: 24, dishes: ["日本A5和牛拼盤", "伊比利豬梅花", "屋馬主廚沙拉", "海鮮粥"] },
+  { cat: "火鍋燒肉", shop: "輕井澤鍋物 崇德店", area: "崇德路二段", open: 11, close: 26, dishes: ["和風培根牛肉鍋", "四川麻辣鴨血鍋", "梅花豬肉鍋", "紅茶冰沙"] },
+  { cat: "火鍋燒肉", shop: "山鯨燒肉 漢口崇德", area: "漢口路四段", open: 11.5, close: 23.5, dishes: ["極上和牛雙人套餐", "太空菇", "松露和牛可頌", "鮮榨果汁"] },
+  { cat: "火鍋燒肉", shop: "石二鍋 崇德店", area: "崇德路二段", open: 11.5, close: 22, dishes: ["爆香石頭鍋", "雪花牛肉鍋", "愛呷肉拼盤", "冬瓜檸檬冰沙"] },
+  { cat: "火鍋燒肉", shop: "築間幸福鍋物 北屯店", area: "崇德路二段", open: 11, close: 27, dishes: ["招牌石頭湯底", "霜降牛肉鍋", "海鮮總匯鍋", "自助蔬菜冰淇淋吧"] },
+  { cat: "火鍋燒肉", shop: "燒肉Smile 景賢店", area: "景賢路商圈", open: 11, close: 27, dishes: ["個人和牛盛合套餐", "牛五花雙拼", "野菜沙拉自助吧", "蔥花玉子拌飯"] },
+  { cat: "火鍋燒肉", shop: "北平路三媽臭臭鍋", area: "北平路三段", open: 11, close: 23, dishes: ["大腸臭臭鍋", "海鮮豆腐鍋", "泡菜鍋", "麻辣鍋", "白飯飲料吃到飽"] },
+  { cat: "火鍋燒肉", shop: "文心路老四川麻辣鍋", area: "文心路四段", open: 11.5, close: 25.5, dishes: ["絕選麻辣鴛鴦鍋", "川味涼粉", "滷水大腸頭", "雪花牛"] },
+  { cat: "火鍋燒肉", shop: "崇德韓國銅盤烤肉", area: "崇德路二段", open: 11.5, close: 22, dishes: ["秘製牛五花銅盤烤肉", "梅花豬烤肉", "海鮮煎餅", "韓式小菜無限續"] },
+  { cat: "火鍋燒肉", shop: "松竹路酸菜白肉鍋", area: "松竹路二段", open: 11.5, close: 21.5, dishes: ["東北酸菜白肉鍋", "手工川丸子", "五花白肉片", "蔥油餅"] },
+  { cat: "火鍋燒肉", shop: "昌平路平價小火鍋", area: "昌平路一段", open: 11, close: 22.5, dishes: ["牛奶起司鍋", "沙茶牛肉鍋", "藥膳羊肉鍋", "爆米花冰淇淋"] },
+  { cat: "火鍋燒肉", shop: "水湳精緻燒肉餐酒", area: "中清路二段", open: 17, close: 25, dishes: ["厚切牛舌", "橫膈膜燒肉", "明太子拌飯", "生啤酒"] },
+  { cat: "火鍋燒肉", shop: "東山路石頭小火鍋", area: "東山路一段", open: 11, close: 22, dishes: ["蒜香爆炒牛肉鍋", "海鮮總匯鍋", "鴨血豆腐", "冰淇淋"] },
+  { cat: "韓式異國", shop: "非常石鍋韓式料理", area: "北屯路商圈", open: 11.5, close: 21.5, dishes: ["起司春川辣炒雞", "泡菜豬肉石鍋拌飯", "海鮮煎餅", "人蔘雞湯"] },
+  { cat: "韓式異國", shop: "涓豆腐 台中崇德店", area: "崇德路二段", open: 11.5, close: 22, dishes: ["海陸綜合嫩豆腐煲", "韓式炸雞", "石鍋紫米飯", "黑糖香柚豆花"] },
+  { cat: "韓式異國", shop: "瓦城泰國料理 崇德店", area: "崇德路二段", open: 11.5, close: 21.5, dishes: ["原味月亮蝦餅", "泰式打拋豬", "檸檬清蒸魚", "摩摩喳喳"] },
+  { cat: "韓式異國", shop: "北平路越南河粉", area: "北平路三段", open: 11, close: 20.5, dishes: ["生牛肉河粉", "炸春捲", "越式法國麵包", "涼拌木瓜絲"] },
+  { cat: "韓式異國", shop: "崇德韓式炸雞專賣", area: "崇德路二段", open: 11.5, close: 22.5, dishes: ["洋釀半半炸雞", "蜂蜜蒜味炸雞", "辣炒年糕", "醃蘿蔔"] },
+  { cat: "韓式異國", shop: "文心路印度咖哩屋", area: "文心路四段", open: 11.5, close: 21, dishes: ["奶油雞肉咖哩", "蒜味烤餅 Naan", "坦都里烤雞", "印度拉茶"] },
+  { cat: "韓式異國", shop: "昌平路泰式船麵", area: "昌平路一段", open: 11.5, close: 20.5, dishes: ["泰式瀑布牛肉船麵", "綠咖哩雞飯", "泰式奶茶", "炸雞翅"] },
+  { cat: "韓式異國", shop: "松竹路韓式部隊鍋", area: "松竹路二段", open: 11.5, close: 21.5, dishes: ["經典火腿起司部隊鍋", "韓式魚板串", "海苔拳頭飯", "辣味炸雞"] },
+  { cat: "義式美式", shop: "JAI宅 水湳店", area: "中清路二段", open: 11, close: 21.5, dishes: ["橘醬爆炸蛤蜊義大利麵", "明太子奶油宅宅麵", "提拉米蘇"] },
+  { cat: "義式美式", shop: "水相餐聚苑", area: "經貿三路二段", open: 11.5, close: 22, dishes: ["火山起司麵包", "黑松露野菇燉飯", "爐烤牛排", "莓果氣泡飲"] },
+  { cat: "義式美式", shop: "薄多義義式手工披薩", area: "崇德路二段", open: 11.5, close: 21.5, dishes: ["瑪格麗特皇后披薩", "青醬雞肉麵", "佛卡夏佐醬", "炸雞翅"] },
+  { cat: "義式美式", shop: "崇德美式手工牛肉堡", area: "崇德路二段", open: 11.5, close: 21.5, dishes: ["花生醬培根牛肉堡", "雙層起司堡", "松露薯條", "奶昔"] },
+  { cat: "義式美式", shop: "文心路平價牛排館", area: "文心路四段", open: 11, close: 22, dishes: ["厚切沙朗牛排", "香煎雞腿排", "酥皮濃湯", "鐵板麵"] },
+  { cat: "義式美式", shop: "北平路平價義大利麵", area: "北平路三段", open: 11, close: 20.5, dishes: ["奶油培根義大利麵", "番茄肉醬焗烤飯", "玉米濃湯", "紅茶"] },
+  { cat: "義式美式", shop: "松竹路窯烤披薩車", area: "松竹路二段", open: 15, close: 22, dishes: ["夏威夷鳳梨披薩", "總匯海鮮披薩", "蒜香麵包", "可樂"] },
+  { cat: "義式美式", shop: "水湳墨西哥捲餅屋", area: "中清路二段", open: 11.5, close: 21, dishes: ["手撕豬肉塔可餅", "起司牛肉捲餅", "莎莎醬玉米片"] },
+  { cat: "早午餐甜點", shop: "KafeD 咖啡滴水湳旗艦", area: "經貿路二段", open: 9, close: 20, dishes: ["德式年輪厚夾心", "精品手沖咖啡", "鮭魚開放三明治"] },
+  { cat: "早午餐甜點", shop: "崇德質感早午餐拼盤", area: "崇德路二段", open: 8, close: 15.5, dishes: ["唐揚雞可頌拼盤", "班尼迪克蛋", "鮮奶茶", "薯泥沙拉"] },
+  { cat: "早午餐甜點", shop: "昌平路傳統早餐店", area: "昌平路一段", open: 5.5, close: 12, dishes: ["粉漿蛋餅", "豬排總匯吐司", "鐵板麵加蛋", "大冰奶"] },
+  { cat: "早午餐甜點", shop: "北平路古早味豆花", area: "北平路三段", open: 12, close: 22, dishes: ["綜合粉圓花生豆花", "紅豆湯圓", "嫩仙草凍", "黑糖剉冰"] },
+  { cat: "早午餐甜點", shop: "崇德路人氣手搖飲", area: "崇德路二段", open: 10, close: 22, dishes: ["珍珠鮮奶茶", "翡翠檸檬綠", "芝士奶蓋烏龍", "黑糖波霸鮮奶"] },
+  { cat: "早午餐甜點", shop: "水湳文青千層蛋糕", area: "中清路二段", open: 12, close: 19.5, dishes: ["法式水果千層", "小山園抹茶千層", "巴斯克乳酪", "拿鐵"] },
+  { cat: "早午餐甜點", shop: "松竹路舒芙蕾鬆餅", area: "松竹路二段", open: 11, close: 20, dishes: ["焦糖布蕾舒芙蕾", "草莓生乳鬆餅", "伯爵鮮奶茶"] },
+  { cat: "早午餐甜點", shop: "文心路手作貝果咖啡", area: "文心路四段", open: 8, close: 17, dishes: ["藍莓乳酪貝果", "煙燻鮭魚貝果", "美式黑咖啡"] },
+  { cat: "早午餐甜點", shop: "大坑東東芋圓", area: "東山路二段", open: 9, close: 22, dishes: ["招牌綜合芋圓冰", "熱紅豆芋圓湯", "仙草芋圓", "薏仁芋圓"] },
+  { cat: "早午餐甜點", shop: "昌平路鮮果茶飲", area: "昌平路二段", open: 10, close: 22, dishes: ["滿杯水果茶", "楊枝甘露", "甘蔗青茶", "四季春珍波椰"] },
+  { cat: "早午餐甜點", shop: "四平路文青早午餐", area: "四平路商圈", open: 8, close: 15, dishes: ["嫩煎雞腿排拼盤", "法式吐司", "鮮奶茶", "脆薯"] }
 ];
 let snd = true, ac = null;
 function togSnd() { snd = !snd; document.getElementById("sndBtn").innerText = snd ? "🔊 音效開" : "🔇 靜音"; }
@@ -134,35 +238,40 @@ function updateClock() {
   document.getElementById("liveClock").innerText = "🕒 " + hh + ":" + mm;
 }
 setInterval(updateClock, 10000); updateClock();
+
 function getList() {
   const c = document.getElementById("catSelect").value;
   const only = document.getElementById("openCheck").checked;
   const res = [];
-  for (let i = 0; i < shopsV2.length; i++) {
-    const s = shopsV2[i];
+  for (let i = 0; i < shopsV4.length; i++) {
+    const s = shopsV4[i];
     if ((c === "all" || s.cat === c) && (!only || isOpenNow(s))) res.push(s);
   }
   return res;
 }
-function updateCount() { document.getElementById("countText").innerText = "符合：" + getList().length + " 家店"; }
+function updateCount() {
+  const list = getList();
+  let totalD = 0;
+  for (let i = 0; i < list.length; i++) totalD += list[i].dishes.length;
+  document.getElementById("countText").innerText = list.length + " 家店・" + totalD + " 道菜";
+}
 updateCount();
 
-function spinV2() {
+function spinV4() {
   const list = getList();
   if (list.length === 0) { alert("目前該分類都在休息中喔！請取消勾選「僅抽營業中」試試！"); return; }
-  const idx = Math.floor(Math.random() * list.length);
-  const item = list[idx];
+  const item = list[Math.floor(Math.random() * list.length)];
+  const hitDish = item.dishes[Math.floor(Math.random() * item.dishes.length)];
   const open = isOpenNow(item);
-  const btn = document.getElementById("spinBtn");
-  const box = document.getElementById("resBox");
+  const btn = document.getElementById("spinBtn"), box = document.getElementById("resBox");
   btn.disabled = true; btn.innerText = "高速滾動中..."; box.style.display = "none";
   let step = 0;
   const timer = setInterval(function() {
     step++;
     playBeep(520, "triangle", 0.04, 0);
-    const r = shopsV2[step % shopsV2.length];
-    if (step <= 10) document.getElementById("s1").innerText = r.dish;
-    if (step === 11) { document.getElementById("s1").innerText = item.dish; playBeep(392, "sine", 0.15, 0); }
+    const r = shopsV4[step % shopsV4.length];
+    if (step <= 10) document.getElementById("s1").innerText = r.dishes[0];
+    if (step === 11) { document.getElementById("s1").innerText = hitDish; playBeep(392, "sine", 0.15, 0); }
     if (step <= 18) document.getElementById("s2").innerText = r.shop;
     if (step === 19) { document.getElementById("s2").innerText = item.shop; playBeep(494, "sine", 0.15, 0); }
     if (step <= 25) document.getElementById("s3").innerText = (step % 2 === 0) ? "🟢 營業中" : "🔴 休息中";
@@ -172,6 +281,12 @@ function spinV2() {
       playBeep(587, "sine", 0.15, 0);
       btn.disabled = false; btn.innerText = "再轉一次！";
       box.className = open ? "result-card" : "result-card closed";
+      let tags = "";
+      for (let j = 0; j < item.dishes.length; j++) {
+        const d = item.dishes[j];
+        tags += (d === hitDish) ? '<span class="dtag hit">★ ' + d + '</span>' : '<span class="dtag">' + d + '</span>';
+      }
+      document.getElementById("resTags").innerHTML = tags;
       if (open) {
         playBeep(523, "triangle", 0.25, 0.1); playBeep(659, "triangle", 0.25, 0.2); playBeep(784, "triangle", 0.35, 0.3);
         document.getElementById("resText").innerText = "🎉 中獎！【" + item.area + "】" + item.shop;
@@ -181,7 +296,7 @@ function spinV2() {
         document.getElementById("resText").innerText = "🔴 殘念休息中！【" + item.area + "】" + item.shop;
         document.getElementById("resAction").innerHTML = '<div style="margin-top:6px;color:#ff7675;font-size:12px;">沒開門不算，再轉一次吧！</div>';
       }
-      document.getElementById("resHours").innerText = "必點：" + item.dish;
+      document.getElementById("resHours").innerText = "收錄 " + item.dishes.length + " 道看板菜色：";
       box.style.display = "block";
     }
   }, 85);
