@@ -8,50 +8,42 @@
   * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Microsoft JhengHei", sans-serif; }
   body { margin: 0; padding: 12px 6px; background: linear-gradient(135deg, #141424 0%, #1a2238 100%); color: #fff; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
   .top-bar { width: 100%; max-width: 960px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 6px; }
-  .region-badge { background: linear-gradient(90deg, #ff6b6b, #e94560); color: #fff; font-size: 12px; font-weight: bold; padding: 4px 12px; border-radius: 20px; box-shadow: 0 2px 8px rgba(233, 69, 96, 0.4); }
+  .region-badge { background: linear-gradient(90deg, #ff6b6b, #e94560); color: #fff; font-size: 12px; font-weight: bold; padding: 4px 12px; border-radius: 20px; }
   .clock-badge { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,215,0,0.4); color: #ffe066; font-size: 12px; font-weight: bold; padding: 4px 10px; border-radius: 20px; }
   .sound-toggle { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: #fff; border-radius: 20px; padding: 4px 10px; font-size: 12px; cursor: pointer; }
   .header { text-align: center; margin-bottom: 12px; }
-  .header h1 { margin: 0; font-size: 21px; color: #ffd700; text-shadow: 0 2px 10px rgba(255, 215, 0, 0.4); }
+  .header h1 { margin: 0; font-size: 21px; color: #ffd700; }
   .header p { margin: 3px 0 0; font-size: 12px; color: #b0b8d1; }
-
   .main-arena { display: flex; flex-direction: row; align-items: stretch; justify-content: center; gap: 6px; width: 100%; max-width: 960px; }
   .ad-column { flex: 0 0 21%; max-width: 175px; min-width: 72px; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; }
-  .ad-card { flex: 1; background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 215, 0, 0.35); border-radius: 10px; padding: 6px 4px; text-align: center; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; text-decoration: none; color: #fff; transition: transform 0.15s; min-height: 76px; }
-  .ad-card:active { transform: scale(0.96); }
+  .ad-card { flex: 1; background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 215, 0, 0.35); border-radius: 10px; padding: 6px 4px; text-align: center; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; text-decoration: none; color: #fff; min-height: 76px; }
   .ad-card.vacant { border: 1px dashed rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.03); }
   .ad-tag { display: inline-block; font-size: 9px; font-weight: bold; padding: 1px 5px; border-radius: 6px; margin-bottom: 3px; background: #ffd700; color: #1a1a2e; }
   .ad-card.vacant .ad-tag { background: rgba(255, 255, 255, 0.15); color: #bbb; }
   .ad-title { font-size: 11px; font-weight: 900; color: #fff; line-height: 1.2; margin-bottom: 2px; word-break: break-all; }
   .ad-sub { font-size: 9px; color: #ffe066; line-height: 1.15; }
   .ad-card.vacant .ad-sub { color: #999; }
-
   .center-stage { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; }
   .filter-panel { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 14px; padding: 10px; width: 100%; margin-bottom: 10px; }
   .filter-panel label.title-lbl { display: block; font-size: 11px; color: #ffd700; margin-bottom: 5px; font-weight: bold; }
-  select { width: 100%; padding: 8px; border-radius: 8px; border: none; background: #fff; color: #1a1a2e; font-size: 13px; font-weight: bold; outline: none; cursor: pointer; }
+  select { width: 100%; padding: 8px; border-radius: 8px; border: none; background: #fff; color: #1a1a2e; font-size: 13px; font-weight: bold; outline: none; }
   .open-only-row { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; padding-top: 7px; border-top: 1px dashed rgba(255,255,255,0.15); font-size: 12px; color: #ffe066; }
   .open-only-row label { display: flex; align-items: center; gap: 6px; cursor: pointer; font-weight: bold; }
-  .open-only-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: #00b894; cursor: pointer; }
+  .open-only-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: #00b894; }
   .stats-line { font-size: 10px; color: #a0a8c0; margin-top: 5px; text-align: right; }
-
-  .machine { background: #e94560; padding: 12px 8px; border-radius: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.4); width: 100%; border: 3px solid #ffd700; }
+  .machine { background: #e94560; padding: 12px 8px; border-radius: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 100%; border: 3px solid #ffd700; }
   .machine.win-glow { animation: winPulse 0.6s ease-in-out 3; }
   @keyframes winPulse { 0%, 100% { box-shadow: 0 0 15px #ffd700; } 50% { box-shadow: 0 0 38px #fff, 0 0 55px #ffd700; } }
-
   .slots { display: flex; gap: 4px; background: #0f3460; padding: 8px 5px; border-radius: 10px; border: 2px solid #1a1a2e; }
-  .slot-window { flex: 1; background: #fff; color: #1a1a2e; border-radius: 7px; height: 112px; position: relative; overflow: hidden; box-shadow: inset 0 10px 12px -6px rgba(0,0,0,0.4), inset 0 -10px 12px -6px rgba(0,0,0,0.4); }
+  .slot-window { flex: 1; background: #fff; color: #1a1a2e; border-radius: 7px; height: 112px; position: relative; overflow: hidden; }
   .slot-label { font-size: 9px; color: #fff; background: rgba(15,52,96,0.9); padding: 1px 6px; border-radius: 6px; position: absolute; top: 4px; left: 50%; transform: translateX(-50%); font-weight: bold; z-index: 5; white-space: nowrap; }
   .reel-strip { position: absolute; top: 0; left: 0; width: 100%; will-change: transform; }
-  .reel-item { height: 112px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 18px 3px 4px; font-weight: 900; line-height: 1.2; word-break: break-word; color: #1a1a2e; }
+  .reel-item { height: 112px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 18px 3px 4px; font-weight: 900; line-height: 1.2; color: #1a1a2e; }
   .reel-emoji { font-size: 20px; margin-bottom: 3px; }
   .reel-text { font-size: 12px; }
-
-  .btn-spin { width: 100%; margin-top: 12px; padding: 13px 8px; font-size: 16px; font-weight: bold; color: #1a1a2e; background: linear-gradient(to bottom, #ffe066, #ffd700); border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 0 #b39700, 0 6px 14px rgba(0,0,0,0.3); }
-  .btn-spin:active { transform: translateY(3px); box-shadow: 0 1px 0 #b39700; }
+  .btn-spin { width: 100%; margin-top: 12px; padding: 13px 8px; font-size: 16px; font-weight: bold; color: #1a1a2e; background: linear-gradient(to bottom, #ffe066, #ffd700); border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 0 #b39700; }
   .btn-spin:disabled { background: #888; box-shadow: none; color: #ccc; }
-
-  .result-card { display: none; margin-top: 12px; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,215,0,0.6); border-radius: 14px; padding: 14px; width: 100%; text-align: center; animation: fadeIn 0.35s ease; }
+  .result-card { display: none; margin-top: 12px; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,215,0,0.6); border-radius: 14px; padding: 14px; width: 100%; text-align: center; }
   .result-card.closed-card { border-color: #ff6b6b; background: rgba(255, 75, 75, 0.12); }
   .status-pill { display: inline-block; font-size: 12px; font-weight: bold; padding: 4px 12px; border-radius: 20px; margin-bottom: 8px; }
   .status-open { background: #00b894; color: #fff; }
@@ -61,60 +53,33 @@
   .result-card .meta { font-size: 12px; color: #d0d8f0; margin-bottom: 8px; }
   .dish-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin-bottom: 12px; }
   .dish-tag { background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.2); padding: 3px 8px; border-radius: 12px; font-size: 11px; color: #fff; }
-  .dish-tag.highlight { background: #ffd700; color: #1a1a2e; font-weight: bold; border-color: #ffd700; }
+  .dish-tag.highlight { background: #ffd700; color: #1a1a2e; font-weight: bold; }
   .btn-map { display: inline-block; background: #00b894; color: #fff; text-decoration: none; padding: 9px 18px; border-radius: 25px; font-weight: bold; font-size: 13px; }
   .btn-retry { display: inline-block; background: #e17055; color: #fff; border: none; padding: 9px 18px; border-radius: 25px; font-weight: bold; font-size: 13px; cursor: pointer; }
-
   .footer-biz { margin-top: 18px; text-align: center; font-size: 11px; color: #8c96b5; }
   .footer-biz span { color: #ffd700; text-decoration: underline; cursor: pointer; }
   #confettiCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 </head>
 <body>
-
 <canvas id="confettiCanvas"></canvas>
-
 <div class="top-bar">
   <span class="region-badge">📍 北屯百大美食旗艦站</span>
   <span class="clock-badge" id="liveClock">🕒 --:--</span>
   <button class="sound-toggle" id="soundBtn" onclick="toggleSound()">🔊 音效開</button>
 </div>
-
 <div class="header">
   <h1>🎰 北屯區美食幸運拉霸機</h1>
-  <p>即時對時営業狀態・有開門抽中才算贏！</p>
+  <p>即時對時營業狀態・有開門抽中才算贏！</p>
 </div>
-
 <div class="main-arena">
   <div class="ad-column">
-    <a class="ad-card" href="https://google.com" target="_blank">
-      <span class="ad-tag">VIP 置頂</span>
-      <div class="ad-title">屋馬燒肉 崇德</div>
-      <div class="ad-sub">訂位贈主廚私房菜</div>
-    </a>
-    <a class="ad-card" href="https://google.com" target="_blank">
-      <span class="ad-tag">熱門推薦</span>
-      <div class="ad-title">藏壽司 文心崇德</div>
-      <div class="ad-sub">滿額抽限定扭蛋</div>
-    </a>
-    <div class="ad-card vacant" onclick="alert('【台中市北屯區・黃金廣告版位招租】\n\n您的店就在北屯嗎？立即卡位左側黃金版位，讓北屯居民每天轉拉霸都第一眼看到您的店！')">
-      <span class="ad-tag">版位招租</span>
-      <div class="ad-title">北屯創始席位</div>
-      <div class="ad-sub">點擊洽談曝光合作</div>
-    </div>
-    <div class="ad-card vacant" onclick="alert('【台中市北屯區・黃金廣告版位招租】\n\n銅板小吃與人氣餐廳專屬曝光窗口，歡迎北屯在地店家洽詢進駐！')">
-      <span class="ad-tag">版位招租</span>
-      <div class="ad-title">北屯美食席位</div>
-      <div class="ad-sub">低成本高精準導流</div>
-    </div>
-    <div class="ad-card vacant" onclick="alert('【台中市北屯區・黃金廣告版位招租】\n\n搶佔崇德、文心、昌平、松竹商圈客群，立即預約本版位！')">
-      <span class="ad-tag">版位招租</span>
-      <div class="ad-title">商圈特約席位</div>
-      <div class="ad-sub">歡迎在地名店進駐</div>
-    </div>
+    <a class="ad-card" href="https://google.com" target="_blank"><span class="ad-tag">VIP 置頂</span><div class="ad-title">屋馬燒肉 崇德</div><div class="ad-sub">訂位贈主廚私房菜</div></a>
+    <a class="ad-card" href="https://google.com" target="_blank"><span class="ad-tag">熱門推薦</span><div class="ad-title">藏壽司 文心崇德</div><div class="ad-sub">滿額抽限定扭蛋</div></a>
+    <div class="ad-card vacant" onclick="alert('北屯黃金廣告位招租中！')"><span class="ad-tag">版位招租</span><div class="ad-title">北屯創始席位</div><div class="ad-sub">點擊洽談曝光合作</div></div>
+    <div class="ad-card vacant" onclick="alert('北屯黃金廣告位招租中！')"><span class="ad-tag">版位招租</span><div class="ad-title">北屯美食席位</div><div class="ad-sub">低成本高精準導流</div></div>
+    <div class="ad-card vacant" onclick="alert('北屯黃金廣告位招租中！')"><span class="ad-tag">版位招租</span><div class="ad-title">商圈特約席位</div><div class="ad-sub">歡迎在地名店進駐</div></div>
   </div>
-
   <div class="center-stage">
     <div class="filter-panel">
       <label class="title-lbl">🍽️ 選擇想吃的料理類型</label>
@@ -129,138 +94,118 @@
         <option value="義式美式">🇮🇹 義式西餐・美式漢堡牛排</option>
         <option value="早午餐甜點">🧋 早午餐・咖啡豆花手搖飲</option>
       </select>
-      <div class="open-only-row">
-       
-🟢 僅抽目前營業中店家
-載入北屯百大美食庫中...
-第一軸・招牌菜
-
-🍽️準備開轉
-
-第二軸・北屯店家
-
-🏪北屯好店
-
-第三軸・營業狀態
-
-⏰即時對時
-
-北屯美食，開轉！
+      <div class="open-only-row"><label><input type="checkbox" id="openOnlyCheck" onchange="updateStats()"> 🟢 僅抽目前營業中店家</label></div>
+      <div class="stats-line" id="statsLine">載入中...</div>
+    </div>
+    <div class="machine" id="machineBox">
+      <div class="slots">
+        <div class="slot-window"><span class="slot-label">第一軸・招牌菜</span><div class="reel-strip" id="strip1"><div class="reel-item"><div class="reel-emoji">🍽️</div><div class="reel-text">準備開轉</div></div></div></div>
+        <div class="slot-window"><span class="slot-label">第二軸・北屯店家</span><div class="reel-strip" id="strip2"><div class="reel-item"><div class="reel-emoji">🏪</div><div class="reel-text">北屯好店</div></div></div></div>
+        <div class="slot-window"><span class="slot-label">第三軸・營業狀態</span><div class="reel-strip" id="strip3"><div class="reel-item"><div class="reel-emoji">⏰</div><div class="reel-text">即時對時</div></div></div></div>
+      </div>
+      <button class="btn-spin" id="spinBtn" onclick="startSpin()">北屯美食，開轉！</button>
+    </div>
 🟢 營業中
 🎉 今日天選美食！
 
-在地首選
-丰禾台味 崇德
-王品集團台菜名店
 
-人氣網美
-JAI宅 水湳店
-爆量蛤蜊義大利麵
 
-版位招租
-北屯創始席位
-一鍵導航精準吸客
 
-版位招租
-限量廣告席位
-全區僅限 10 家名額
 
-版位招租
-特約合作席位
-點擊了解合作方案
+
+在地首選丰禾台味 崇德王品集團台菜名店
+人氣網美JAI宅 水湳店爆量蛤蜊義大利麵
+版位招租北屯創始席位一鍵導航精準吸客
+版位招租限量廣告席位全區僅限 10 家名額
+版位招租特約合作席位點擊了解合作方案
+
 
 目前營運站點：台中市北屯區（第一示範基地）｜店家合作洽詢
-// 營業時間格式 [開始小時, 結束小時]（支援跨午夜，如 [16, 2] 代表下午4點開到凌晨2點，[0, 24] 代表24小時）
+   
+<script>
 const beitunShops = [
-// 1. 銅板小吃 (22家)
-{ cat: "銅板小吃", emoji: "🍜", shop: "老向的店", area: "北平路商圈", hours: [10.5, 22], dishes: ["蚌麵", "清蒸鴨腿麵", "東坡肉飯", "紅油抄手", "麻辣乾麵"] },
-{ cat: "銅板小吃", emoji: "🦪", shop: "大腸蚵仔麵線", area: "昌平路商圈", hours: [6.5, 13.5], dishes: ["綜合大腸蚵仔麵線", "清麵線", "滷大腸頭", "蒜泥鮮蚵"] },
-{ cat: "銅板小吃", emoji: "🍳", shop: "台北蚵仔煎", area: "一點利市場周邊", hours:, dishes: ["招牌蚵仔煎", "蝦仁煎", "花枝羹湯", "魯肉飯"] },
-{ cat: "銅板小吃", emoji: "🍚", shop: "松竹麵攤肉燥飯", area: "松竹路商圈", hours: [11, 20.5], dishes: ["古早味肉燥飯", "陽春乾麵", "隔間肉湯", "滷油豆腐"] },
-{ cat: "銅板小吃", emoji: "🥟", shop: "角間煎餃", area: "昌平路商圈", hours: [6, 12.5], dishes: ["高麗菜冰花煎餃", "韭菜煎餃", "酸辣湯", "古早味豆漿"] },
-{ cat: "銅板小吃", emoji: "🍲", shop: "北屯阿婆炒麵", area: "北屯市場", hours:, dishes: ["台中傳統炒麵", "豬血湯", "綜合湯", "東泉辣椒醬拌麵"] },
-{ cat: "銅板小吃", emoji: "🥩", shop: "昌平炸粿蚵嗲", area: "昌平路二段", hours: [14, 19.5], dishes: ["現炸蚵嗲", "肉嗲", "炸米糕", "炸韭菜條", "蘿蔔糕"] },
-{ cat: "銅板小吃", emoji: "🍜", shop: "徐家莊手打麵", area: "北平路三段", hours:, dishes: ["招牌手打炒麵", "木須炒麵", "酸辣湯餃", "滷味拼盤"] },
-{ cat: "銅板小吃", emoji: "🥟", shop: "鑫旺角茶餐廳小吃", area: "北平路商圈", hours:, dishes: ["鮮蝦雲吞麵", "叉燒包", "蘿蔔糕", "絲襪奶茶"] },
-{ cat: "銅板小吃", emoji: "🍚", shop: "東山路控肉飯", area: "東山路一段", hours: [10.5, 20.5], dishes: ["肥瘦相間控肉飯", "腳庫飯", "白菜滷", "筍乾", "味噌湯"] },
-{ cat: "銅板小吃", emoji: "🍜", shop: "河北路牛肉麵", area: "河北路二段", hours: [11, 20.5], dishes: ["紅燒半筋半肉麵", "清燉牛肉麵", "水餃", "涼拌小黃瓜"] },
-{ cat: "銅板小吃", emoji: "🥠", shop: "綏遠路蔥油餅", area: "綏遠路商圈", hours:, dishes: ["九層塔加蛋蔥油餅", "起司抓餅", "豬肉餡餅", "小米粥"] },
-{ cat: "銅板小吃", emoji: "🍲", shop: "崇德肉圓伯", area: "崇德路二段", hours: [11, 19.5], dishes: ["低溫油泡肉圓", "四神湯", "貢丸湯", "甜不辣"] },
-{ cat: "銅板小吃", emoji: "🍚", shop: "文心嘉義火雞肉飯", area: "文心路四段", hours: [10.5, 21], dishes: ["火雞肉片飯", "雞魯飯", "荷包蛋", "下水湯", "燙青菜"] },
-{ cat: "銅板小吃", emoji: "🥟", shop: "北平黃昏市場水餃", area: "北平路三段", hours:, dishes: ["手工韭菜水餃", "高麗菜鮮肉餃", "玉米濃湯", "滷豆干"] },
-{ cat: "銅板小吃", emoji: "🍜", shop: "大坑豬頭三炸粿", area: "東山路二段", hours: [9.5, 17], dishes: ["大骨筍湯", "招牌蚵嗲", "炸地瓜", "炸香菇", "米腸"] },
-{ cat: "銅板小吃", emoji: "🍢", shop: "一點利市場關東煮", area: "遼寧路一段", hours: [14.5, 20], dishes: ["黑輪", "白蘿蔔", "高麗菜捲", "苦瓜封", "柴魚高湯"] },
-{ cat: "銅板小吃", emoji: "🍚", shop: "四平路鴨肉飯", area: "四平路商圈", hours:, dishes: ["煙燻鴨肉飯", "當歸鴨麵線", "米血糕", "鴨肉切盤"] },
-{ cat: "銅板小吃", emoji: "🍜", shop: "興安路乾意麵", area: "興安路一段", hours: [6.5, 14], dishes: ["古早味乾意麵", "餛飩湯", "粉腸湯", "滷蛋海帶"] },
-{ cat: "銅板小吃", emoji: "🫓", shop: "天津路胡椒餅", area: "天津路服飾商圈", hours: [14, 20.5], dishes: ["炭烤赤肉胡椒餅", "起司牛肉餅", "紅豆酥餅", "甜燒餅"] },
-{ cat: "銅板小吃", emoji: "🍲", shop: "梅川東路當歸土虱", area: "梅川東路四段", hours: [16.5, 24], dishes: ["藥燉排骨", "當歸土虱頭", "麻油麵線", "滷肉飯"] },
-{ cat: "銅板小吃", emoji: "🥟", shop: "軍功路湯包專賣", area: "軍功路一段", hours: [6, 13.5], dishes: ["爆汁鮮肉湯包", "絲瓜蝦仁湯包", "酸辣湯", "紅茶豆漿"] },
-// 2. 宵夜炸物 (14家)
-{ cat: "宵夜炸物", emoji: "🍗", shop: "炸滋滋無骨鹽酥雞", area: "昌平路商圈", hours:, dishes: ["無骨鹽酥雞", "酥炸魷魚圈", "甜不辣", "百頁豆腐", "四季豆"] },
-{ cat: "宵夜炸物", emoji: "🍢", shop: "永留香臭豆腐", area: "太原路三段", hours: [15.5, 23], dishes: ["脆皮臭豆腐", "麻辣鴨血豆腐煲", "大腸麵線", "泡菜"] },
-{ cat: "宵夜炸物", emoji: "🔥", shop: "北平路炭烤雞排", area: "北平路三段", hours: [16.5, 0.5], dishes: ["蜜汁炭烤大雞排", "烤甜不辣", "烤米血", "烤雞屁股"] },
-{ cat: "宵夜炸物", emoji: "🌶️", shop: "昌平麻辣乾鍋滷味", area: "昌平路一段", hours:, dishes: ["麻辣鴨血", "王子麵", "高麗菜", "鴨腸", "老油條"] },
-{ cat: "宵夜炸物", emoji: "🍗", shop: "崇德惡魔厚切雞排", area: "崇德路二段", hours: [15.5, 23.5], dishes: ["原味厚切雞排", "辣味雞排", "煉乳銀絲捲", "甘梅地瓜"] },
-{ cat: "宵夜炸物", emoji: "🍢", shop: "文心路深夜串燒屋", area: "文心路四段", hours:, dishes: ["明太子雞肉串", "培根捲金針菇", "鹽烤秋刀魚", "烤麻糬"] },
-{ cat: "宵夜炸物", emoji: "🥟", shop: "松竹永和豆漿大王", area: "松竹路二段", hours:, dishes: ["燒餅油條", "起司蛋餅", "小籠湯包", "冰豆漿", "蘿蔔糕加蛋"] },
-{ cat: "宵夜炸物", emoji: "🍗", shop: "東山路美式炸雞桶", area: "東山路一段", hours:, dishes: ["卡啦脆雞腿", "洋蔥圈", "波浪薯條", "雞米花"] },
-{ cat: "宵夜炸物", emoji: "🍲", shop: "北屯深夜砂鍋粥", area: "崇德路一段", hours: [17.5, 1.5], dishes: ["鮮蝦干貝砂鍋粥", "鮑魚雞肉粥", "炒水蓮", "炸豆腐"] },
-{ cat: "宵夜炸物", emoji: "🌶️", shop: "興安路冷滷味攤", area: "興安路二段", hours: [16.5, 23.5], dishes: ["煙燻鴨翅", "滷雞爪凍", "滷豆干", "海帶結", "酸菜"] },
-{ cat: "宵夜炸物", emoji: "🍗", shop: "水湳市場鹽水雞", area: "中清路二段", hours: [16.5, 23.5], dishes: ["去骨煙燻雞胸", "雞腿肉", "花椰菜", "玉米筍", "鳥蛋"] },
-{ cat: "宵夜炸物", emoji: "🔥", shop: "太原路焦糖滷味", area: "太原路三段", hours: [17, 0.5], dishes: ["焦糖滷鴨頭", "甜不辣", "貢丸", "豬血糕", "百頁"] },
-{ cat: "宵夜炸物", emoji: "🍔", shop: "北屯24H麥當勞", area: "崇德路二段", hours:, dishes: ["大麥克", "勁辣雞腿堡", "麥克雞塊", "大薯", "玉米濃湯"] },
-{ cat: "宵夜炸物", emoji: "🍜", shop: "崇德深夜清粥小菜", area: "崇德路一段", hours:, dishes: ["地瓜稀飯", "菜脯蛋", "紅燒肉", "滷虱目魚肚", "炒空心菜"] },
-// 3. 台式熱炒 (14家)
-{ cat: "台式熱炒", emoji: "🍲", shop: "丰禾台味風格料理", area: "崇德路三段", hours: [11.5, 21.5], dishes: ["丰禾起家雞", "黑麻油燒蛋", "糖醋鱸魚", "芋絲米糕"] },
-{ cat: "台式熱炒", emoji: "🍗", shop: "東山棧甕缸雞", area: "東山路一段", hours: [11, 21.5], dishes: ["招牌甕缸雞", "雞油燜筍", "酥炸溪蝦", "炒山蘇"] },
-{ cat: "台式熱炒", emoji: "🦆", shop: "柴火火燄烤鴨", area: "松竹路三段", hours: [11.5, 21.5], dishes: ["片皮櫻桃烤鴨", "酸菜鴨架湯", "鹽酥鴨架", "京醬肉絲"] },
-{ cat: "台式熱炒", emoji: "🦆", shop: "御記烤鴨松竹總店", area: "松竹路二段", hours: [10.5, 20], dishes: ["一鴨二吃片皮鴨", "甜麵醬蔥段", "大火爆炒鴨骨", "滷鴨翅"] },
-{ cat: "台式熱炒", emoji: "🦐", shop: "崇德99元現炒", area: "崇德路二段", hours:, dishes: ["宮保雞丁", "鳳梨蝦球", "三杯中卷", "客家小炒", "蚵仔酥"] },
-{ cat: "台式熱炒", emoji: "🐓", shop: "大坑竹之鄉風味餐", area: "東山路二段", hours: [11, 20.5], dishes: ["耖米飯", "白斬土雞", "筍乾扣肉", "麻油川七"] },
-{ cat: "台式熱炒", emoji: "🍱", shop: "北平路排骨飯大王", area: "北平路三段", hours: [10.5, 20.5], dishes: ["古早味炸排骨飯", "蜜汁雞腿飯", "鱈魚便當", "三杯雞飯"] },
-{ cat: "台式熱炒", emoji: "🦆", shop: "昌平路鵝肉城", area: "昌平路一段", hours: [16, 23.5], dishes: ["鹽水鵝肉切盤", "鵝油拌飯", "下水湯", "桂竹筍", "炒蛤蜊"] },
-{ cat: "台式熱炒", emoji: "🐟", shop: "文心路活魚海鮮餐廳", area: "文心路四段", hours: [11, 21.5], dishes: ["清蒸石斑魚", "金沙中卷", "避風塘炒蟹", "海鮮炒麵"] },
-{ cat: "台式熱炒", emoji: "🍲", shop: "太原路薑母鴨", area: "太原路三段", hours:, dishes: ["炭火薑母鴨", "鴨肉丸", "凍豆腐", "高麗菜", "麻油麵線"] },
-{ cat: "台式熱炒", emoji: "🐑", shop: "松竹路正宗羊肉爐", area: "松竹路一段", hours: [16.5, 0.5], dishes: ["當歸帶皮羊肉爐", "羊大骨", "涮羊肉片", "腐乳醬"] },
-{ cat: "台式熱炒", emoji: "🍱", shop: "水湳池上木片便當", area: "中清路二段", hours: [10.5, 20], dishes: ["招牌木片便當", "炸雞腿飯", "控肉便當", "鯖魚便當"] },
-{ cat: "台式熱炒", emoji: "🦐", shop: "軍功路海鮮熱炒", area: "軍功路二段", hours: [17, 0.5], dishes: ["蒜泥白肉", "蔥爆牛肉", "椒鹽龍珠", "苦瓜鹹蛋"] },
-{ cat: "台式熱炒", emoji: "🐔", shop: "大坑龍莊烤乳豬", area: "東山路二段", hours:, dishes: ["脆皮烤乳豬", "桶仔雞", "山藥排骨湯", "炒檳榔花"] },
-// 4. 日式料理 (12家)
-{ cat: "日式料理", emoji: "🍣", shop: "藏壽司 文心崇德店", area: "文心路四段", hours:, dishes: ["炙燒鮭魚肚", "北海道大帆立貝", "鮮蝦天婦羅手卷", "茶碗蒸"] },
-{ cat: "日式料理", emoji: "🍱", shop: "樹太老日本定食", area: "崇德路二段", hours: [11, 21.5], dishes: ["炸里肌肉豬排定食", "起司藍帶豬排", "照燒雞腿定食", "和風炸雞"] },
-{ cat: "日式料理", emoji: "🍜", shop: "崇德豚骨拉麵屋", area: "崇德路二段", hours: [11.5, 21], dishes: ["濃厚豚骨叉燒拉麵", "辛味噌拉麵", "日式唐揚雞", "溏心蛋"] },
-{ cat: "日式料理", emoji: "🍣", shop: "北平路平價壽司丼", area: "北平路三段", hours: [11, 20.5], dishes: ["綜合生魚片丼", "炙燒比目魚丼", "花壽司拼盤", "鮮魚味噌湯"] },
-{ cat: "日式料理", emoji: "🍛", shop: "文心日式咖哩專門", area: "文心路四段", hours:, dishes: ["炸豬排歐姆蛋咖哩", "漢堡排咖哩飯", "可樂餅", "炸牡蠣"] },
-{ cat: "日式料理", emoji: "🍢", shop: "松竹路深夜居酒屋", area: "松竹路二段", hours: [17.5, 1], dishes: ["明太子山藥", "鹽烤松阪豬", "午仔魚一夜干", "鮭魚烤飯糰"] },
-{ cat: "日式料理", emoji: "🍱", shop: "昌平路日式定食", area: "昌平路一段", hours: [11.5, 20.5], dishes: ["鹽烤鯖魚定食", "薑汁燒肉丼", "親子丼", "日式玉子燒"] },
-{ cat: "日式料理", emoji: "🍜", shop: "水湳烏龍麵專門店", area: "中清路二段", hours:, dishes: ["明太子拌烏龍麵", "牛肉湯烏龍麵", "炸蝦天婦羅", "炸地瓜"] },
-{ cat: "日式料理", emoji: "🍣", shop: "崇德迴轉壽司", area: "崇德路三段", hours: [11, 21.5], dishes: ["極上鮪魚大腹", "鮭魚卵軍艦", "玉子燒握壽司", "花蛤味噌湯"] },
-{ cat: "日式料理", emoji: "🥩", shop: "北屯日式和牛漢堡排", area: "崇德路二段", hours: [11.5, 21], dishes: ["直火炭烤和牛漢堡排", "越光米白飯", "生食級蛋黃", "味增湯"] },
-{ cat: "日式料理", emoji: "🐙", shop: "一點利章魚燒小丸子", area: "遼寧路一段", hours:, dishes: ["原味柴魚章魚燒", "明太子起司章魚燒", "芥末海苔章魚燒"] },
-{ cat: "日式料理", emoji: "🍱", shop: "東山路鰻魚飯專賣", area: "東山路一段", hours: [11.5, 20.5], dishes: ["蒲燒鰻魚重箱飯", "白燒鰻魚", "鰻肝清湯", "和風沙拉"] },
-// 5. 火鍋燒肉 (12家)
-{ cat: "火鍋燒肉", emoji: "🥩", shop: "屋馬燒肉 崇德店", area: "崇德路二段", hours:, dishes: ["日本A5和牛拼盤", "伊比利豬梅花", "屋馬主廚沙拉", "海鮮粥"] },
-{ cat: "火鍋燒肉", emoji: "🍲", shop: "輕井澤鍋物 崇德店", area: "崇德路二段", hours:, dishes: ["和風培根牛肉鍋", "四川麻辣鴨血鍋", "梅花豬肉鍋", "紅茶冰沙"] },
-{ cat: "火鍋燒肉", emoji: "🥩", shop: "山鯨燒肉 漢口崇德", area: "漢口路四段", hours: [11.5, 23.5], dishes: ["極上和牛雙人套餐", "太空菇", "松露和牛可頌", "鮮榨果汁"] },
-{ cat: "火鍋燒肉", emoji: "🍲", shop: "石二鍋 崇德店", area: "崇德路二段", hours: [11.5, 22], dishes: ["爆香石頭鍋", "雪花牛肉鍋", "愛呷肉拼盤", "冬瓜檸檬冰沙"] },
-{ cat: "火鍋燒肉", emoji: "🍲", shop: "築間幸福鍋物 北屯店", area: "崇德路二段", hours:, dishes: ["招牌石頭湯底", "霜降牛肉鍋", "海鮮總匯鍋", "自助蔬菜冰淇淋吧"] },
-{ cat: "火鍋燒肉", emoji: "🥩", shop: "燒肉Smile 景賢店", area: "景賢路商圈", hours:, dishes: ["個人和牛盛合套餐", "牛五花雙拼", "野菜沙拉自助吧", "蔥花玉子拌飯"] },
-{ cat: "火鍋燒肉", emoji: "🍲", shop: "北平路三媽臭臭鍋", area: "北平路三段", hours:, dishes: ["大腸臭臭鍋", "海鮮豆腐鍋", "泡菜鍋", "麻辣鍋", "白飯飲料吃到飽"] },
-{ cat: "火鍋燒肉", emoji: "🍲", shop: "文心路老四川麻辣鍋", area: "文心路四段", hours: [11.5, 1.5], dishes: ["絕選麻辣鴛鴦鍋", "川味涼粉", "滷水大腸頭", "雪花牛"] },
-{ cat: "火鍋燒肉", emoji: "🥩", shop: "崇德韓國銅盤烤肉", area: "崇德路二段", hours: [11.5, 22], dishes: ["秘製牛五花銅盤烤肉", "梅花豬烤肉", "海鮮煎餅", "韓式小菜無限續"] },
-{ cat: "火鍋燒肉", emoji: "🍲", shop: "松竹路酸菜白肉鍋", area: "松竹路二段", hours: [11.5, 21.5], dishes: ["東北酸菜白肉鍋", "手工川丸子", "五花白肉片", "蔥油餅"] },
-{ cat: "火鍋燒肉", emoji: "🍲", shop: "昌平路平價小火鍋", area: "昌平路一段", hours: [11, 22.5], dishes: ["牛奶起司鍋", "沙茶牛肉鍋", "藥膳羊肉鍋", "爆米花冰淇淋"] },
-{ cat: "火鍋燒肉", emoji: "🥩", shop: "水湳精緻燒肉餐酒", area: "中清路二段", hours:, dishes: ["厚切牛舌", "橫膈膜燒肉", "明太子拌飯", "生啤酒"] },
-// 6. 韓式異國 (8家)
-{ cat: "韓式異國", emoji: "🥘", shop: "非常石鍋韓式料理", area: "北屯路商圈", hours: [11.5, 21.5], dishes: ["起司春川辣炒雞", "泡菜豬肉石鍋拌飯", "海鮮煎餅", "人蔘雞湯"] },
-{ cat: "韓式異國", emoji: "🍲", shop: "涓豆腐 台中崇德店", area: "崇德路二段", hours: [11.5, 22], dishes: ["海陸綜合嫩豆腐煲", "韓式炸雞", "石鍋紫米飯", "黑糖香柚豆花"] },
-{ cat: "韓式異國", emoji: "🌶️", shop: "瓦城泰國料理 崇德店", area: "崇德路二段", hours: [11.5, 21.5], dishes: ["原味月亮蝦餅", "泰式打拋豬", "檸檬清蒸魚", "摩摩喳喳"] },
+  { cat: "銅板小吃", emoji: "🍜", shop: "老向的店", area: "北平路商圈", hours: [10.5, 22], dishes: ["蚌麵", "清蒸鴨腿麵", "東坡肉飯", "紅油抄手", "麻辣乾麵"] },
+  { cat: "銅板小吃", emoji: "🦪", shop: "大腸蚵仔麵線", area: "昌平路商圈", hours: [6.5, 13.5], dishes: ["綜合大腸蚵仔麵線", "清麵線", "滷大腸頭", "蒜泥鮮蚵"] },
+  { cat: "銅板小吃", emoji: "🍳", shop: "台北蚵仔煎", area: "一點利市場周邊", hours:, dishes: ["招牌蚵仔煎", "蝦仁煎", "花枝羹湯", "魯肉飯"] },
+  { cat: "銅板小吃", emoji: "🍚", shop: "松竹麵攤肉燥飯", area: "松竹路商圈", hours: [11, 20.5], dishes: ["古早味肉燥飯", "陽春乾麵", "隔間肉湯", "滷油豆腐"] },
+  { cat: "銅板小吃", emoji: "🥟", shop: "角間煎餃", area: "昌平路商圈", hours: [6, 12.5], dishes: ["高麗菜冰花煎餃", "韭菜煎餃", "酸辣湯", "古早味豆漿"] },
+  { cat: "銅板小吃", emoji: "🍲", shop: "北屯阿婆炒麵", area: "北屯市場", hours:, dishes: ["台中傳統炒麵", "豬血湯", "綜合湯", "東泉辣椒醬拌麵"] },
+  { cat: "銅板小吃", emoji: "🥩", shop: "昌平炸粿蚵嗲", area: "昌平路二段", hours: [14, 19.5], dishes: ["現炸蚵嗲", "肉嗲", "炸米糕", "炸韭菜條", "蘿蔔糕"] },
+  { cat: "銅板小吃", emoji: "🍜", shop: "徐家莊手打麵", area: "北平路三段", hours:, dishes: ["招牌手打炒麵", "木須炒麵", "酸辣湯餃", "滷味拼盤"] },
+  { cat: "銅板小吃", emoji: "🥟", shop: "鑫旺角茶餐廳小吃", area: "北平路商圈", hours:, dishes: ["鮮蝦雲吞麵", "叉燒包", "蘿蔔糕", "絲襪奶茶"] },
+  { cat: "銅板小吃", emoji: "🍚", shop: "東山路控肉飯", area: "東山路一段", hours: [10.5, 20.5], dishes: ["肥瘦相間控肉飯", "腳庫飯", "白菜滷", "筍乾", "味噌湯"] },
+  { cat: "銅板小吃", emoji: "🍜", shop: "河北路牛肉麵", area: "河北路二段", hours: [11, 20.5], dishes: ["紅燒半筋半肉麵", "清燉牛肉麵", "水餃", "涼拌小黃瓜"] },
+  { cat: "銅板小吃", emoji: "🥠", shop: "綏遠路蔥油餅", area: "綏遠路商圈", hours:, dishes: ["九層塔加蛋蔥油餅", "起司抓餅", "豬肉餡餅", "小米粥"] },
+  { cat: "銅板小吃", emoji: "🍲", shop: "崇德肉圓伯", area: "崇德路二段", hours: [11, 19.5], dishes: ["低溫油泡肉圓", "四神湯", "貢丸湯", "甜不辣"] },
+  { cat: "銅板小吃", emoji: "🍚", shop: "文心嘉義火雞肉飯", area: "文心路四段", hours: [10.5, 21], dishes: ["火雞肉片飯", "雞魯飯", "荷包蛋", "下水湯", "燙青菜"] },
+  { cat: "銅板小吃", emoji: "🥟", shop: "北平黃昏市場水餃", area: "北平路三段", hours:, dishes: ["手工韭菜水餃", "高麗菜鮮肉餃", "玉米濃湯", "滷豆干"] },
+  { cat: "銅板小吃", emoji: "🍜", shop: "大坑豬頭三炸粿", area: "東山路二段", hours: [9.5, 17], dishes: ["大骨筍湯", "招牌蚵嗲", "炸地瓜", "炸香菇", "米腸"] },
+  { cat: "銅板小吃", emoji: "🍢", shop: "一點利市場關東煮", area: "遼寧路一段", hours: [14.5, 20], dishes: ["黑輪", "白蘿蔔", "高麗菜捲", "苦瓜封", "柴魚高湯"] },
+  { cat: "銅板小吃", emoji: "🍚", shop: "四平路鴨肉飯", area: "四平路商圈", hours:, dishes: ["煙燻鴨肉飯", "當歸鴨麵線", "米血糕", "鴨肉切盤"] },
+  { cat: "銅板小吃", emoji: "🍜", shop: "興安路乾意麵", area: "興安路一段", hours: [6.5, 14], dishes: ["古早味乾意麵", "餛飩湯", "粉腸湯", "滷蛋海帶"] },
+  { cat: "銅板小吃", emoji: "🫓", shop: "天津路胡椒餅", area: "天津路服飾商圈", hours: [14, 20.5], dishes: ["炭烤赤肉胡椒餅", "起司牛肉餅", "紅豆酥餅", "甜燒餅"] },
+  { cat: "銅板小吃", emoji: "🍲", shop: "梅川東路當歸土虱", area: "梅川東路四段", hours: [16.5, 24], dishes: ["藥燉排骨", "當歸土虱頭", "麻油麵線", "滷肉飯"] },
+  { cat: "銅板小吃", emoji: "🥟", shop: "軍功路湯包專賣", area: "軍功路一段", hours: [6, 13.5], dishes: ["爆汁鮮肉湯包", "絲瓜蝦仁湯包", "酸辣湯", "紅茶豆漿"] },
+  { cat: "宵夜炸物", emoji: "🍗", shop: "炸滋滋無骨鹽酥雞", area: "昌平路商圈", hours:, dishes: ["無骨鹽酥雞", "酥炸魷魚圈", "甜不辣", "百頁豆腐", "四季豆"] },
+  { cat: "宵夜炸物", emoji: "🍢", shop: "永留香臭豆腐", area: "太原路三段", hours: [15.5, 23], dishes: ["脆皮臭豆腐", "麻辣鴨血豆腐煲", "大腸麵線", "泡菜"] },
+  { cat: "宵夜炸物", emoji: "🔥", shop: "北平路炭烤雞排", area: "北平路三段", hours: [16.5, 0.5], dishes: ["蜜汁炭烤大雞排", "烤甜不辣", "烤米血", "烤雞屁股"] },
+  { cat: "宵夜炸物", emoji: "🌶️", shop: "昌平麻辣乾鍋滷味", area: "昌平路一段", hours:, dishes: ["麻辣鴨血", "王子麵", "高麗菜", "鴨腸", "老油條"] },
+  { cat: "宵夜炸物", emoji: "🍗", shop: "崇德惡魔厚切雞排", area: "崇德路二段", hours: [15.5, 23.5], dishes: ["原味厚切雞排", "辣味雞排", "煉乳銀絲捲", "甘梅地瓜"] },
+  { cat: "宵夜炸物", emoji: "🍢", shop: "文心路深夜串燒屋", area: "文心路四段", hours: [17.5, 1.5], dishes: ["明太子雞肉串", "培根捲金針菇", "鹽烤秋刀魚", "烤麻糬"] },
+  { cat: "宵夜炸物", emoji: "🥟", shop: "松竹永和豆漿大王", area: "松竹路二段", hours:, dishes: ["燒餅油條", "起司蛋餅", "小籠湯包", "冰豆漿", "蘿蔔糕加蛋"] },
+  { cat: "宵夜炸物", emoji: "🍗", shop: "東山路美式炸雞桶", area: "東山路一段", hours:, dishes: ["卡啦脆雞腿", "洋蔥圈", "波浪薯條", "雞米花"] },
+  { cat: "宵夜炸物", emoji: "🍲", shop: "北屯深夜砂鍋粥", area: "崇德路一段", hours: [17.5, 1.5], dishes: ["鮮蝦干貝砂鍋粥", "鮑魚雞肉粥", "炒水蓮", "炸豆腐"] },
+  { cat: "宵夜炸物", emoji: "🌶️", shop: "興安路冷滷味攤", area: "興安路二段", hours: [16.5, 23.5], dishes: ["煙燻鴨翅", "滷雞爪凍", "滷豆干", "海帶結", "酸菜"] },
+  { cat: "宵夜炸物", emoji: "🍗", shop: "水湳市場鹽水雞", area: "中清路二段", hours: [16.5, 23.5], dishes: ["去骨煙燻雞胸", "雞腿肉", "花椰菜", "玉米筍", "鳥蛋"] },
+  { cat: "宵夜炸物", emoji: "🔥", shop: "太原路焦糖滷味", area: "太原路三段", hours: [17, 0.5], dishes: ["焦糖滷鴨頭", "甜不辣", "貢丸", "豬血糕", "百頁"] },
+  { cat: "宵夜炸物", emoji: "🍔", shop: "北屯24H麥當勞", area: "崇德路二段", hours:, dishes: ["大麥克", "勁辣雞腿堡", "麥克雞塊", "大薯", "玉米濃湯"] },
+  { cat: "宵夜炸物", emoji: "🍜", shop: "崇德深夜清粥小菜", area: "崇德路一段", hours:, dishes: ["地瓜稀飯", "菜脯蛋", "紅燒肉", "滷虱目魚肚", "炒空心菜"] },
+  { cat: "台式熱炒", emoji: "🍲", shop: "丰禾台味風格料理", area: "崇德路三段", hours: [11.5, 21.5], dishes: ["丰禾起家雞", "黑麻油燒蛋", "糖醋鱸魚", "芋絲米糕"] },
+  { cat: "台式熱炒", emoji: "🍗", shop: "東山棧甕缸雞", area: "東山路一段", hours: [11, 21.5], dishes: ["招牌甕缸雞", "雞油燜筍", "酥炸溪蝦", "炒山蘇"] },
+  { cat: "台式熱炒", emoji: "🦆", shop: "柴火火燄烤鴨", area: "松竹路三段", hours: [11.5, 21.5], dishes: ["片皮櫻桃烤鴨", "酸菜鴨架湯", "鹽酥鴨架", "京醬肉絲"] },
+  { cat: "台式熱炒", emoji: "🦆", shop: "御記烤鴨松竹總店", area: "松竹路二段", hours: [10.5, 20], dishes: ["一鴨二吃片皮鴨", "甜麵醬蔥段", "大火爆炒鴨骨", "滷鴨翅"] },
+  { cat: "台式熱炒", emoji: "🦐", shop: "崇德99元現炒", area: "崇德路二段", hours: [16.5, 1], dishes: ["宮保雞丁", "鳳梨蝦球", "三杯中卷", "客家小炒", "蚵仔酥"] },
+  { cat: "台式熱炒", emoji: "🐓", shop: "大坑竹之鄉風味餐", area: "東山路二段", hours: [11, 20.5], dishes: ["耖米飯", "白斬土雞", "筍乾扣肉", "麻油川七"] },
+  { cat: "台式熱炒", emoji: "🍱", shop: "北平路排骨飯大王", area: "北平路三段", hours: [10.5, 20.5], dishes: ["古早味炸排骨飯", "蜜汁雞腿飯", "鱈魚便當", "三杯雞飯"] },
+  { cat: "台式熱炒", emoji: "🦆", shop: "昌平路鵝肉城", area: "昌平路一段", hours: [16, 23.5], dishes: ["鹽水鵝肉切盤", "鵝油拌飯", "下水湯", "桂竹筍", "炒蛤蜊"] },
+  { cat: "台式熱炒", emoji: "🐟", shop: "文心路活魚海鮮餐廳", area: "文心路四段", hours: [11, 21.5], dishes: ["清蒸石斑魚", "金沙中卷", "避風塘炒蟹", "海鮮炒麵"] },
+  { cat: "台式熱炒", emoji: "🍲", shop: "太原路薑母鴨", area: "太原路三段", hours:, dishes: ["炭火薑母鴨", "鴨肉丸", "凍豆腐", "高麗菜", "麻油麵線"] },
+  { cat: "台式熱炒", emoji: "🐑", shop: "松竹路正宗羊肉爐", area: "松竹路一段", hours: [16.5, 0.5], dishes: ["當歸帶皮羊肉爐", "羊大骨", "涮羊肉片", "腐乳醬"] },
+  { cat: "台式熱炒", emoji: "🍱", shop: "水湳池上木片便當", area: "中清路二段", hours: [10.5, 20], dishes: ["招牌木片便當", "炸雞腿飯", "控肉便當", "鯖魚便當"] },
+  { cat: "台式熱炒", emoji: "🦐", shop: "軍功路海鮮熱炒", area: "軍功路二段", hours: [17, 0.5], dishes: ["蒜泥白肉", "蔥爆牛肉", "椒鹽龍珠", "苦瓜鹹蛋"] },
+  { cat: "台式熱炒", emoji: "🐔", shop: "大坑龍莊烤乳豬", area: "東山路二段", hours:, dishes: ["脆皮烤乳豬", "桶仔雞", "山藥排骨湯", "炒檳榔花"] },
+  { cat: "日式料理", emoji: "🍣", shop: "藏壽司 文心崇德店", area: "文心路四段", hours:, dishes: ["炙燒鮭魚肚", "北海道大帆立貝", "鮮蝦天婦羅手卷", "茶碗蒸"] },
+  { cat: "日式料理", emoji: "🍱", shop: "樹太老日本定食", area: "崇德路二段", hours: [11, 21.5], dishes: ["炸里肌肉豬排定食", "起司藍帶豬排", "照燒雞腿定食", "和風炸雞"] },
+  { cat: "日式料理", emoji: "🍜", shop: "崇德豚骨拉麵屋", area: "崇德路二段", hours: [11.5, 21], dishes: ["濃厚豚骨叉燒拉麵", "辛味噌拉麵", "日式唐揚雞", "溏心蛋"] },
+  { cat: "日式料理", emoji: "🍣", shop: "北平路平價壽司丼", area: "北平路三段", hours: [11, 20.5], dishes: ["綜合生魚片丼", "炙燒比目魚丼", "花壽司拼盤", "鮮魚味噌湯"] },
+  { cat: "日式料理", emoji: "🍛", shop: "文心日式咖哩專門", area: "文心路四段", hours:, dishes: ["炸豬排歐姆蛋咖哩", "漢堡排咖哩飯", "可樂餅", "炸牡蠣"] },
+  { cat: "日式料理", emoji: "🍢", shop: "松竹路深夜居酒屋", area: "松竹路二段", hours: [17.5, 1], dishes: ["明太子山藥", "鹽烤松阪豬", "午仔魚一夜干", "鮭魚烤飯糰"] },
+  { cat: "日式料理", emoji: "🍱", shop: "昌平路日式定食", area: "昌平路一段", hours: [11.5, 20.5], dishes: ["鹽烤鯖魚定食", "薑汁燒肉丼", "親子丼", "日式玉子燒"] },
+  { cat: "日式料理", emoji: "🍜", shop: "水湳烏龍麵專門店", area: "中清路二段", hours:, dishes: ["明太子拌烏龍麵", "牛肉湯烏龍麵", "炸蝦天婦羅", "炸地瓜"] },
+  { cat: "日式料理", emoji: "🍣", shop: "崇德迴轉壽司", area: "崇德路三段", hours: [11, 21.5], dishes: ["極上鮪魚大腹", "鮭魚卵軍艦", "玉子燒握壽司", "花蛤味噌湯"] },
+  { cat: "日式料理", emoji: "🥩", shop: "北屯日式和牛漢堡排", area: "崇德路二段", hours: [11.5, 21], dishes: ["直火炭烤和牛漢堡排", "越光米白飯", "生食級蛋黃", "味增湯"] },
+  { cat: "日式料理", emoji: "🐙", shop: "一點利章魚燒小丸子", area: "遼寧路一段", hours:, dishes: ["原味柴魚章魚燒", "明太子起司章魚燒", "芥末海苔章魚燒"] },
+  { cat: "日式料理", emoji: "🍱", shop: "東山路鰻魚飯專賣", area: "東山路一段", hours: [11.5, 20.5], dishes: ["蒲燒鰻魚重箱飯", "白燒鰻魚", "鰻肝清湯", "和風沙拉"] },
+  { cat: "火鍋燒肉", emoji: "🥩", shop: "屋馬燒肉 崇德店", area: "崇德路二段", hours:, dishes: ["日本A5和牛拼盤", "伊比利豬梅花", "屋馬主廚沙拉", "海鮮粥"] },
+  { cat: "火鍋燒肉", emoji: "🍲", shop: "輕井澤鍋物 崇德店", area: "崇德路二段", hours:, dishes: ["和風培根牛肉鍋", "四川麻辣鴨血鍋", "梅花豬肉鍋", "紅茶冰沙"] },
+  { cat: "火鍋燒肉", emoji: "🥩", shop: "山鯨燒肉 漢口崇德", area: "漢口路四段", hours: [11.5, 23.5], dishes: ["極上和牛雙人套餐", "太空菇", "松露和牛可頌", "鮮榨果汁"] },
+  { cat: "火鍋燒肉", emoji: "🍲", shop: "石二鍋 崇德店", area: "崇德路二段", hours: [11.5, 22], dishes: ["爆香石頭鍋", "雪花牛肉鍋", "愛呷肉拼盤", "冬瓜檸檬冰沙"] },
+  { cat: "火鍋燒肉", emoji: "🍲", shop: "築間幸福鍋物 北屯店", area: "崇德路二段", hours:, dishes: ["招牌石頭湯底", "霜降牛肉鍋", "海鮮總匯鍋", "自助蔬菜冰淇淋吧"] },
+  { cat: "火鍋燒肉", emoji: "🥩", shop: "燒肉Smile 景賢店", area: "景賢路商圈", hours:, dishes: ["個人和牛盛合套餐", "牛五花雙拼", "野菜沙拉自助吧", "蔥花玉子拌飯"] },
+  { cat: "火鍋燒肉", emoji: "🍲", shop: "北平路三媽臭臭鍋", area: "北平路三段", hours:, dishes: ["大腸臭臭鍋", "海鮮豆腐鍋", "泡菜鍋", "麻辣鍋", "白飯飲料吃到飽"] },
+  { cat: "火鍋燒肉", emoji: "🍲", shop: "文心路老四川麻辣鍋", area: "文心路四段", hours: [11.5, 1.5], dishes: ["絕選麻辣鴛鴦鍋", "川味涼粉", "滷水大腸頭", "雪花牛"] },
+  { cat: "火鍋燒肉", emoji: "🥩", shop: "崇德韓國銅盤烤肉", area: "崇德路二段", hours: [11.5, 22], dishes: ["秘製牛五花銅盤烤肉", "梅花豬烤肉", "海鮮煎餅", "韓式小菜無限續"] },
+  { cat: "火鍋燒肉", emoji: "🍲", shop: "松竹路酸菜白肉鍋", area: "松竹路二段", hours: [11.5, 21.5], dishes: ["東北酸菜白肉鍋", "手工川丸子", "五花白肉片", "蔥油餅"] },
+  { cat: "火鍋燒肉", emoji: "🍲", shop: "昌平路平價小火鍋", area: "昌平路一段", hours: [11, 22.5], dishes: ["牛奶起司鍋", "沙茶牛肉鍋", "藥膳羊肉鍋", "爆米花冰淇淋"] },
+  { cat: "火鍋燒肉", emoji: "🥩", shop: "水湳精緻燒肉餐酒", area: "中清路二段", hours:, dishes: ["厚切牛舌", "橫膈膜燒肉", "明太子拌飯", "生啤酒"] },
+  { cat: "韓式異國", emoji: "🥘", shop: "非常石鍋韓式料理", area: "北屯路商圈", hours: [11.5, 21.5], dishes: ["起司春川辣炒雞", "泡菜豬肉石鍋拌飯", "海鮮煎餅", "人蔘雞湯"] },
+  { cat: "韓式異國", emoji: "🍲", shop: "涓豆腐 台中崇德店", area: "崇德路二段", hours: [11.5, 22], dishes: ["海陸綜合嫩豆腐煲", "韓式炸雞", "石鍋紫米飯", "黑糖香柚豆花"] },
+  { cat: "韓式異國", emoji: "🌶️", shop: "瓦城泰國料理 崇德店", area: "崇德路二段", hours: [11.5, 21.5], dishes: ["原味月亮蝦餅", "泰式打拋豬", "檸檬清蒸魚", "摩摩喳喳"] },
 { cat: "韓式異國", emoji: "🍜", shop: "北平路越南河粉", area: "北平路三段", hours: [11, 20.5], dishes: ["生牛肉河粉", "炸春捲", "越式法國麵包", "涼拌木瓜絲"] },
 { cat: "韓式異國", emoji: "🍗", shop: "崇德韓式炸雞專賣", area: "崇德路二段", hours: [11.5, 22.5], dishes: ["洋釀半半炸雞", "蜂蜜蒜味炸雞", "辣炒年糕", "醃蘿蔔"] },
 { cat: "韓式異國", emoji: "🍛", shop: "文心路印度咖哩屋", area: "文心路四段", hours: [11.5, 21], dishes: ["奶油雞肉咖哩", "蒜味烤餅 Naan", "坦都里烤雞", "印度拉茶"] },
 { cat: "韓式異國", emoji: "🍜", shop: "昌平路泰式船麵", area: "昌平路一段", hours: [11.5, 20.5], dishes: ["泰式瀑布牛肉船麵", "綠咖哩雞飯", "泰式奶茶", "炸雞翅"] },
 { cat: "韓式異國", emoji: "🥘", shop: "松竹路韓式部隊鍋", area: "松竹路二段", hours: [11.5, 21.5], dishes: ["經典火腿起司部隊鍋", "韓式魚板串", "海苔拳頭飯", "辣味炸雞"] },
-// 7. 義式美式 (8家)
 { cat: "義式美式", emoji: "🍝", shop: "JAI宅 水湳店", area: "中清路二段", hours:, dishes: ["橘醬爆炸蛤蜊義大利麵", "明太子奶油宅宅麵", "提拉米蘇"] },
 { cat: "義式美式", emoji: "🥂", shop: "水相餐聚苑", area: "經貿三路二段", hours: [11.5, 22], dishes: ["火山起司麵包", "黑松露野菇燉飯", "爐烤牛排", "莓果氣泡飲"] },
 { cat: "義式美式", emoji: "🍕", shop: "薄多義義式手工披薩", area: "崇德路二段", hours: [11.5, 21.5], dishes: ["瑪格麗特皇后披薩", "青醬雞肉麵", "佛卡夏佐醬", "炸雞翅"] },
@@ -269,7 +214,6 @@ const beitunShops = [
 { cat: "義式美式", emoji: "🍝", shop: "北平路平價義大利麵", area: "北平路三段", hours: [11, 20.5], dishes: ["奶油培根義大利麵", "番茄肉醬焗烤飯", "玉米濃湯", "紅茶"] },
 { cat: "義式美式", emoji: "🍕", shop: "松竹路窯烤披薩車", area: "松竹路二段", hours:, dishes: ["夏威夷鳳梨披薩", "總匯海鮮披薩", "蒜香麵包", "可樂"] },
 { cat: "義式美式", emoji: "🌮", shop: "水湳墨西哥捲餅屋", area: "中清路二段", hours: [11.5, 21], dishes: ["手撕豬肉塔可餅", "起司牛肉捲餅", "莎莎醬玉米片"] },
-// 8. 早午餐甜點 (10家)
 { cat: "早午餐甜點", emoji: "☕", shop: "KafeD 咖啡滴水湳旗艦", area: "經貿路二段", hours:, dishes: ["德式年輪厚夾心", "精品手沖咖啡", "鮭魚開放三明治"] },
 { cat: "早午餐甜點", emoji: "🥐", shop: "崇德質感早午餐拼盤", area: "崇德路二段", hours: [8, 15.5], dishes: ["唐揚雞可頌拼盤", "班尼迪克蛋", "鮮奶茶", "薯泥沙拉"] },
 { cat: "早午餐甜點", emoji: "🥪", shop: "昌平路傳統早餐店", area: "昌平路一段", hours: [5.5, 12], dishes: ["粉漿蛋餅", "豬排總匯吐司", "鐵板麵加蛋", "大冰奶"] },
@@ -279,10 +223,7 @@ const beitunShops = [
 { cat: "早午餐甜點", emoji: "🥞", shop: "松竹路舒芙蕾鬆餅", area: "松竹路二段", hours:, dishes: ["焦糖布蕾舒芙蕾", "草莓生乳鬆餅", "伯爵鮮奶茶"] },
 { cat: "早午餐甜點", emoji: "🥯", shop: "文心路手作貝果咖啡", area: "文心路四段", hours:, dishes: ["藍莓乳酪貝果", "煙燻鮭魚貝果", "美式黑咖啡"] },
 { cat: "早午餐甜點", emoji: "🍡", shop: "大坑東東芋圓", area: "東山路二段", hours:, dishes: ["招牌綜合芋圓冰", "熱紅豆芋圓湯", "仙草芋圓", "薏仁芋圓"] },
-{ cat: "早午餐甜點", emoji: "🧋", shop: "昌平路鮮果茶飲", area: "昌平路二段", hours:, dishes: ["滿杯水果茶", "楊枝甘露", "甘蔗青茶", "四季春珍波椰"] }
-];
-// 補強至完整 100 家北屯代表店家
-const extraShops = [
+{ cat: "早午餐甜點", emoji: "🧋", shop: "昌平路鮮果茶飲", area: "昌平路二段", hours:, dishes: ["滿杯水果茶", "楊枝甘露", "甘蔗青茶", "四季春珍波椰"] },
 { cat: "銅板小吃", emoji: "🍜", shop: "崇德路陽春麵老店", area: "崇德路一段", hours: [11, 20.5], dishes: ["麻醬乾麵", "餛飩麵", "滷味豆干海帶", "貢丸湯"] },
 { cat: "銅板小吃", emoji: "🍚", shop: "北屯路排骨酥麵", area: "北屯路商圈", hours:, dishes: ["古早味排骨酥麵", "筒仔米糕", "金針排骨湯", "燙青菜"] },
 { cat: "銅板小吃", emoji: "🥟", shop: "遼寧路蒸餃酸辣湯", area: "遼寧路一段", hours: [11, 20.5], dishes: ["鮮肉蒸餃", "花素蒸餃", "招牌酸辣湯", "小米粥"] },
@@ -294,20 +235,14 @@ const extraShops = [
 { cat: "火鍋燒肉", emoji: "🍲", shop: "東山路石頭小火鍋", area: "東山路一段", hours:, dishes: ["蒜香爆炒牛肉鍋", "海鮮總匯鍋", "鴨血豆腐", "冰淇淋"] },
 { cat: "早午餐甜點", emoji: "🥐", shop: "四平路文青早午餐", area: "四平路商圈", hours:, dishes: ["嫩煎雞腿排拼盤", "法式吐司", "鮮奶茶", "脆薯"] }
 ];
-extraShops.forEach(s => beitunShops.push(s));
-// 判斷目前時間是否在營業時間內
 function checkIsOpen(hours) {
 const now = new Date();
 const currentDec = now.getHours() + now.getMinutes() / 60;
 const start = hours[0];
 const end = hours[1];
 if (start === 0 && end === 24) return true;
-if (end > start) {
-return currentDec >= start && currentDec < end;
-} else {
-// 跨午夜營業時間 (例如 16:00 到 01:30)
+if (end > start) return currentDec >= start && currentDec < end;
 return currentDec >= start || currentDec < end;
-}
 }
 function formatHoursText(hours) {
 if (hours[0] === 0 && hours[1] === 24) return "24小時營業";
@@ -320,9 +255,7 @@ return fmt(hours[0]) + " ~ " + fmt(hours[1]);
 }
 function updateLiveClock() {
 const now = new Date();
-const hh = String(now.getHours()).padStart(2, '0');
-const mm = String(now.getMinutes()).padStart(2, '0');
-document.getElementById('liveClock').innerText = "🕒 " + hh + ":" + mm;
+document.getElementById('liveClock').innerText = "🕒 " + String(now.getHours()).padStart(2, '0') + ":" + String(now.getMinutes()).padStart(2, '0');
 }
 setInterval(updateLiveClock, 10000);
 updateLiveClock();
@@ -354,7 +287,7 @@ osc.stop(audioCtx.currentTime + 0.04);
 }
 function playStop(stage) {
 if (!soundEnabled || !audioCtx) return;
-const freqs =;
+const freqs = [392, 493.88, 587.33];
 const osc = audioCtx.createOscillator();
 const gain = audioCtx.createGain();
 osc.type = 'sine';
@@ -366,7 +299,6 @@ gain.connect(audioCtx.destination);
 osc.start();
 osc.stop(audioCtx.currentTime + 0.16);
 }
-// 中獎歡樂和弦音效
 function playWinSound() {
 if (!soundEnabled || !audioCtx) return;
 const notes = [523.25, 659.25, 783.99, 1046.50];
@@ -383,10 +315,9 @@ osc.start(audioCtx.currentTime + idx * 0.09);
 osc.stop(audioCtx.currentTime + idx * 0.09 + 0.4);
 });
 }
-// 沒中獎（店家休息中）遺憾嘟～咚～音效
 function playLoseSound() {
 if (!soundEnabled || !audioCtx) return;
-const notes = [311.13, 277.18, 233.08]; // 降半音階遺憾感
+const notes = [311.13, 277.18, 233.08];
 notes.forEach((freq, idx) => {
 const osc = audioCtx.createOscillator();
 const gain = audioCtx.createGain();
@@ -426,8 +357,7 @@ stripEl.style.transition = "none";
 stripEl.style.transform = "translateY(0px)";
 }
 function animateReel(stripEl, totalItems, durationMs, stageNum, onDone) {
-const itemHeight = 112;
-const targetY = -(totalItems * itemHeight);
+const targetY = -(totalItems * 112);
 let ticks = 0;
 const maxTicks = Math.floor(durationMs / 100);
 const tickTimer = setInterval(() => {
@@ -451,7 +381,7 @@ function startSpin() {
 initAudio();
 const filtered = getFilteredShops();
 if (filtered.length === 0) {
-alert("目前這個時段該料理分類剛好都在休息中喔！\n請取消勾選「🟢 僅抽目前營業中店家」試試手氣，或切換其他料理分類！");
+alert("目前這個時段該料理分類剛好都在休息中喔！請取消勾選「僅抽目前營業中店家」試試手氣！");
 return;
 }
 const chosenShop = filtered[Math.floor(Math.random() * filtered.length)];
