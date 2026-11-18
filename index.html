@@ -2,338 +2,72 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>台中市北屯區・百大美食幸運拉霸機</title>
 <style>
   * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Microsoft JhengHei", sans-serif; }
-  body {
-    margin: 0;
-    padding: 12px 6px 30px;
-    background: linear-gradient(135deg, #141428 0%, #1b2845 100%);
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-  .header { text-align: center; margin-bottom: 10px; padding: 0 8px; }
-  .badge-area {
-    display: inline-block;
-    background: linear-gradient(90deg, #ff6b6b, #ffa502);
-    color: #141428;
-    font-size: 11px;
-    font-weight: 900;
-    padding: 3px 12px;
-    border-radius: 20px;
-    margin-bottom: 4px;
-    letter-spacing: 0.5px;
-  }
-  .header h1 { margin: 0; font-size: 21px; color: #ffd700; text-shadow: 0 2px 8px rgba(255, 215, 0, 0.4); }
-  .header p { margin: 4px 0 0; font-size: 12px; color: #b8c0e0; }
+  body { margin: 0; padding: 12px 6px; background: linear-gradient(135deg, #141424 0%, #1a2238 100%); color: #fff; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
+  .top-bar { width: 100%; max-width: 960px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 6px; }
+  .region-badge { background: linear-gradient(90deg, #ff6b6b, #e94560); color: #fff; font-size: 12px; font-weight: bold; padding: 4px 12px; border-radius: 20px; box-shadow: 0 2px 8px rgba(233, 69, 96, 0.4); }
+  .clock-badge { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,215,0,0.4); color: #ffe066; font-size: 12px; font-weight: bold; padding: 4px 10px; border-radius: 20px; }
+  .sound-toggle { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: #fff; border-radius: 20px; padding: 4px 10px; font-size: 12px; cursor: pointer; }
+  .header { text-align: center; margin-bottom: 12px; }
+  .header h1 { margin: 0; font-size: 21px; color: #ffd700; text-shadow: 0 2px 10px rgba(255, 215, 0, 0.4); }
+  .header p { margin: 3px 0 0; font-size: 12px; color: #b0b8d1; }
 
-  .top-bar { width: 100%; max-width: 820px; display: flex; justify-content: flex-end; padding: 0 4px 6px; }
-  .sound-toggle {
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,215,0,0.4);
-    color: #ffd700;
-    border-radius: 20px;
-    padding: 4px 10px;
-    font-size: 11px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  /* 強制三欄並排主舞台 */
-  .main-stage {
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    justify-content: center;
-    gap: 5px;
-    width: 100%;
-    max-width: 860px;
-  }
-
-  /* 左右側各 5 格黃金廣告欄 */
-  .ad-column {
-    flex: 0 0 21%;
-    max-width: 155px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 5px;
-  }
-  .ad-card {
-    flex: 1;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 215, 0, 0.35);
-    border-radius: 8px;
-    padding: 5px 4px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    text-decoration: none;
-    color: #fff;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.15s, border-color 0.15s;
-  }
+  .main-arena { display: flex; flex-direction: row; align-items: stretch; justify-content: center; gap: 6px; width: 100%; max-width: 960px; }
+  .ad-column { flex: 0 0 21%; max-width: 175px; min-width: 72px; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; }
+  .ad-card { flex: 1; background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 215, 0, 0.35); border-radius: 10px; padding: 6px 4px; text-align: center; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; text-decoration: none; color: #fff; transition: transform 0.15s; min-height: 76px; }
   .ad-card:active { transform: scale(0.96); }
-  .ad-card.vip {
-    background: linear-gradient(145deg, rgba(255, 215, 0, 0.18), rgba(233, 69, 96, 0.18));
-    border-color: #ffd700;
-  }
-  .ad-card.rent {
-    border: 1px dashed rgba(255, 255, 255, 0.35);
-    background: rgba(255, 255, 255, 0.03);
-  }
-  .ad-tag {
-    font-size: 8px;
-    font-weight: 900;
-    padding: 1px 5px;
-    border-radius: 4px;
-    margin-bottom: 2px;
-    line-height: 1.2;
-  }
-  .tag-vip { background: #ffd700; color: #141428; }
-  .tag-hot { background: #ff4757; color: #fff; }
-  .tag-rent { background: #57606f; color: #fff; }
-  .ad-title {
-    font-size: 11px;
-    font-weight: 900;
-    line-height: 1.2;
-    color: #fff;
-    word-break: keep-all;
-  }
-  .ad-sub {
-    font-size: 9px;
-    color: #d2dae2;
-    margin-top: 2px;
-    line-height: 1.15;
-  }
+  .ad-card.vacant { border: 1px dashed rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.03); }
+  .ad-tag { display: inline-block; font-size: 9px; font-weight: bold; padding: 1px 5px; border-radius: 6px; margin-bottom: 3px; background: #ffd700; color: #1a1a2e; }
+  .ad-card.vacant .ad-tag { background: rgba(255, 255, 255, 0.15); color: #bbb; }
+  .ad-title { font-size: 11px; font-weight: 900; color: #fff; line-height: 1.2; margin-bottom: 2px; word-break: break-all; }
+  .ad-sub { font-size: 9px; color: #ffe066; line-height: 1.15; }
+  .ad-card.vacant .ad-sub { color: #999; }
 
-  /* 中央拉霸機主體 */
-  .center-console {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-  }
-  .filter-panel {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 215, 0, 0.35);
-    border-radius: 12px;
-    padding: 10px;
-    margin-bottom: 8px;
-  }
-  .filter-label {
-    display: block;
-    font-size: 11px;
-    color: #ffd700;
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  select {
-    width: 100%;
-    padding: 8px 6px;
-    border-radius: 8px;
-    border: none;
-    background: #fff;
-    color: #141428;
-    font-size: 13px;
-    font-weight: 900;
-    outline: none;
-    cursor: pointer;
-  }
-  .stats-bar {
-    font-size: 10px;
-    color: #7bed9f;
-    text-align: center;
-    margin-top: 5px;
-    font-weight: bold;
-  }
+  .center-stage { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; }
+  .filter-panel { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 14px; padding: 10px; width: 100%; margin-bottom: 10px; }
+  .filter-panel label.title-lbl { display: block; font-size: 11px; color: #ffd700; margin-bottom: 5px; font-weight: bold; }
+  select { width: 100%; padding: 8px; border-radius: 8px; border: none; background: #fff; color: #1a1a2e; font-size: 13px; font-weight: bold; outline: none; cursor: pointer; }
+  .open-only-row { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; padding-top: 7px; border-top: 1px dashed rgba(255,255,255,0.15); font-size: 12px; color: #ffe066; }
+  .open-only-row label { display: flex; align-items: center; gap: 6px; cursor: pointer; font-weight: bold; }
+  .open-only-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: #00b894; cursor: pointer; }
+  .stats-line { font-size: 10px; color: #a0a8c0; margin-top: 5px; text-align: right; }
 
-  .machine {
-    background: linear-gradient(180deg, #e94560 0%, #c0392b 100%);
-    padding: 10px 7px 12px;
-    border-radius: 16px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.4);
-    border: 3px solid #ffd700;
-    transition: box-shadow 0.3s;
-  }
-  .machine.jackpot-glow {
-    box-shadow: 0 0 25px #ffd700, 0 0 45px rgba(255, 215, 0, 0.6);
-  }
-  .slots {
-    display: flex;
-    gap: 4px;
-    background: #0f3460;
-    padding: 7px 5px;
-    border-radius: 10px;
-    border: 2px solid #141428;
-  }
-  .slot-window {
-    flex: 1;
-    height: 118px;
-    background: #fff;
-    border-radius: 7px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: inset 0 8px 10px -5px rgba(0,0,0,0.45), inset 0 -8px 10px -5px rgba(0,0,0,0.45);
-  }
-  .slot-header {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    background: rgba(20, 20, 40, 0.88);
-    color: #ffd700;
-    font-size: 9px;
-    font-weight: bold;
-    text-align: center;
-    padding: 2px 0;
-    z-index: 3;
-  }
-  .reel-strip {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    display: flex;
-    flex-direction: column;
-    will-change: transform;
-  }
-  .reel-item {
-    height: 118px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 18px 3px 4px;
-    color: #141428;
-  }
-  .reel-emoji { font-size: 20px; margin-bottom: 2px; line-height: 1; }
-  .reel-text {
-    font-weight: 900;
-    line-height: 1.2;
-    word-break: break-word;
-  }
+  .machine { background: #e94560; padding: 12px 8px; border-radius: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.4); width: 100%; border: 3px solid #ffd700; }
+  .machine.win-glow { animation: winPulse 0.6s ease-in-out 3; }
+  @keyframes winPulse { 0%, 100% { box-shadow: 0 0 15px #ffd700; } 50% { box-shadow: 0 0 38px #fff, 0 0 55px #ffd700; } }
 
-  .btn-spin {
-    width: 100%;
-    margin-top: 10px;
-    padding: 12px 6px;
-    font-size: 16px;
-    font-weight: 900;
-    color: #141428;
-    background: linear-gradient(to bottom, #ffe066, #ffd700);
-    border: none;
-    border-radius: 40px;
-    cursor: pointer;
-    box-shadow: 0 4px 0 #b39700, 0 6px 15px rgba(0,0,0,0.35);
-    transition: transform 0.1s;
-  }
+  .slots { display: flex; gap: 4px; background: #0f3460; padding: 8px 5px; border-radius: 10px; border: 2px solid #1a1a2e; }
+  .slot-window { flex: 1; background: #fff; color: #1a1a2e; border-radius: 7px; height: 112px; position: relative; overflow: hidden; box-shadow: inset 0 10px 12px -6px rgba(0,0,0,0.4), inset 0 -10px 12px -6px rgba(0,0,0,0.4); }
+  .slot-label { font-size: 9px; color: #fff; background: rgba(15,52,96,0.9); padding: 1px 6px; border-radius: 6px; position: absolute; top: 4px; left: 50%; transform: translateX(-50%); font-weight: bold; z-index: 5; white-space: nowrap; }
+  .reel-strip { position: absolute; top: 0; left: 0; width: 100%; will-change: transform; }
+  .reel-item { height: 112px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 18px 3px 4px; font-weight: 900; line-height: 1.2; word-break: break-word; color: #1a1a2e; }
+  .reel-emoji { font-size: 20px; margin-bottom: 3px; }
+  .reel-text { font-size: 12px; }
+
+  .btn-spin { width: 100%; margin-top: 12px; padding: 13px 8px; font-size: 16px; font-weight: bold; color: #1a1a2e; background: linear-gradient(to bottom, #ffe066, #ffd700); border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 0 #b39700, 0 6px 14px rgba(0,0,0,0.3); }
   .btn-spin:active { transform: translateY(3px); box-shadow: 0 1px 0 #b39700; }
-  .btn-spin:disabled { background: #7f8fa6; box-shadow: none; color: #dcdde1; cursor: not-allowed; }
+  .btn-spin:disabled { background: #888; box-shadow: none; color: #ccc; }
 
-  /* 開獎結果與完整菜單展示卡 */
-  .result-card {
-    display: none;
-    width: 100%;
-    max-width: 860px;
-    margin-top: 12px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid #ffd700;
-    border-radius: 14px;
-    padding: 14px;
-    animation: fadeIn 0.35s ease;
-  }
-  .res-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 6px;
-    border-bottom: 1px solid rgba(255,255,255,0.15);
-    padding-bottom: 8px;
-    margin-bottom: 8px;
-  }
-  .res-shop { font-size: 17px; font-weight: 900; color: #ffd700; }
-  .res-badge {
-    background: #e94560;
-    color: #fff;
-    font-size: 11px;
-    font-weight: bold;
-    padding: 2px 8px;
-    border-radius: 12px;
-  }
-  .res-highlight {
-    font-size: 14px;
-    color: #7bed9f;
-    font-weight: bold;
-    margin-bottom: 8px;
-  }
-  .menu-box-title {
-    font-size: 11px;
-    color: #d2dae2;
-    margin-bottom: 6px;
-    font-weight: bold;
-  }
-  .menu-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-bottom: 12px;
-  }
-  .menu-tag {
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.25);
-    color: #fff;
-    font-size: 11px;
-    padding: 3px 8px;
-    border-radius: 6px;
-  }
-  .menu-tag.picked {
-    background: #ffd700;
-    color: #141428;
-    border-color: #ffd700;
-    font-weight: 900;
-  }
-  .btn-map {
-    display: block;
-    width: 100%;
-    text-align: center;
-    background: linear-gradient(90deg, #00b894, #00cec9);
-    color: #fff;
-    text-decoration: none;
-    padding: 11px;
-    border-radius: 25px;
-    font-weight: 900;
-    font-size: 14px;
-    box-shadow: 0 4px 12px rgba(0, 184, 148, 0.35);
-  }
+  .result-card { display: none; margin-top: 12px; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,215,0,0.6); border-radius: 14px; padding: 14px; width: 100%; text-align: center; animation: fadeIn 0.35s ease; }
+  .result-card.closed-card { border-color: #ff6b6b; background: rgba(255, 75, 75, 0.12); }
+  .status-pill { display: inline-block; font-size: 12px; font-weight: bold; padding: 4px 12px; border-radius: 20px; margin-bottom: 8px; }
+  .status-open { background: #00b894; color: #fff; }
+  .status-closed { background: #d63031; color: #fff; }
+  .result-card h3 { margin: 0 0 6px; color: #ffd700; font-size: 16px; }
+  .result-card.closed-card h3 { color: #ff7675; }
+  .result-card .meta { font-size: 12px; color: #d0d8f0; margin-bottom: 8px; }
+  .dish-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin-bottom: 12px; }
+  .dish-tag { background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.2); padding: 3px 8px; border-radius: 12px; font-size: 11px; color: #fff; }
+  .dish-tag.highlight { background: #ffd700; color: #1a1a2e; font-weight: bold; border-color: #ffd700; }
+  .btn-map { display: inline-block; background: #00b894; color: #fff; text-decoration: none; padding: 9px 18px; border-radius: 25px; font-weight: bold; font-size: 13px; }
+  .btn-retry { display: inline-block; background: #e17055; color: #fff; border: none; padding: 9px 18px; border-radius: 25px; font-weight: bold; font-size: 13px; cursor: pointer; }
 
-  .footer-recruit {
-    margin-top: 16px;
-    text-align: center;
-    font-size: 11px;
-    color: #a4b0be;
-  }
-  .footer-recruit span {
-    color: #ffd700;
-    text-decoration: underline;
-    cursor: pointer;
-    font-weight: bold;
-  }
-
-  #confettiCanvas {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 999;
-  }
-
+  .footer-biz { margin-top: 18px; text-align: center; font-size: 11px; color: #8c96b5; }
+  .footer-biz span { color: #ffd700; text-decoration: underline; cursor: pointer; }
+  #confettiCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 </head>
@@ -341,508 +75,58 @@
 
 <canvas id="confettiCanvas"></canvas>
 
-<div class="header">
-  <div class="badge-area">📍 台中市・北屯區首發旗艦站</div>
-  <h1>🎰 北屯百大美食幸運拉霸機</h1>
-  <p>從銅板路邊攤到崇德路名店・一鍵決定今天吃什麼</p>
-</div>
-
 <div class="top-bar">
-  <button class="sound-toggle" id="soundBtn" onclick="toggleSound()">🔊 音效：開啟</button>
+  <span class="region-badge">📍 北屯百大美食旗艦站</span>
+  <span class="clock-badge" id="liveClock">🕒 --:--</span>
+  <button class="sound-toggle" id="soundBtn" onclick="toggleSound()">🔊 音效開</button>
 </div>
 
-<div class="main-stage">
-  <!-- 左側 5 格黃金廣告看板 -->
+<div class="header">
+  <h1>🎰 北屯區美食幸運拉霸機</h1>
+  <p>即時對時営業狀態・有開門抽中才算贏！</p>
+</div>
+
+<div class="main-arena">
   <div class="ad-column">
-    <a class="ad-card vip" href="https://www.google.com/maps/search/?api=1&query=台中市北屯區屋馬燒肉崇德店" target="_blank">
-      <span class="ad-tag tag-vip">VIP 置頂</span>
-      <div class="ad-title">屋馬燒肉</div>
-      <div class="ad-sub">崇德旗艦首選</div>
+    <a class="ad-card" href="https://google.com" target="_blank">
+      <span class="ad-tag">VIP 置頂</span>
+      <div class="ad-title">屋馬燒肉 崇德</div>
+      <div class="ad-sub">訂位贈主廚私房菜</div>
     </a>
-    <a class="ad-card vip" href="https://www.google.com/maps/search/?api=1&query=台中市北屯區藏壽司文心崇德店" target="_blank">
-      <span class="ad-tag tag-vip">VIP 置頂</span>
-      <div class="ad-title">藏壽司</div>
-      <div class="ad-sub">文心崇德必吃</div>
+    <a class="ad-card" href="https://google.com" target="_blank">
+      <span class="ad-tag">熱門推薦</span>
+      <div class="ad-title">藏壽司 文心崇德</div>
+      <div class="ad-sub">滿額抽限定扭蛋</div>
     </a>
-    <a class="ad-card" href="https://www.google.com/maps/search/?api=1&query=台中市北屯區老向的店" target="_blank">
-      <span class="ad-tag tag-hot">北屯人氣</span>
-      <div class="ad-title">老向的店</div>
-      <div class="ad-sub">北平路排隊麵食</div>
-    </a>
-    <a class="ad-card rent" href="javascript:void(0)" onclick="alert('【北屯創始廣告位 04 招租中】\n\n搶佔北屯 30 萬人口每日用餐流量！\n歡迎北屯在地餐廳、小吃攤商洽談進駐。')">
-      <span class="ad-tag tag-rent">招租中 04</span>
-      <div class="ad-title">黃金版位</div>
-      <div class="ad-sub">點擊洽談合作</div>
-    </a>
-    <a class="ad-card rent" href="javascript:void(0)" onclick="alert('【北屯創始廣告位 05 招租中】\n\n搶佔北屯 30 萬人口每日用餐流量！\n歡迎北屯在地餐廳、小吃攤商洽談進駐。')">
-      <span class="ad-tag tag-rent">招租中 05</span>
-      <div class="ad-title">黃金版位</div>
-      <div class="ad-sub">點擊洽談合作</div>
-    </a>
+    <div class="ad-card vacant" onclick="alert('【台中市北屯區・黃金廣告版位招租】\n\n您的店就在北屯嗎？立即卡位左側黃金版位，讓北屯居民每天轉拉霸都第一眼看到您的店！')">
+      <span class="ad-tag">版位招租</span>
+      <div class="ad-title">北屯創始席位</div>
+      <div class="ad-sub">點擊洽談曝光合作</div>
+    </div>
+    <div class="ad-card vacant" onclick="alert('【台中市北屯區・黃金廣告版位招租】\n\n銅板小吃與人氣餐廳專屬曝光窗口，歡迎北屯在地店家洽詢進駐！')">
+      <span class="ad-tag">版位招租</span>
+      <div class="ad-title">北屯美食席位</div>
+      <div class="ad-sub">低成本高精準導流</div>
+    </div>
+    <div class="ad-card vacant" onclick="alert('【台中市北屯區・黃金廣告版位招租】\n\n搶佔崇德、文心、昌平、松竹商圈客群，立即預約本版位！')">
+      <span class="ad-tag">版位招租</span>
+      <div class="ad-title">商圈特約席位</div>
+      <div class="ad-sub">歡迎在地名店進駐</div>
+    </div>
   </div>
 
-  <!-- 中央拉霸機主體 -->
-  <div class="center-console">
+  <div class="center-stage">
     <div class="filter-panel">
-      <label class="filter-label">🍽️ 選擇北屯美食類型（共 8 大類）</label>
+      <label class="title-lbl">🍽️ 選擇想吃的料理類型</label>
       <select id="cuisineSelect" onchange="updateStats()">
-        <option value="all">🎲 全部美食隨機抽（含銅板小吃與餐廳）</option>
-        <option value="銅板小吃">🪙 銅板美食・麵線滷肉飯煎餃</option>
-        <option value="台式熱炒">🇹🇼 台式料理・甕缸雞鴨肉熱炒</option>
-        <option value="宵夜炸物">🍢 宵夜炸物・鹹酥雞臭豆腐滷味</option>
+        <option value="all">🎲 全部北屯百大美食隨機抽</option>
+        <option value="銅板小吃">🥢 銅板小吃・麵線滷肉飯蚵仔煎</option>
+        <option value="宵夜炸物">🍗 宵夜炸物・鹹酥雞串燒滷味</option>
+        <option value="台式熱炒">🇹🇼 台式料理・便當熱炒甕缸雞</option>
         <option value="日式料理">🇯🇵 日式料理・拉麵壽司丼飯</option>
-        <option value="火鍋燒肉">🍲 火鍋燒肉・崇德路一級戰區</option>
-        <option value="韓式異國">🇰🇷 韓式南洋・部隊鍋泰式河粉</option>
-        <option value="義式美式">🇮🇹 義式美式・義大利麵披薩漢堡</option>
-        <option value="早午餐飲">🧋 早午餐甜點・豆花咖啡手搖飲</option>
+        <option value="火鍋燒肉">🍲 火鍋・精緻燒肉</option>
+        <option value="韓式異國">🇰🇷 韓式・泰式異國南洋風</option>
+        <option value="義式美式">🇮🇹 義式西餐・美式漢堡牛排</option>
+        <option value="早午餐甜點">🧋 早午餐・咖啡豆花手搖飲</option>
       </select>
-      <div class="stats-bar" id="statsBar">載入北屯百大美食資料庫中...</div>
-    </div>
-
-    <div class="machine" id="machineBox">
-      <div class="slots">
-        <div class="slot-window">
-          <div class="slot-header">第一軸・招牌菜</div>
-          <div class="reel-strip" id="reel1"></div>
-        </div>
-        <div class="slot-window">
-          <div class="slot-header">第二軸・北屯好店</div>
-          <div class="reel-strip" id="reel2"></div>
-        </div>
-        <div class="slot-window">
-          <div class="slot-header">第三軸・餐點規模</div>
-          <div class="reel-strip" id="reel3"></div>
-        </div>
-      </div>
-      <button class="btn-spin" id="spinBtn" onclick="startSpin()">🎰 啟動北屯美食拉霸！</button>
-    </div>
-  </div>
-
-  <!-- 右側 5 格黃金廣告看板 -->
-  <div class="ad-column">
-    <a class="ad-card vip" href="https://www.google.com/maps/search/?api=1&query=台中市北屯區東山棧甕缸雞" target="_blank">
-      <span class="ad-tag tag-vip">VIP 置頂</span>
-      <div class="ad-title">東山棧</div>
-      <div class="ad-sub">大坑必吃甕缸雞</div>
-    </a>
-    <a class="ad-card" href="https://www.google.com/maps/search/?api=1&query=台中市北屯區柴火火燄烤鴨" target="_blank">
-      <span class="ad-tag tag-hot">北屯人氣</span>
-      <div class="ad-title">柴火烤鴨</div>
-      <div class="ad-sub">松竹路一鴨多吃</div>
-    </a>
-    <a class="ad-card" href="https://www.google.com/maps/search/?api=1&query=台中市北屯區永留香臭豆腐" target="_blank">
-      <span class="ad-tag tag-hot">銅板必吃</span>
-      <div class="ad-title">永留香</div>
-      <div class="ad-sub">排隊酥脆臭豆腐</div>
-    </a>
-    <a class="ad-card rent" href="javascript:void(0)" onclick="alert('【北屯創始廣告位 09 招租中】\n\n搶佔北屯 30 萬人口每日用餐流量！\n歡迎北屯在地餐廳、小吃攤商洽談進駐。')">
-      <span class="ad-tag tag-rent">招租中 09</span>
-      <div class="ad-title">黃金版位</div>
-      <div class="ad-sub">點擊洽談合作</div>
-    </a>
-    <a class="ad-card rent" href="javascript:void(0)" onclick="alert('【北屯創始廣告位 10 招租中】\n\n搶佔北屯 30 萬人口每日用餐流量！\n歡迎北屯在地餐廳、小吃攤商洽談進駐。')">
-      <span class="ad-tag tag-rent">招租中 10</span>
-      <div class="ad-title">黃金版位</div>
-      <div class="ad-sub">點擊洽談合作</div>
-    </a>
-  </div>
-</div>
-
-<!-- 開獎結果與完整菜單展開區 -->
-<div class="result-card" id="resultCard">
-  <div class="res-top">
-    <div class="res-shop" id="resShopName">🎉 推薦店家</div>
-    <div class="res-badge" id="resCategoryBadge">銅板小吃</div>
-  </div>
-  <div class="res-highlight" id="resPickedDish">👉 本次天選主餐：</div>
-  <div class="menu-box-title" id="resMenuTitle">📋 本店收錄完整招牌菜單（共 X 道）：</div>
-  <div class="menu-tags" id="resMenuTags"></div>
-  <a class="btn-map" id="mapLink" href="#" target="_blank">📍 立即開啟 Google 地圖導航前往</a>
-</div>
-
-<div class="footer-recruit">
-  台中市北屯區首發示範站｜<span onclick="alert('【北屯美食拉霸機・創始店家合作招募】\n\n1. 兩側黃金廣告看板（限量 10 席）\n2. 拉霸轉輪加權曝光（提高抽中機率）\n3. 專人收錄完整菜單與 Google 地圖一鍵導流\n\n歡迎北屯在地店家聯繫總監洽談合作！')">北屯店家廣告刊登與加權曝光洽詢</span>
-</div>
-
-<script>
-// 台中市北屯區 100 家真實美食資料庫（涵蓋銅板小吃、宵夜炸物、人氣餐廳與手搖甜點）
-const beitunDatabase = [
-  // 一、銅板小吃（22 家）
-  { cuisine: "銅板小吃", emoji: "🍜", shop: "豐大腸蚵仔麵線（北屯店）", dishes: ["大腸蚵仔麵線", "土魠魚麵線", "綜合大腸麵線", "清麵線", "蒜泥白肉", "燙青菜"], weight: 2 },
-  { cuisine: "銅板小吃", emoji: "🦪", shop: "台北蚵仔煎（昌平路）", dishes: ["招牌蚵仔煎", "蝦仁煎", "綜合雙蛋煎", "花枝羹麵", "肉燥飯", "貢丸湯"], weight: 2 },
-  { cuisine: "銅板小吃", emoji: "🍲", shop: "翔喨大腸麵線・爌肉飯", dishes: ["招牌大腸麵線", "皮蛋麵線", "入口即化爌肉飯", "酥炸甜不辣", "綜合麵線", "滷油豆腐"], weight: 2 },
-  { cuisine: "銅板小吃", emoji: "🥟", shop: "角間煎餃（一點利市場）", dishes: ["高麗菜豬肉煎餃", "韭菜鮮肉煎餃", "冰花脆皮煎餃", "酸辣湯", "古早味紅茶", "無糖豆漿"], weight: 2 },
-  { cuisine: "銅板小吃", emoji: "🍜", shop: "老向的店（北平路）", dishes: ["老向鴨腿麵", "大滷麵", "東坡排骨麵", "清蒸臭豆腐", "蚌麵", "滷味拼盤"], weight: 2 },
-  { cuisine: "銅板小吃", emoji: "🍚", shop: "松竹麵攤", dishes: ["古早味肉燥飯", "魷魚羹麵", "鹹菜酸肚湯", "滷鴨胗", "乾意麵", "燙地瓜葉"], weight: 2 },
-  { cuisine: "銅板小吃", emoji: "🥟", shop: "軍功太祖肉圓", dishes: ["招牌脆皮肉圓", "大腸豬血湯", "綜合湯", "四神湯", "乾麵", "貢丸湯"], weight: 2 },
-  { cuisine: "銅板小吃", emoji: "🍗", shop: "饡味軒嘉義火雞肉飯", dishes: ["手切火雞肉飯", "招牌滷肉飯", "火雞肉片飯", "味噌豆腐湯", "滷白菜", "荷包蛋"], weight: 2 },
-  { cuisine: "銅板小吃", emoji: "🐷", shop: "豬腳榮（北屯）", dishes: ["魯香豬排飯", "冬瓜爌肉飯", "中段豬腳飯", "腳庫飯", "筍乾", "味噌湯"], weight: 2 },
-  { cuisine: "銅板小吃", emoji: "🍜", shop: "金谷不囉嗦麵店", dishes: ["當歸鴨肉麵線", "排骨酥麵", "古早味控肉飯", "肉燥飯", "滷味拼盤", "燙地瓜葉"], weight: 2 },
-  { cuisine: "銅板小吃", emoji: "🌯", shop: "阿靜潤餅（一點利市場）", dishes: ["招牌傳統潤餅", "辣味蛋酥潤餅", "瘦肉高麗菜潤餅", "芥末風味潤餅", "雙拼潤餅"], weight: 1 },
-  { cuisine: "銅板小吃", emoji: "🥟", shop: "郎港式鮮肉包（一點利）", dishes: ["爆汁鮮肉包", "高麗菜鮮肉包", "蔥肉煎包", "芝麻包", "豆沙包"], weight: 1 },
-  { cuisine: "銅板小吃", emoji: "🥟", shop: "頂記蛋黃鮮肉包（崇德二路）", dishes: ["招牌蛋黃鮮肉包", "香菇筍肉包", "黑糖饅頭", "蔥花捲", "手工豆漿"], weight: 1 },
-  { cuisine: "銅板小吃", emoji: "🍜", shop: "阿春麵担（北屯路）", dishes: ["古早味麻醬麵", "豬油乾麵", "鮮肉餛飩湯麵", "米粉湯", "切仔滷味小菜", "蛋花湯"], weight: 2 },
-  { cuisine: "銅板小吃", emoji: "🥩", shop: "大山牛肉麵", dishes: ["滿漢三寶牛肉麵", "紅燒半筋半肉麵", "清燉牛肉麵", "炸醬乾麵", "酸辣湯餃", "涼拌小黃瓜"], weight: 2 },
-  { cuisine: "銅板小吃", emoji: "🥩", shop: "小眷村牛肉麵（昌平店）", dishes: ["眷村紅燒牛肉麵", "番茄牛肉麵", "小滷拼盤", "麻醬乾拌麵", "酸菜牛肉飯", "紅油抄手"], weight: 2 },
-  { cuisine: "銅板小吃", emoji: "🥩", shop: "牛佬牛肉麵專門店（興安路）", dishes: ["招牌牛佬牛肉麵", "牛筋麵", "炸豆包", "滷牛肚拼盤", "牛肉湯餃", "燙青菜"], weight: 2 },
-  { cuisine: "銅板小吃", emoji: "🍜", shop: "徐家莊手打麵（北平路）", dishes: ["招牌手打烏龍麵", "炸醬手打麵", "木須炒麵", "酸辣湯麵", "蔥油餅", "小米粥"], weight: 2 },
-  { cuisine: "銅板小吃", emoji: "🥟", shop: "鑫旺角茶餐廳・平價點心", dishes: ["臘味蘿蔔糕", "鮮蝦腐皮捲", "豉汁蒸排骨", "干炒牛河", "絲襪奶茶", "冰火菠蘿油"], weight: 1 },
-  { cuisine: "銅板小吃", emoji: "🍚", shop: "東山路無名排骨飯", dishes: ["古早味炸排骨飯", "滷雞腿飯", "控肉便當", "菜脯蛋", "紫菜蛋花湯"], weight: 1 },
-  { cuisine: "銅板小吃", emoji: "🍜", shop: "昌平路炒麵豬血湯", dishes: ["台中傳統炒麵", "綜合豬血湯", "隔間肉湯", "魯肉飯", "油豆腐", "東泉辣椒醬拌麵"], weight: 2 },
-  { cuisine: "銅板小吃", emoji: "🥟", shop: "八方雲集（北屯崇德店）", dishes: ["招牌鍋貼", "韓式辣味鍋貼", "玉米濃湯", "酸辣湯", "鮮蝦水餃", "古早味豆漿"], weight: 1 },
-
-  // 二、宵夜炸物（14 家）
-  { cuisine: "宵夜炸物", emoji: "🍗", shop: "炸滋滋ZIZI鹽酥雞（崇德十路）", dishes: ["無骨鹽酥雞", "脆皮大雞排", "手工甜不辣", "軟Ｑ米血糕", "百頁豆腐", "蒜香四季豆"], weight: 2 },
-  { cuisine: "宵夜炸物", emoji: "🧈", shop: "永留香臭豆腐（北屯）", dishes: ["外酥內嫩臭豆腐", "大腸豬血湯", "綜合豬血湯", "泡菜加量臭豆腐", "麻辣鴨血"], weight: 2 },
-  { cuisine: "宵夜炸物", emoji: "🦪", shop: "豬頭三的店（大坑）", dishes: ["現炸招牌蚵嗲", "大骨竹筍湯", "炸地瓜片", "炸芋頭粿", "炸米腸", "綜合炸物拼盤"], weight: 2 },
-  { cuisine: "宵夜炸物", emoji: "🧈", shop: "一點利市場酥炸臭豆腐", dishes: ["市場招牌臭豆腐", "小魚乾辣椒臭豆腐", "古早味紅茶", "台式泡菜"], weight: 1 },
-  { cuisine: "宵夜炸物", emoji: "🍗", shop: "台灣第一家鹽酥雞（昌平路）", dishes: ["招牌椒鹽鹽酥雞", "炸魷魚腳", "銀絲卷煉乳", "炸雞皮", "甜不辣", "杏鮑菇"], weight: 2 },
-  { cuisine: "宵夜炸物", emoji: "🍢", shop: "就醬子烤吧（北屯崇德店）", dishes: ["醬烤雞腿肉串", "培根捲鮮干貝", "烤甜不辣", "麻辣泡麵", "烤豆干", "烤四季豆"], weight: 2 },
-  { cuisine: "宵夜炸物", emoji: "🍗", shop: "繼光香香雞（崇德店）", dishes: ["香香炸雞", "阿根廷魷魚", "蒜脆杏鮑菇", "墨魚甜不辣", "地瓜球"], weight: 1 },
-  { cuisine: "宵夜炸物", emoji: "🌶️", shop: "三顧茅廬麻辣滷味（北屯店）", dishes: ["黃金麻辣燙", "老火湯滷味", "鴨血豆腐煲", "王子麵套餐", "滷大腸頭", "高麗菜"], weight: 1 },
-  { cuisine: "宵夜炸物", emoji: "🍗", shop: "魔王狂爆雞排（北屯店）", dishes: ["厚切狂爆雞排", "起司爆漿雞排", "脆皮薯條", "花枝丸", "雞軟骨"], weight: 1 },
-  { cuisine: "宵夜炸物", emoji: "🥟", shop: "世界豆漿大王（北屯宵夜）", dishes: ["燒餅油條", "冰豆漿", "小籠湯包", "蘿蔔糕加蛋", "鹹豆漿", "飯糰夾蛋"], weight: 1 },
-  { cuisine: "宵夜炸物", emoji: "🍢", shop: "激旨燒鳥（北屯生活圈）", dishes: ["豬五花包麻糬", "牛肉包水蓮", "雞肉蔥串", "烤玉米筍", "生啤酒", "味噌湯"], weight: 1 },
-  { cuisine: "宵夜炸物", emoji: "🍗", shop: "胖老爹美式炸雞（北屯店）", dishes: ["無敵全家餐", "美式脆皮雞腿", "泰式無骨雞腿排", "起司條", "波霸薯條"], weight: 1 },
-  { cuisine: "宵夜炸物", emoji: "🍢", shop: "黃品滷味・甘蔗雞（一點利）", dishes: ["招牌甘蔗雞腿", "煙燻鴨翅", "滷雞腳", "蜜汁豆干", "脆筍干", "海帶結"], weight: 1 },
-  { cuisine: "宵夜炸物", emoji: "🥟", shop: "永和豆漿（文心路宵夜）", dishes: ["培根蛋餅", "卡啦雞腿堡", "熱米漿", "煎餃", "鐵板麵加蛋", "蘿蔔糕"], weight: 1 },
-
-  // 三、台式熱炒（14 家）
-  { cuisine: "台式熱炒", emoji: "🐓", shop: "東山棧甕缸雞（大坑）", dishes: ["招牌現烤甕缸雞", "雞油燜竹筍", "雞油拌飯", "麻油松阪豬", "三杯中卷", "鳳梨蝦球"], weight: 3 },
-  { cuisine: "台式熱炒", emoji: "🦆", shop: "柴火火燄烤鴨（松竹店）", dishes: ["櫻桃片皮鴨", "酸菜鴨架湯", "醬爆炒鴨架", "塔香三杯鴨", "干鍋花椰菜", "金沙豆腐"], weight: 3 },
-  { cuisine: "台式熱炒", emoji: "🍲", shop: "丰禾台味風格料理（崇德店）", dishes: ["丰禾起家雞", "黑麻油燒蛋", "糖醋鱸魚", "芋絲米糕", "白菜滷", "古早味滷肉"], weight: 2 },
-  { cuisine: "台式熱炒", emoji: "🦢", shop: "鵝庄（北屯）", dishes: ["限量黃金燒鵝", "招牌白切鵝肉", "鵝油拌飯", "下水湯", "桂竹筍", "米血糕"], weight: 2 },
-  { cuisine: "台式熱炒", emoji: "🦆", shop: "御記烤鴨（松竹路）", dishes: ["一鴨兩吃片皮鴨", "甜麵醬蔥段捲餅", "大火快炒鴨架", "滷鴨翅", "毛豆"], weight: 2 },
-  { cuisine: "台式熱炒", emoji: "🐓", shop: "龍莊烤乳豬・甕缸雞（大坑）", dishes: ["脆皮烤乳豬", "大坑甕缸雞", "客家小炒", "薑絲大腸", "鹹蛋苦瓜", "筍乾控肉"], weight: 2 },
-  { cuisine: "台式熱炒", emoji: "🍤", shop: "霸味薑母鴨（北屯崇德店）", dishes: ["炭火老薑母鴨", "鴨肉丸", "麻油麵線", "凍豆腐", "高麗菜", "鴨腸"], weight: 2 },
-  { cuisine: "台式熱炒", emoji: "🍲", shop: "萬客什鍋（崇德店）", dishes: ["萬客燒酒雞鍋", "剝皮辣椒烏骨雞鍋", "麻油炸蛋", "雲朵白糖粿", "雪花牛", "手工蛋餃"], weight: 3 },
-  { cuisine: "台式熱炒", emoji: "🐟", shop: "三合院辣脆腸・熱炒（北屯）", dishes: ["招牌辣脆腸", "宮保雞丁", "蔥爆牛肉", "鐵板鮮蚵", "蛤蜊絲瓜", "炒水蓮"], weight: 1 },
-  { cuisine: "台式熱炒", emoji: "🐓", shop: "竹之鄉風味餐廳（大坑）", dishes: ["大坑竹筒飯", "耖米芳甕缸雞", "山蘇炒小魚乾", "炸溪蝦", "竹筍排骨湯"], weight: 1 },
-  { cuisine: "台式熱炒", emoji: "🍲", shop: "帝一食補炭燒薑母鴨（北屯）", dishes: ["炭燒薑母鴨", "鴨佛", "鴨血糕", "金針菇", "豆皮", "麻油麵線"], weight: 1 },
-  { cuisine: "台式熱炒", emoji: "🍤", shop: "阿秋大肥鵝（北屯生活圈）", dishes: ["秘製燒鵝", "避風塘炒蟹", "臭豆腐肥腸鍋", "金沙中卷", "生菜蝦鬆"], weight: 1 },
-  { cuisine: "台式熱炒", emoji: "🦆", shop: "九合脆皮烤鴨（西屯／北屯）", dishes: ["脆皮烤鴨全隻", "手工荷葉餅", "爆炒九層塔鴨骨", "涼拌海蜇皮"], weight: 1 },
-  { cuisine: "台式熱炒", emoji: "🍲", shop: "呂記正宗岡山羊肉爐（北屯）", dishes: ["當歸帶皮羊肉爐", "沙茶炒羊肉", "羊油麵線", "蔥爆羊肚", "麻油羊肝"], weight: 1 },
-
-  // 四、日式料理（13 家）
-  { cuisine: "日式料理", emoji: "🍣", shop: "藏壽司（文心崇德店）", dishes: ["炙燒鮭魚肚握壽司", "熟成鮪魚", "鮮蝦天婦羅手卷", "豚骨醬油拉麵", "茶碗蒸", "北海道千層蛋糕"], weight: 3 },
-  { cuisine: "日式料理", emoji: "🍣", shop: "壽司郎（台中北屯松竹店）", dishes: ["極上鮪魚大腹", "炙燒羅勒鮭魚", "炸蝦天婦羅", "濃厚豚骨拉麵", "卡達拉娜甜點", "玉子燒"], weight: 2 },
-  { cuisine: "日式料理", emoji: "🍱", shop: "樹太老日本定食（崇德店）", dishes: ["炸里肌肉豬排定食", "起司藍帶豬排", "日式唐揚炸雞定食", "鯖魚鹽燒定食", "和風咖哩豬排", "茶碗蒸"], weight: 2 },
-  { cuisine: "日式料理", emoji: "🍜", shop: "一蘭拉麵（台中生活圈）", dishes: ["天然豚骨拉麵", "加麵替玉", "半熟鹽味蛋", "秘製赤紅醬汁", "釜醬汁豚骨叉燒", "抹茶杏仁豆腐"], weight: 2 },
-  { cuisine: "日式料理", emoji: "🍜", shop: "麵屋田宗（北屯）", dishes: ["濃厚魚介豚骨拉麵", "特製叉燒拉麵", "溏心蛋", "日式煎餃", "叉燒飯", "辣味增拉麵"], weight: 2 },
-  { cuisine: "日式料理", emoji: "🍱", shop: "品田牧場（台中崇德店）", dishes: ["厚切腰內豬排", "章魚燒豬排", "黄金豬排咖哩", "海老天婦羅", "高麗菜絲無限續", "日式芝麻醬"], weight: 2 },
-  { cuisine: "日式料理", emoji: "🍣", shop: "爭鮮迴轉壽司（北屯愛買店）", dishes: ["鮭魚生魚片", "蝦味魚卵軍艦", "蒲燒鰻魚握壽司", "鮮魚味噌湯", "稻荷豆皮壽司", "焦糖布丁"], weight: 1 },
-  { cuisine: "日式料理", emoji: "🍱", shop: "大戶屋（崇德路商圈）", dishes: ["炭烤花魚定食", "滑蛋豬排鍋定食", "雞肉蔬菜黑醋醬", "鹽麴五花肉", "抹茶蕨餅"], weight: 1 },
-  { cuisine: "日式料理", emoji: "🍛", shop: "CoCo壹番屋（北屯）", dishes: ["炸豬排歐姆蛋咖哩", "奶油雞肉咖哩", "菠菜起司咖哩", "炸雞塊沙拉", "福神漬"], weight: 1 },
-  { cuisine: "日式料理", emoji: "🍢", shop: "將軍府日式居酒屋（文心路）", dishes: ["大到靠北生蠔", "明太子雞肉串", "剝皮辣椒牛肉捲", "午仔魚一夜干", "日式炒烏龍", "鮭魚烤飯糰"], weight: 2 },
-  { cuisine: "日式料理", emoji: "🍱", shop: "吉野家（北屯崇德店）", dishes: ["招牌牛丼", "翠玉子牛丼", "照燒雞腿丼", "和風豚丼", "泡菜牛丼", "味噌湯"], weight: 1 },
-  { cuisine: "日式料理", emoji: "🍜", shop: "花月嵐拉麵（北屯生活圈）", dishes: ["大蒜拳骨拉麵", "大蒜拳骨白濃拉麵", "鐵板炒飯", "酥炸香雞塊", "配料秘製辣韭菜"], weight: 1 },
-  { cuisine: "日式料理", emoji: "🍱", shop: "定食8（北屯）", dishes: ["豪華海景丼", "起司豬排定食", "岩鹽牛排定食", "照燒雞腿定食", "茶碗蒸", "味增湯"], weight: 1 },
-
-  // 五、火鍋燒肉（13 家）
-  { cuisine: "火鍋燒肉", emoji: "🥩", shop: "屋馬燒肉（崇德店）", dishes: ["美國韓風牛小排", "澳洲和牛橫膈膜", "屋馬主廚沙拉", "海鮮粥", "濃郁雞湯無限喝", "哈根達斯冰淇淋"], weight: 3 },
-  { cuisine: "火鍋燒肉", emoji: "🥩", shop: "茶六燒肉堂（中清／北屯生活圈）", dishes: ["極黑和牛霜降", "松阪豬肉", "炙燒鮭魚烤飯糰", "鯖魚一夜干", "山藥排骨湯", "雪花冰"], weight: 3 },
-  { cuisine: "火鍋燒肉", emoji: "🍲", shop: "輕井澤鍋物（崇德店）", dishes: ["和風燒鍋（梅花豬）", "壽喜燒牛肉鍋", "麻辣鴨血豆腐", "滷肥腸", "紅茶冰沙", "寬冬粉"], weight: 2 },
-  { cuisine: "火鍋燒肉", emoji: "🥩", shop: "山鯨燒肉（漢口／崇德商圈）", dishes: ["日本A5宮崎和牛", "伊比利豬梅花", "鮮活太空菇", "和風炸雞", "雞湯", "明治冰淇淋"], weight: 2 },
-  { cuisine: "火鍋燒肉", emoji: "🍲", shop: "築間幸福鍋物（北屯崇德店）", dishes: ["招牌石頭湯底", "美國濕式熟成牛五花", "龍王鍋海鮮拼盤", "野菜自助吧吃到飽", "明治冰淇淋"], weight: 2 },
-  { cuisine: "火鍋燒肉", emoji: "🍲", shop: "石二鍋（台中崇德店）", dishes: ["石頭爆香雪花牛鍋", "剝皮辣椒雞鍋", "愛呷肉雙拼", "冬瓜檸檬冰沙", "百頁魚豆腐", "烏龍麵"], weight: 2 },
-  { cuisine: "火鍋燒肉", emoji: "🥩", shop: "燒肉Smile（北屯崇德店）", dishes: ["牛小排個人燒肉套餐", "豚五花雙拼", "蔥鹽牛舌", "野菜沙拉吧吃到飽", "越光米飯"], weight: 2 },
-  { cuisine: "火鍋燒肉", emoji: "🍲", shop: "十二段鍋物堂（北屯）", dishes: ["壽喜燒雙人套餐", "麻辣牛奶鍋", "安格斯黑牛", "自助蔬食吧", "霜淇淋"], weight: 1 },
-  { cuisine: "火鍋燒肉", emoji: "🍲", shop: "六扇門時尚湯鍋（北屯店）", dishes: ["原味大骨鍋", "川味麻辣鍋", "韓式泡菜鍋", "白飯泡麵吃到飽", "爆米花霜淇淋"], weight: 1 },
-  { cuisine: "火鍋燒肉", emoji: "🍲", shop: "老先覺功夫窯燒鍋（北屯）", dishes: ["招牌麻辣窯燒鍋", "厚實龍骨鍋", "胡麻牛肉鍋", "滷鴨血", "老油條"], weight: 1 },
-  { cuisine: "火鍋燒肉", emoji: "🥩", shop: "森森燒肉（中科／北屯生活圈）", dishes: ["A5和牛燒肉套餐", "果香壺漬牛肋條", "法式甜點櫃吃到飽", "咖哩飯", "手搖飲吧"], weight: 2 },
-  { cuisine: "火鍋燒肉", emoji: "🍲", shop: "肉多多火鍋（台中進化／北屯）", dishes: ["爆炒川府麻辣湯", "超人氣大肉盤", "蔬食自助吧", "黃金粹滷飯", "霜淇淋"], weight: 1 },
-  { cuisine: "火鍋燒肉", emoji: "🍲", shop: "三媽臭臭鍋（北屯昌平店）", dishes: ["經典大腸臭臭鍋", "海鮮豆腐鍋", "泡菜鍋", "麻辣鴨血鍋", "加點王子麵"], weight: 1 },
-
-  // 六、韓式異國（8 家）
-  { cuisine: "韓式異國", emoji: "🥘", shop: "非常石鍋韓式料理（北屯店）", dishes: ["起司春川炒雞", "韓式海鮮煎餅", "石鍋拌飯", "部隊鍋", "辣炒年糕", "韓式炸雞"], weight: 2 },
-  { cuisine: "韓式異國", emoji: "🥘", shop: "涓豆腐（台中崇德店）", dishes: ["海陸綜合嫩豆腐煲", "韓式起司烘蛋捲", "綜合海鮮煎餅", "醬燒青蔥牛五花", "黑糖香柚豆花"], weight: 2 },
-  { cuisine: "韓式異國", emoji: "🌶️", shop: "瓦城泰國料理（台中崇德店）", dishes: ["原味月亮蝦餅", "泰式打拋豬", "檸檬清蒸魚", "綠咖哩椰汁雞", "酸辣蝦湯", "摩摩喳喳"], weight: 2 },
-  { cuisine: "韓式異國", emoji: "🍗", shop: "起家雞韓式炸雞（北屯崇德店）", dishes: ["頂級洋釀炸雞", "人氣青蔥炸雞", "半半炸雞", "韓式炸年糕", "手作飯糰", "醃蘿蔔"], weight: 2 },
-  { cuisine: "韓式異國", emoji: "🍜", shop: "大心新泰式麵食（北屯生活圈）", dishes: ["酸辣海陸麵", "咖哩雞腿麵", "清燉牛肉河粉", "蝦醬薯條", "黑火山霜淇淋"], weight: 1 },
-  { cuisine: "韓式異國", emoji: "🍜", shop: "北屯越南河粉（昌平路）", dishes: ["生牛肉河粉", "越式炸春捲", "涼拌木瓜絲", "法國麵包夾肉", "越式滴漏咖啡"], weight: 1 },
-  { cuisine: "韓式異國", emoji: "🍛", shop: "甘閣印度料理（北屯生活圈）", dishes: ["奶油雞肉咖哩", "蒜味印度烤餅", "坦都里烤雞", "香料羊肉咖哩", "印度拉茶"], weight: 1 },
-  { cuisine: "韓式異國", emoji: "🥘", shop: "北村豆腐家（台中生活圈）", dishes: ["北村嫩豆腐煲", "鑄鐵拌飯", "首爾韓式炸雞年糕", "香蕉牛奶霜淇淋"], weight: 1 },
-
-  // 七、義式美式（8 家）
-  { cuisine: "義式美式", emoji: "🍝", shop: "JAI宅（水湳店）", dishes: ["橘醬爆炸蛤蜊宅宅麵", "明太子奶油鮮蝦麵", "日式焦糖檸檬炸雞", "瀑布提拉米蘇", "水果茶"], weight: 2 },
-  { cuisine: "義式美式", emoji: "🍽️", shop: "水相餐聚苑（北屯水湳）", dishes: ["火山起司麵包", "黑松露野菇燉飯", "爐烤美國肋眼牛排", "明太子干貝義大利麵", "熔岩巧克力"], weight: 2 },
-  { cuisine: "義式美式", emoji: "🍕", shop: "薄多義義式手工披薩（崇德店）", dishes: ["瑪格麗特皇后披薩", "燻鴨胸蒜辣麵", "炸雞翅拼盤", "松露野菇燉飯", "提拉米蘇"], weight: 2 },
-  { cuisine: "義式美式", emoji: "🍔", shop: "麥當勞（台中崇德二店）", dishes: ["大麥克", "雙層牛肉吉事堡", "勁辣雞腿堡", "麥克雞塊", "金黃地瓜條", "蛋捲冰淇淋"], weight: 1 },
-  { cuisine: "義式美式", emoji: "🍗", shop: "肯德基 KFC（台中崇德餐廳）", dishes: ["咔啦脆雞", "上校薄脆雞", "紐奧良烤雞腿堡", "原味蛋撻", "紙包雞", "上校雞塊"], weight: 1 },
-  { cuisine: "義式美式", emoji: "🍕", shop: "必勝客 Pizza Hut（台中北屯店）", dishes: ["超級總匯大披薩", "和風章魚燒披薩", "夏威夷披薩", "BBQ烤雞", "德國芝心腸"], weight: 1 },
-  { cuisine: "義式美式", emoji: "🥩", shop: "貴族世家／平價牛排（北屯）", dishes: ["沙朗牛排", "香煎雞腿排", "鐵板黑胡椒豬排", "酥皮濃湯", "沙拉吧吃到飽"], weight: 1 },
-  { cuisine: "義式美式", emoji: "🍝", shop: "NU PASTA（台中北屯店）", dishes: ["奶香培根義大利麵", "焗烤海鮮千層麵", "義式炸雞薯條", "吐司盒子", "蜜桃冰茶"], weight: 1 },
-
-  // 八、早午餐飲（8 家）
-  { cuisine: "早午餐飲", emoji: "🍨", shop: "百香傳統豆花（昌平路）", dishes: ["古早味三色豆花", "花生珍珠豆花", "紅豆牛奶冰", "四神清湯", "綜合芋圓豆花", "薑汁豆花"], weight: 2 },
-  { cuisine: "早午餐飲", emoji: "☕", shop: "KafeD 咖啡滴（水湳旗艦店）", dishes: ["年輪蛋糕", "精品手沖咖啡", "燻鮭魚開放式三明治", "德式香腸早午餐", "拿鐵咖啡"], weight: 2 },
-  { cuisine: "早午餐飲", emoji: "🥞", shop: "樂丘廚房（北屯生活圈）", dishes: ["珍珠奶茶舒芙蕾鬆餅", "黑松露燉飯", "美式花生醬牛肉堡", "泰式酸辣炸雞", "水果冰茶"], weight: 2 },
-  { cuisine: "早午餐飲", emoji: "🥐", shop: "路易莎咖啡 Louisa（北屯崇德店）", dishes: ["牛肉起司磚壓三明治", "莊園級拿鐵", "小農鮮奶咖啡", "鮪魚玉米蛋堡", "黑糖雪點奶茶"], weight: 1 },
-  { cuisine: "早午餐飲", emoji: "🧋", shop: "50嵐（北屯昌平店）", dishes: ["波霸奶茶", "四季春珍波椰", "8冰綠", "紅茶拿鐵", "冰淇淋紅茶", "檸檬梅汁"], weight: 1 },
-  { cuisine: "早午餐飲", emoji: "🧋", shop: "可不可熟成紅茶（北屯崇德店）", dishes: ["熟成紅茶", "胭脂多多", "白玉歐蕾", "春芽綠茶", "雪藏紅茶"], weight: 1 },
-  { cuisine: "早午餐飲", emoji: "🍰", shop: "禾雅堂經典乳酪蛋糕（大坑）", dishes: ["經典原味乳酪蛋糕", "萊姆葡萄乳酪", "濃郁巧克力乳酪", "伴手禮盒"], weight: 1 },
-  { cuisine: "早午餐飲", emoji: "🥐", shop: "Q Burger 饗樂餐飲（北屯店）", dishes: ["卡啦雞腿起司蛋堡", "法式吐司拼盤", "薯餅塔", "鍋燒意麵", "招牌奶茶"], weight: 1 }
-];
-
-// 計數確認：目前共收錄 100 家北屯區真實美食店家
-let soundEnabled = true;
-let audioCtx = null;
-
-function initAudio() {
-  if (!audioCtx) {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    audioCtx = new AudioContext();
-  }
-  if (audioCtx.state === 'suspended') {
-    audioCtx.resume();
-  }
-}
-
-function toggleSound() {
-  soundEnabled = !soundEnabled;
-  const btn = document.getElementById('soundBtn');
-  btn.innerText = soundEnabled ? "🔊 音效：開啟" : "🔇 音效：靜音";
-  if (soundEnabled) initAudio();
-}
-
-function playTickSound(freq = 520) {
-  if (!soundEnabled || !audioCtx) return;
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  osc.type = 'triangle';
-  osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-  gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
-  osc.start();
-  osc.stop(audioCtx.currentTime + 0.04);
-}
-
-function playStopSound(stage) {
-  if (!soundEnabled || !audioCtx) return;
-  const freqs = [440, 554.37, 659.25];
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  osc.type = 'sine';
-  osc.frequency.setValueAtTime(freqs[stage - 1] || 523.25, audioCtx.currentTime);
-  gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.18);
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
-  osc.start();
-  osc.stop(audioCtx.currentTime + 0.18);
-}
-
-function playWinSound() {
-  if (!soundEnabled || !audioCtx) return;
-  const notes = [523.25, 659.25, 783.99, 1046.50];
-  notes.forEach((freq, idx) => {
-    setTimeout(() => {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-      gain.gain.setValueAtTime(0.16, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.35);
-    }, idx * 90);
-  });
-}
-
-function getFontSize(text) {
-  const len = text.length;
-  if (len <= 5) return "14px";
-  if (len <= 8) return "12px";
-  if (len <= 11) return "10.5px";
-  return "9.5px";
-}
-
-function createReelItemHTML(emoji, text) {
-  const fSize = getFontSize(text);
-  return `<div class="reel-item">
-    <div class="reel-emoji">${emoji}</div>
-    <div class="reel-text" style="font-size:${fSize};">${text}</div>
-  </div>`;
-}
-
-function renderInitialReels() {
-  document.getElementById('reel1').innerHTML = createReelItemHTML("🍜", "百大招牌菜");
-  document.getElementById('reel2').innerHTML = createReelItemHTML("🏪", "北屯百大好店");
-  document.getElementById('reel3').innerHTML = createReelItemHTML("📋", "完整菜單收錄");
-}
-
-function updateStats() {
-  const sel = document.getElementById('cuisineSelect').value;
-  const filtered = sel === "all" ? beitunDatabase : beitunDatabase.filter(item => item.cuisine === sel);
-  let dishCount = 0;
-  for (let i = 0; i < filtered.length; i++) {
-    dishCount += filtered[i].dishes.length;
-  }
-  document.getElementById('statsBar').innerText = `已收錄 ${filtered.length} 家北屯在地店家・共 ${dishCount} 道真實菜色`;
-}
-
-updateStats();
-renderInitialReels();
-
-function startSpin() {
-  initAudio();
-  const sel = document.getElementById('cuisineSelect').value;
-  const filtered = sel === "all" ? beitunDatabase : beitunDatabase.filter(item => item.cuisine === sel);
-
-  let pool = [];
-  for (let i = 0; i < filtered.length; i++) {
-    for (let w = 0; w < filtered[i].weight; w++) {
-      pool.push(filtered[i]);
-    }
-  }
-
-  const finalShop = pool[Math.floor(Math.random() * pool.length)];
-  const finalDish = finalShop.dishes[Math.floor(Math.random() * finalShop.dishes.length)];
-  const finalScale = `收錄 ${finalShop.dishes.length} 道菜`;
-
-  const btn = document.getElementById('spinBtn');
-  const card = document.getElementById('resultCard');
-  const machine = document.getElementById('machineBox');
-  btn.disabled = true;
-  btn.innerText = "正在搜尋北屯美味...";
-  card.style.display = "none";
-  machine.classList.remove('jackpot-glow');
-
-  spinReel('reel1', 16, 1400, 1, finalShop.emoji, finalDish, () => {
-    return {
-      emoji: beitunDatabase[Math.floor(Math.random() * beitunDatabase.length)].emoji,
-      text: beitunDatabase[Math.floor(Math.random() * beitunDatabase.length)].dishes[0]
-    };
-  });
-
-  spinReel('reel2', 24, 2100, 2, "🏪", finalShop.shop, () => {
-    const r = beitunDatabase[Math.floor(Math.random() * beitunDatabase.length)];
-    return { emoji: r.emoji, text: r.shop };
-  });
-
-  spinReel('reel3', 32, 2900, 3, "📋", finalScale, () => {
-    const r = beitunDatabase[Math.floor(Math.random() * beitunDatabase.length)];
-    return { emoji: "📋", text: `收錄 ${r.dishes.length} 道菜` };
-  }, () => {
-    playWinSound();
-    machine.classList.add('jackpot-glow');
-    launchConfetti();
-    showResult(finalShop, finalDish);
-  });
-}
-
-function spinReel(reelId, itemCount, duration, stageNum, finalEmoji, finalText, randomGenerator, onComplete) {
-  const reel = document.getElementById(reelId);
-  const itemHeight = 118;
-  let html = "";
-
-  // 構建由上往下滾動的長條序列（頂部為最終大獎，底部為起點）
-  html += createReelItemHTML(finalEmoji, finalText);
-  for (let i = 1; i < itemCount; i++) {
-    const randObj = randomGenerator();
-    html += createReelItemHTML(randObj.emoji, randObj.text);
-  }
-  reel.innerHTML = html;
-
-  const startY = -(itemCount - 1) * itemHeight;
-  reel.style.transition = "none";
-  reel.style.transform = `translateY(${startY}px)`;
-
-  let tickCount = 0;
-  const maxTicks = Math.floor(duration / 95);
-  const tickTimer = setInterval(() => {
-    playTickSound(420 + tickCount * 15);
-    tickCount++;
-    if (tickCount >= maxTicks) clearInterval(tickTimer);
-  }, 95);
-
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      reel.style.transition = `transform ${duration}ms cubic-bezier(0.12, 0.88, 0.25, 1.03)`;
-      reel.style.transform = "translateY(0px)";
-    });
-  });
-
-  setTimeout(() => {
-    clearInterval(tickTimer);
-    playStopSound(stageNum);
-    if (onComplete) onComplete();
-  }, duration);
-}
-
-function showResult(shopObj, pickedDish) {
-  const btn = document.getElementById('spinBtn');
-  btn.disabled = false;
-  btn.innerText = "不滿意？再轉一次北屯美食！";
-
-  document.getElementById('resShopName').innerText = `🎉 ${shopObj.emoji} ${shopObj.shop}`;
-  document.getElementById('resCategoryBadge').innerText = shopObj.cuisine;
-  document.getElementById('resPickedDish').innerText = `👉 本次天選推薦：【${pickedDish}】`;
-  document.getElementById('resMenuTitle').innerText = `📋 本店收錄完整招牌菜單（共 ${shopObj.dishes.length} 道）：`;
-
-  let tagsHTML = "";
-  for (let i = 0; i < shopObj.dishes.length; i++) {
-    const d = shopObj.dishes[i];
-    if (d === pickedDish) {
-      tagsHTML += `<span class="menu-tag picked">⭐ ${d}</span>`;
-    } else {
-      tagsHTML += `<span class="menu-tag">${d}</span>`;
-    }
-  }
-  document.getElementById('resMenuTags').innerHTML = tagsHTML;
-
-  const query = encodeURIComponent("台中市北屯區 " + shopObj.shop);
-  document.getElementById('mapLink').href = `https://www.google.com/maps/search/?api=1&query=${query}`;
-  document.getElementById('resultCard').style.display = "block";
-}
-
-// 慶祝煙火彩帶特效
-function launchConfetti() {
-  const canvas = document.getElementById('confettiCanvas');
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-
-  const colors = ['#ffd700', '#ff4757', '#2ed573', '#1e90ff', '#ffa502', '#ffffff'];
-  let particles = [];
-  for (let i = 0; i < 85; i++) {
-    particles.push({
-      x: canvas.width / 2,
-      y: canvas.height * 0.42,
-      vx: (Math.random() - 0.5) * 14,
-      vy: (Math.random() - 0.85) * 14,
-      size: Math.random() * 7 + 4,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      alpha: 1
-    });
-  }
-
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    let alive = false;
-    for (let i = 0; i < particles.length; i++) {
-      const p = particles[i];
-      p.x += p.vx;
-      p.y += p.vy;
-      p.vy += 0.35;
-      p.alpha -= 0.016;
-      if (p.alpha > 0) {
-        alive = true;
-        ctx.globalAlpha = p.alpha;
-        ctx.fillStyle = p.color;
-        ctx.fillRect(p.x, p.y, p.size, p.size * 0.6);
-      }
-    }
-    ctx.globalAlpha = 1;
-    if (alive) requestAnimationFrame(animate);
-    else ctx.clearRect(0, 0, canvas.width, canvas.height);
-  }
-  animate();
-}
-</script>
-</body>
-</html>
+      <div class="open-only-row">
