@@ -5,67 +5,55 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>台中市北屯區・美食幸運拉霸機 v3.0</title>
 <style>
-  * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Microsoft JhengHei", sans-serif; }
-  body { margin: 0; padding: 12px 6px; background: linear-gradient(135deg, #141424 0%, #1a2238 100%); color: #fff; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
-  .top-bar { width: 100%; max-width: 960px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 6px; }
-  .region-badge { background: #e94560; color: #fff; font-size: 12px; font-weight: bold; padding: 4px 12px; border-radius: 20px; }
-  .clock-badge { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,215,0,0.4); color: #ffe066; font-size: 12px; font-weight: bold; padding: 4px 10px; border-radius: 20px; }
-  .sound-btn { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.3); color: #fff; border-radius: 20px; padding: 4px 10px; font-size: 12px; cursor: pointer; }
-  .header { text-align: center; margin-bottom: 12px; }
-  .header h1 { margin: 0; font-size: 20px; color: #ffd700; }
-  .header p { margin: 4px 0 0; font-size: 12px; color: #b0b8d1; }
-  .main-arena { display: flex; flex-direction: row; align-items: stretch; justify-content: center; gap: 6px; width: 100%; max-width: 960px; }
-  .ad-column { flex: 0 0 21%; max-width: 175px; min-width: 72px; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; }
-  .ad-card { flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,215,0,0.4); border-radius: 10px; padding: 6px 4px; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; text-decoration: none; color: #fff; min-height: 72px; }
-  .ad-card.vacant { border: 1px dashed rgba(255,255,255,0.3); background: rgba(255,255,255,0.03); cursor: pointer; }
-  .ad-tag { font-size: 9px; font-weight: bold; padding: 1px 5px; border-radius: 6px; margin-bottom: 3px; background: #ffd700; color: #1a1a2e; }
-  .ad-card.vacant .ad-tag { background: rgba(255,255,255,0.15); color: #bbb; }
-  .ad-title { font-size: 11px; font-weight: bold; line-height: 1.2; margin-bottom: 2px; }
-  .ad-sub { font-size: 9px; color: #ffe066; }
-  .center-stage { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; }
-  .filter-panel { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,215,0,0.3); border-radius: 12px; padding: 10px; width: 100%; margin-bottom: 10px; }
-  select { width: 100%; padding: 8px; border-radius: 8px; border: none; background: #fff; color: #1a1a2e; font-size: 13px; font-weight: bold; outline: none; }
-  .open-row { margin-top: 8px; font-size: 12px; color: #ffe066; display: flex; justify-content: space-between; align-items: center; }
-  .machine { background: #e94560; padding: 14px 8px; border-radius: 18px; width: 100%; border: 3px solid #ffd700; box-shadow: 0 8px 20px rgba(0,0,0,0.5); }
-  .machine.win-glow { animation: winPulse 0.6s ease-in-out 3; }
-  @keyframes winPulse { 0%, 100% { box-shadow: 0 0 15px #ffd700; } 50% { box-shadow: 0 0 38px #fff, 0 0 55px #ffd700; } }
-  .slots { display: flex; gap: 5px; background: #0f3460; padding: 10px 6px; border-radius: 10px; }
-  .slot-window { flex: 1; background: #fff; color: #1a1a2e; border-radius: 8px; height: 110px; position: relative; overflow: hidden; box-shadow: inset 0 8px 10px -6px rgba(0,0,0,0.4), inset 0 -8px 10px -6px rgba(0,0,0,0.4); }
-  .slot-label { font-size: 9px; color: #fff; background: rgba(15,52,96,0.9); padding: 1px 6px; border-radius: 6px; position: absolute; top: 4px; left: 50%; transform: translateX(-50%); font-weight: bold; z-index: 5; white-space: nowrap; }
-  .reel-strip { position: absolute; top: 0; left: 0; width: 100%; will-change: transform; }
-  .reel-item { height: 110px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 16px 3px 4px; font-weight: 900; line-height: 1.2; color: #1a1a2e; }
-  .reel-emoji { font-size: 20px; margin-bottom: 3px; }
-  .reel-text { font-size: 12px; }
-  .btn-spin { width: 100%; margin-top: 14px; padding: 14px; font-size: 16px; font-weight: bold; color: #1a1a2e; background: #ffd700; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 0 #b39700; }
-  .btn-spin:disabled { background: #888; box-shadow: none; color: #ccc; }
-  .result-card { display: none; margin-top: 12px; background: rgba(255,255,255,0.12); border: 1.5px solid #ffd700; border-radius: 12px; padding: 12px; width: 100%; text-align: center; }
-  .result-card.closed { border-color: #ff6b6b; background: rgba(255,75,75,0.15); }
-  .btn-map { display: inline-block; margin-top: 8px; background: #00b894; color: #fff; text-decoration: none; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: bold; }
-  #confettiCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
+  * { box-sizing: border-box; font-family: "Microsoft JhengHei", sans-serif; }
+  body { margin: 0; padding: 10px 5px; background: #141424; color: #fff; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
+  .top-bar { width: 100%; max-width: 960px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding: 0 5px; font-size: 12px; }
+  .badge { background: #e94560; padding: 3px 10px; border-radius: 15px; font-weight: bold; }
+  .clock { background: rgba(255,255,255,0.12); color: #ffe066; padding: 3px 10px; border-radius: 15px; font-weight: bold; }
+  .snd-btn { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid #ffd700; border-radius: 15px; padding: 3px 10px; cursor: pointer; font-size: 12px; }
+  h1 { margin: 0 0 8px; font-size: 19px; color: #ffd700; text-align: center; }
+  .arena { display: flex; gap: 5px; width: 100%; max-width: 960px; align-items: stretch; }
+  .ad-col { flex: 0 0 21%; max-width: 170px; min-width: 70px; display: flex; flex-direction: column; gap: 5px; }
+  .ad { flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,215,0,0.4); border-radius: 8px; padding: 5px 3px; text-align: center; color: #fff; text-decoration: none; display: flex; flex-direction: column; justify-content: center; min-height: 68px; }
+  .ad.v { border-style: dashed; border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.03); cursor: pointer; }
+  .ad b { font-size: 10px; color: #fff; display: block; margin-top: 2px; }
+  .ad span { font-size: 9px; color: #ffe066; }
+  .tag { background: #ffd700; color: #1a1a2e; font-size: 8px; font-weight: bold; padding: 1px 4px; border-radius: 4px; align-self: center; }
+  .center { flex: 1; min-width: 0; }
+  .panel { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,215,0,0.3); border-radius: 12px; padding: 8px; margin-bottom: 8px; }
+  select { width: 100%; padding: 7px; border-radius: 6px; border: none; font-weight: bold; font-size: 13px; }
+  .row { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; color: #ffe066; }
+  .machine { background: #e94560; padding: 12px 6px; border-radius: 16px; border: 3px solid #ffd700; }
+  .slots { display: flex; gap: 4px; background: #0f3460; padding: 8px 4px; border-radius: 10px; }
+  .win { flex: 1; background: #fff; color: #1a1a2e; border-radius: 6px; height: 100px; position: relative; overflow: hidden; }
+  .lbl { position: absolute; top: 3px; left: 50%; transform: translateX(-50%); background: #0f3460; color: #fff; font-size: 8px; padding: 1px 5px; border-radius: 5px; z-index: 5; white-space: nowrap; }
+  .strip { position: absolute; top: 0; left: 0; width: 100%; }
+  .item { height: 100px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 14px 2px 2px; font-weight: 900; font-size: 12px; line-height: 1.2; }
+  .btn { width: 100%; margin-top: 10px; padding: 12px; font-size: 16px; font-weight: bold; color: #1a1a2e; background: #ffd700; border: none; border-radius: 40px; cursor: pointer; box-shadow: 0 4px 0 #b39700; }
+  .btn:disabled { background: #888; box-shadow: none; color: #ccc; }
+  .res { display: none; margin-top: 10px; background: rgba(255,255,255,0.12); border: 1.5px solid #ffd700; border-radius: 12px; padding: 10px; text-align: center; }
+  .res.off { border-color: #ff6b6b; background: rgba(255,75,75,0.15); }
+  .map-btn { display: inline-block; margin-top: 6px; background: #00b894; color: #fff; text-decoration: none; padding: 7px 14px; border-radius: 20px; font-size: 12px; font-weight: bold; }
 </style>
 </head>
 <body>
-<canvas id="confettiCanvas"></canvas>
 <div class="top-bar">
-  <span class="region-badge">📍 北屯區 v3.0</span>
-  <span class="clock-badge" id="liveClock">🕒 --:--</span>
-  <button class="sound-btn" id="soundBtn" onclick="toggleSound()">🔊 音效開</button>
+  <span class="badge">📍 北屯區 v3.0</span>
+  <span class="clock" id="clk">🕒 --:--</span>
+  <button class="snd-btn" id="sbtn" onclick="togSnd()">🔊 音效開</button>
 </div>
-<div class="header">
-  <h1>🎰 北屯區美食幸運拉霸機</h1>
-  <p>垂直滾動轉輪 ＋ 中獎煙火與休息槓龜雙音效</p>
-</div>
-<div class="main-arena">
-  <div class="ad-column">
-    <a class="ad-card" href="https://google.com" target="_blank"><span class="ad-tag">VIP 1</span><div class="ad-title">屋馬燒肉 崇德</div><div class="ad-sub">訂位贈私房菜</div></a>
-    <a class="ad-card" href="https://google.com" target="_blank"><span class="ad-tag">VIP 2</span><div class="ad-title">藏壽司 崇德</div><div class="ad-sub">滿額抽限定扭蛋</div></a>
-    <div class="ad-card vacant" onclick="alert('北屯黃金廣告位招租中！')"><span class="ad-tag">招租 3</span><div class="ad-title">北屯創始席位</div><div class="ad-sub">點擊洽談合作</div></div>
-    <div class="ad-card vacant" onclick="alert('北屯黃金廣告位招租中！')"><span class="ad-tag">招租 4</span><div class="ad-title">北屯美食席位</div><div class="ad-sub">高精準在地導流</div></div>
-    <div class="ad-card vacant" onclick="alert('北屯黃金廣告位招租中！')"><span class="ad-tag">招租 5</span><div class="ad-title">商圈特約席位</div><div class="ad-sub">歡迎名店進駐</div></div>
+<h1>🎰 北屯區美食幸運拉霸機</h1>
+<div class="arena">
+  <div class="ad-col">
+    <a class="ad" href="https://google.com" target="_blank"><span class="tag">VIP 1</span><b>屋馬燒肉 崇德</b><span>訂位贈私房菜</span></a>
+    <a class="ad" href="https://google.com" target="_blank"><span class="tag">VIP 2</span><b>藏壽司 崇德</b><span>滿額抽限定扭蛋</span></a>
+    <div class="ad v" onclick="alert('北屯黃金廣告位招租中！')"><span class="tag">招租 3</span><b>北屯創始席位</b><span>點擊洽談合作</span></div>
+    <div class="ad v" onclick="alert('北屯黃金廣告位招租中！')"><span class="tag">招租 4</span><b>北屯美食席位</b><span>高精準在地導流</span></div>
+    <div class="ad v" onclick="alert('北屯黃金廣告位招租中！')"><span class="tag">招租 5</span><b>商圈特約席位</b><span>歡迎名店進駐</span></div>
   </div>
-  <div class="center-stage">
-    <div class="filter-panel">
-      <select id="catSelect" onchange="updateCount()">
+  <div class="center">
+    <div class="panel">
+      <select id="cat" onchange="updCnt()">
         <option value="all">🎲 全部料理隨機抽</option>
         <option value="銅板小吃">🥢 銅板小吃</option>
         <option value="宵夜炸物">🍗 宵夜炸物</option>
@@ -76,139 +64,112 @@
         <option value="義式美式">🇮🇹 義式美式</option>
         <option value="早午餐甜點">🧋 早午餐甜點</option>
       </select>
-      <div class="open-row">
-        <label><input type="checkbox" id="openCheck" onchange="updateCount()"> 🟢 僅抽營業中</label>
-        <span id="countText">統計中...</span>
-      </div>
+      <div class="row"><label><input type="checkbox" id="chk" onchange="updCnt()"> 🟢 僅抽營業中</label><span id="cnt"></span></div>
     </div>
-    <div class="machine" id="machineBox">
+    <div class="machine">
       <div class="slots">
-        <div class="slot-window"><span class="slot-label">第一軸・菜色</span><div class="reel-strip" id="strip1"><div class="reel-item"><div class="reel-emoji">🍽️</div><div class="reel-text">準備開轉</div></div></div></div>
-        <div class="slot-window"><span class="slot-label">第二軸・店家</span><div class="reel-strip" id="strip2"><div class="reel-item"><div class="reel-emoji">🏪</div><div class="reel-text">北屯好店</div></div></div></div>
-        <div class="slot-window"><span class="slot-label">第三軸・狀態</span><div class="reel-strip" id="strip3"><div class="reel-item"><div class="reel-emoji">⏰</div><div class="reel-text">即時對時</div></div></div></div>
+        <div class="win"><span class="lbl">菜色</span><div class="strip" id="st1"><div class="item">🍽️<br>準備開轉</div></div></div>
+        <div class="win"><span class="lbl">店家</span><div class="strip" id="st2"><div class="item">🏪<br>北屯好店</div></div></div>
+        <div class="win"><span class="lbl">狀態</span><div class="strip" id="st3"><div class="item">⏰<br>即時對時</div></div></div>
       </div>
-      <button class="btn-spin" id="spinBtn" onclick="spinV3()">北屯美食，開轉！</button>
+      <button class="btn" id="btn" onclick="go()">北屯美食，開轉！</button>
     </div>
-    <div class="result-card" id="resBox">
-      <div id="resText" style="font-weight:bold;font-size:14px;"></div>
-      <div id="resHours" style="font-size:12px;color:#ccc;margin-top:4px;"></div>
-      <div id="resAction"></div>
+    <div class="res" id="res">
+      <div id="rt" style="font-weight:bold;font-size:14px;"></div>
+      <div id="rh" style="font-size:12px;color:#ddd;margin-top:4px;"></div>
+      <div id="ra"></div>
     </div>
   </div>
-  <div class="ad-column">
-    <a class="ad-card" href="https://google.com" target="_blank"><span class="ad-tag">VIP 6</span><div class="ad-title">丰禾台味 崇德</div><div class="ad-sub">王品台菜名店</div></a>
-    <a class="ad-card" href="https://google.com" target="_blank"><span class="ad-tag">VIP 7</span><div class="ad-title">JAI宅 水湳店</div><div class="ad-sub">爆炸蛤蜊義大利麵</div></a>
-    <div class="ad-card vacant" onclick="alert('北屯黃金廣告位招租中！')"><span class="ad-tag">招租 8</span><div class="ad-title">北屯創始席位</div><div class="ad-sub">一鍵導航吸客</div></div>
-    <div class="ad-card vacant" onclick="alert('北屯黃金廣告位招租中！')"><span class="ad-tag">招租 9</span><div class="ad-title">限量廣告席位</div><div class="ad-sub">全區限量 10 席</div></div>
-    <div class="ad-card vacant" onclick="alert('北屯黃金廣告位招租中！')"><span class="ad-tag">招租 10</span><div class="ad-title">特約合作席位</div><div class="ad-sub">了解合作方案</div></div>
+  <div class="ad-col">
+    <a class="ad" href="https://google.com" target="_blank"><span class="tag">VIP 6</span><b>丰禾台味 崇德</b><span>王品台菜名店</span></a>
+    <a class="ad" href="https://google.com" target="_blank"><span class="tag">VIP 7</span><b>JAI宅 水湳店</b><span>爆炸蛤蜊義大利麵</span></a>
+    <div class="ad v" onclick="alert('北屯黃金廣告位招租中！')"><span class="tag">招租 8</span><b>北屯創始席位</b><span>一鍵導航吸客</span></div>
+    <div class="ad v" onclick="alert('北屯黃金廣告位招租中！')"><span class="tag">招租 9</span><b>限量廣告席位</b><span>全區限量 10 席</span></div>
+    <div class="ad v" onclick="alert('北屯黃金廣告位招租中！')"><span class="tag">招租 10</span><b>特約合作席位</b><span>了解合作方案</span></div>
   </div>
 </div>
 <script>
-const shopsV3 = [
-  { cat: "銅板小吃", emoji: "🍜", dish: "大腸蚵仔麵線", shop: "昌平路大腸麵線", area: "昌平商圈", open: 6.5, close: 13.5 },
-  { cat: "銅板小吃", emoji: "🍳", dish: "招牌蚵仔煎", shop: "台北蚵仔煎", area: "一點利市場", open: 11, close: 21 },
-  { cat: "宵夜炸物", emoji: "🍗", dish: "無骨鹽酥雞", shop: "炸滋滋無骨鹽酥雞", area: "昌平商圈", open: 16, close: 25 },
-  { cat: "台式熱炒", emoji: "🐓", dish: "招牌甕缸雞", shop: "東山棧甕缸雞", area: "大坑東山", open: 11, close: 21.5 },
-  { cat: "日式料理", emoji: "🍣", dish: "炙燒鮭魚肚", shop: "藏壽司 文心崇德店", area: "文心崇德", open: 11, close: 22 },
-  { cat: "火鍋燒肉", emoji: "🥩", dish: "日本A5和牛", shop: "屋馬燒肉 崇德店", area: "崇德商圈", open: 11, close: 24 },
-{ cat: "韓式異國", emoji: "🌶️", dish: "月亮蝦餅", shop: "瓦城泰國料理 崇德店", area: "崇德商圈", open: 11.5, close: 21.5 },
-{ cat: "義式美式", emoji: "🍝", dish: "爆炸蛤蜊麵", shop: "JAI宅 水湳店", area: "水湳商圈", open: 11, close: 21.5 },
-{ cat: "早午餐甜點", emoji: "🥪", dish: "粉漿蛋餅", shop: "昌平路傳統早餐店", area: "昌平商圈", open: 5.5, close: 12 },
-{ cat: "早午餐甜點", emoji: "🍡", dish: "綜合芋圓冰", shop: "大坑東東芋圓", area: "大坑東山", open: 9, close: 22 }
+const db = [
+  { c:"銅板小吃", e:"🍜", d:"大腸蚵仔麵線", s:"昌平路大腸麵線", a:"昌平商圈", o:6.5, cl:13.5 },
+  { c:"銅板小吃", e:"🍳", d:"招牌蚵仔煎", s:"台北蚵仔煎", a:"一點利市場", o:11, cl:21 },
+  { c:"宵夜炸物", e:"🍗", d:"無骨鹽酥雞", s:"炸滋滋無骨鹽酥雞", a:"昌平商圈", o:16, cl:25 },
+  { c:"台式熱炒", e:"🐓", d:"招牌甕缸雞", s:"東山棧甕缸雞", a:"大坑東山", o:11, cl:21.5 },
+  { c:"日式料理", e:"🍣", d:"炙燒鮭魚肚", s:"藏壽司 文心崇德店", a:"文心崇德", o:11, cl:22 },
+  { c:"火鍋燒肉", e:"🥩", d:"日本A5和牛", s:"屋馬燒肉 崇德店", a:"崇德商圈", o:11, cl:24 },
+  { c:"韓式異國", e:"🌶️", d:"月亮蝦餅", s:"瓦城泰國料理 崇德店", a:"崇德商圈", o:11.5, cl:21.5 },
+  { c:"義式美式", e:"🍝", d:"爆炸蛤蜊麵", s:"JAI宅 水湳店", a:"水湳商圈", o:11, cl:21.5 },
+  { c:"早午餐甜點", e:"🥪", d:"粉漿蛋餅", s:"昌平路傳統早餐店", a:"昌平商圈", o:5.5, cl:12 },
+  { c:"早午餐甜點", e:"🍡", d:"綜合芋圓冰", s:"大坑東東芋圓", a:"大坑東山", o:9, cl:22 }
 ];
-let soundOn = true, actx = null;
-function initAudio() {
-if (!actx) { const AC = window.AudioContext || window.webkitAudioContext; if (AC) actx = new AC(); }
-if (actx && actx.state === "suspended") actx.resume();
+let snd = true, ac = null;
+function togSnd() { snd = !snd; document.getElementById("sbtn").innerText = snd ? "🔊 音效開" : "🔇 靜音"; }
+function beep(f, t, dur, del) {
+  if (!snd) return;
+  if (!ac) { const A = window.AudioContext || window.webkitAudioContext; if (A) ac = new A(); }
+  if (!ac) return;
+  if (ac.state === "suspended") ac.resume();
+  const o = ac.createOscillator(), g = ac.createGain();
+  o.type = t; o.frequency.setValueAtTime(f, ac.currentTime + del);
+  g.gain.setValueAtTime(0.12, ac.currentTime + del); g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + del + dur);
+  o.connect(g); g.connect(ac.destination); o.start(ac.currentTime + del); o.stop(ac.currentTime + del + dur);
 }
-function toggleSound() { soundOn = !soundOn; document.getElementById("soundBtn").innerText = soundOn ? "🔊 音效開" : "🔇 靜音"; }
-function tone(freq, type, dur, delay, vol) {
-if (!soundOn || !actx) return;
-const o = actx.createOscillator(), g = actx.createGain();
-o.type = type; o.frequency.setValueAtTime(freq, actx.currentTime + delay);
-g.gain.setValueAtTime(vol, actx.currentTime + delay);
-g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + delay + dur);
-o.connect(g); g.connect(actx.destination);
-o.start(actx.currentTime + delay); o.stop(actx.currentTime + delay + dur);
+function isOp(s) {
+  const n = new Date(), cur = n.getHours() + n.getMinutes() / 60;
+  return s.cl > 24 ? (cur >= s.o || cur < s.cl - 24) : (cur >= s.o && cur < s.cl);
 }
-function isOpenNow(s) {
-const n = new Date(), cur = n.getHours() + n.getMinutes() / 60;
-if (s.close > 24) return cur >= s.open || cur < (s.close - 24);
-return cur >= s.open && cur < s.close;
+function clk() {
+  const n = new Date();
+  document.getElementById("clk").innerText = "🕒 " + (n.getHours()<10?"0":"") + n.getHours() + ":" + (n.getMinutes()<10?"0":"") + n.getMinutes();
 }
-function updateClock() {
-const n = new Date();
-const hh = n.getHours() < 10 ? "0" + n.getHours() : "" + n.getHours();
-const mm = n.getMinutes() < 10 ? "0" + n.getMinutes() : "" + n.getMinutes();
-document.getElementById("liveClock").innerText = "🕒 " + hh + ":" + mm;
+setInterval(clk, 10000); clk();
+function getL() {
+  const v = document.getElementById("cat").value, k = document.getElementById("chk").checked, r = [];
+  for (let i = 0; i < db.length; i++) if ((v === "all" || db[i].c === v) && (!k || isOp(db[i]))) r.push(db[i]);
+  return r;
 }
-setInterval(updateClock, 10000); updateClock();
-function getList() {
-const c = document.getElementById("catSelect").value, only = document.getElementById("openCheck").checked, res = [];
-for (let i = 0; i < shopsV3.length; i++) {
-if ((c === "all" || shopsV3[i].cat === c) && (!only || isOpenNow(shopsV3[i]))) res.push(shopsV3[i]);
+function updCnt() { document.getElementById("cnt").innerText = "符合：" + getL().length + " 家"; }
+updCnt();
+function roll(el, arr, fin, ms, sf, cb) {
+  let h = "";
+  for (let i = 0; i < arr.length; i++) h += '<div class="item">' + arr[i] + '</div>';
+  h += '<div class="item">' + fin + '</div>';
+  el.innerHTML = h; el.style.transition = "none"; el.style.transform = "translateY(0px)";
+  const iv = setInterval(function() { beep(520, "triangle", 0.04, 0); }, 110);
+  setTimeout(function() { el.style.transition = "transform " + ms + "ms cubic-bezier(0.15,0.85,0.25,1)"; el.style.transform = "translateY(" + (-(arr.length * 100)) + "px)"; }, 30);
+  setTimeout(function() { clearInterval(iv); beep(sf, "sine", 0.15, 0); if (cb) cb(); }, ms + 40);
 }
-return res;
-}
-function updateCount() { document.getElementById("countText").innerText = "符合：" + getList().length + " 家店"; }
-updateCount();
-function buildReel(el, arr, fin) {
-let h = "";
-for (let i = 0; i < arr.length; i++) h += '' + arr[i].e + '' + arr[i].t + '';
-h += '' + fin.e + '' + fin.t + '';
-el.innerHTML = h; el.style.transition = "none"; el.style.transform = "translateY(0px)";
-}
-function runReel(el, len, ms, stopFreq, cb) {
-let cnt = 0, max = Math.floor(ms / 100);
-const iv = setInterval(function() { tone(520, "triangle", 0.04, 0, 0.05); if (++cnt >= max) clearInterval(iv); }, 100);
-requestAnimationFrame(function() { requestAnimationFrame(function() {
-el.style.transition = "transform " + ms + "ms cubic-bezier(0.12, 0.88, 0.24, 1.03)";
-el.style.transform = "translateY(" + (-(len * 110)) + "px)";
-}); });
-setTimeout(function() { clearInterval(iv); tone(stopFreq, "sine", 0.16, 0, 0.14); if (cb) cb(); }, ms);
-}
-function spinV3() {
-initAudio();
-const list = getList();
-if (list.length === 0) { alert("目前該分類都在休息中喔！請取消勾選「僅抽營業中」試試！"); return; }
-const item = list[Math.floor(Math.random() * list.length)];
-const open = isOpenNow(item);
-const btn = document.getElementById("spinBtn"), box = document.getElementById("resBox"), m = document.getElementById("machineBox");
-btn.disabled = true; btn.innerText = "轉輪滾動中..."; box.style.display = "none"; m.classList.remove("win-glow");
-const d1 = [], d2 = [], d3 = [];
-for (let i = 0; i < 14; i++) { const r = shopsV3[Math.floor(Math.random() * shopsV3.length)]; d1.push({ e: r.emoji, t: r.dish }); }
-for (let i = 0; i < 20; i++) { const r = shopsV3[Math.floor(Math.random() * shopsV3.length)]; d2.push({ e: "🏪", t: r.shop }); }
-for (let i = 0; i < 26; i++) { const o = Math.random() > 0.4; d3.push({ e: o ? "🟢" : "🔴", t: o ? "營業中！" : "休息中" }); }
-buildReel(document.getElementById("strip1"), d1, { e: item.emoji, t: item.dish });
-buildReel(document.getElementById("strip2"), d2, { e: "🏪", t: item.shop });
-buildReel(document.getElementById("strip3"), d3, { e: open ? "🟢" : "🔴", t: open ? "營業中！" : "休息中" });
-runReel(document.getElementById("strip1"), d1.length, 1400, 392, null);
-runReel(document.getElementById("strip2"), d2.length, 2100, 494, null);
-runReel(document.getElementById("strip3"), d3.length, 2900, 587, function() {
-btn.disabled = false; btn.innerText = open ? "手氣超旺，再轉一次！" : "殘念休息中，再轉一次！";
-box.className = open ? "result-card" : "result-card closed";
-if (open) {
-tone(523, "triangle", 0.3, 0, 0.15); tone(659, "triangle", 0.3, 0.1, 0.15); tone(784, "triangle", 0.3, 0.2, 0.15); tone(1046, "triangle", 0.4, 0.3, 0.15);
-m.classList.add("win-glow"); fireConfetti();
-document.getElementById("resText").innerText = "🎉 中獎！【" + item.area + "】" + item.shop;
-document.getElementById("resAction").innerHTML = '<a class="btn-map" href="google.com' + encodeURIComponent("台中市北屯區 " + item.shop) + '" target="_blank">📍 Google 地圖導航';
+function go() {
+  const l = getL();
+  if (l.length === 0) { alert("目前該分類都在休息中喔！請取消勾選「僅抽營業中」試試！"); return; }
+  const it = l[Math.floor(Math.random() * l.length)], op = isOp(it);
+const b = document.getElementById("btn"), box = document.getElementById("res");
+b.disabled = true; b.innerText = "轉動中..."; box.style.display = "none";
+const a1 = [], a2 = [], a3 = [];
+for (let i = 0; i < 12; i++) { const r = db[Math.floor(Math.random() * db.length)]; a1.push(r.e + "
+" + r.d); }
+for (let i = 0; i < 18; i++) { const r = db[Math.floor(Math.random() * db.length)]; a2.push("🏪
+" + r.s); }
+for (let i = 0; i < 24; i++) { a3.push(i % 2 === 0 ? "🟢
+營業中" : "🔴
+休息中"); }
+roll(document.getElementById("st1"), a1, it.e + "
+" + it.d, 1300, 392, null);
+roll(document.getElementById("st2"), a2, "🏪
+" + it.s, 1900, 494, null);
+roll(document.getElementById("st3"), a3, op ? "🟢
+營業中！" : "🔴
+休息中", 2500, 587, function() {
+b.disabled = false; b.innerText = "再轉一次！"; box.className = op ? "res" : "res off";
+if (op) {
+beep(523, "triangle", 0.25, 0); beep(659, "triangle", 0.25, 0.1); beep(784, "triangle", 0.35, 0.2);
+document.getElementById("rt").innerText = "🎉 中獎！【" + it.a + "】" + it.s;
+document.getElementById("ra").innerHTML = '<a class="map-btn" href="google.com' + encodeURIComponent("台中市北屯區 " + it.s) + '" target="_blank">📍 Google 地圖導航';
 } else {
-tone(311, "sawtooth", 0.3, 0, 0.1); tone(277, "sawtooth", 0.3, 0.2, 0.1); tone(233, "sawtooth", 0.4, 0.4, 0.1);
-document.getElementById("resText").innerText = "🔴 殘念休息中！【" + item.area + "】" + item.shop;
-document.getElementById("resAction").innerHTML = '沒開門不算，再轉一次吧！';
+beep(311, "sawtooth", 0.25, 0); beep(246, "sawtooth", 0.35, 0.2);
+document.getElementById("rt").innerText = "🔴 殘念休息中！【" + it.a + "】" + it.s;
+document.getElementById("ra").innerHTML = '沒開門不算，再轉一次吧！';
 }
-document.getElementById("resHours").innerText = "必點：" + item.dish;
+document.getElementById("rh").innerText = "必點：" + it.d;
 box.style.display = "block";
 });
-}
-function fireConfetti() {
-const c = document.getElementById("confettiCanvas"), ctx = c.getContext("2d"); c.width = window.innerWidth; c.height = window.innerHeight;
-const cols = ["#ffd700", "#ff4757", "#2ed573", "#1e90ff", "#ffa502"], pts = [];
-for (let i = 0; i < 70; i++) pts.push({ x: c.width/2, y: c.height/2, vx: (Math.random()-0.5)*14, vy: (Math.random()-0.7)*14, s: 6, col: cols[i%5], a: 1 });
-function loop() {
-ctx.clearRect(0, 0, c.width, c.height); let ok = false;
-for (let i = 0; i < pts.length; i++) { const p = pts[i]; if (p.a > 0) { ok = true; p.x += p.vx; p.y += p.vy; p.vy += 0.35; p.a -= 0.02; ctx.globalAlpha = Math.max(0, p.a); ctx.fillStyle = p.col; ctx.fillRect(p.x, p.y, p.s, p.s); } }
-if (ok) requestAnimationFrame(loop); else ctx.clearRect(0, 0, c.width, c.height);
-}
-loop();
 }
