@@ -43,9 +43,7 @@
   <span class="clock-badge" id="liveClock">🕒 --:--</span>
   <button class="snd-btn" id="sndBtn" onclick="togSnd()">🔊 音效開</button>
 </div>
-<div class="header">
-  <h1>🎰 北屯區美食幸運拉霸機</h1>
-</div>
+<div class="header"><h1>🎰 北屯區美食幸運拉霸機</h1></div>
 <div class="main-arena">
   <div class="ad-column">
     <a class="ad-card" href="https://google.com" target="_blank"><span class="ad-tag">VIP 1</span><div class="ad-title">屋馬燒肉 崇德</div><div class="ad-sub">訂位贈私房菜</div></a>
@@ -131,59 +129,63 @@ function isOpenNow(s) {
 }
 function updateClock() {
   const n = new Date();
-const hh = n.getHours() < 10 ? "0" + n.getHours() : "" + n.getHours();
-const mm = n.getMinutes() < 10 ? "0" + n.getMinutes() : "" + n.getMinutes();
-document.getElementById("liveClock").innerText = "🕒 " + hh + ":" + mm;
+  const hh = n.getHours() < 10 ? "0" + n.getHours() : "" + n.getHours();
+  const mm = n.getMinutes() < 10 ? "0" + n.getMinutes() : "" + n.getMinutes();
+  document.getElementById("liveClock").innerText = "🕒 " + hh + ":" + mm;
 }
 setInterval(updateClock, 10000); updateClock();
 function getList() {
-const c = document.getElementById("catSelect").value;
-const only = document.getElementById("openCheck").checked;
-const res = [];
-for (let i = 0; i < shopsV2.length; i++) {
-const s = shopsV2[i];
-if ((c === "all" || s.cat === c) && (!only || isOpenNow(s))) res.push(s);
-}
-return res;
+  const c = document.getElementById("catSelect").value;
+  const only = document.getElementById("openCheck").checked;
+  const res = [];
+  for (let i = 0; i < shopsV2.length; i++) {
+    const s = shopsV2[i];
+    if ((c === "all" || s.cat === c) && (!only || isOpenNow(s))) res.push(s);
+  }
+  return res;
 }
 function updateCount() { document.getElementById("countText").innerText = "符合：" + getList().length + " 家店"; }
 updateCount();
+
 function spinV2() {
-const list = getList();
-if (list.length === 0) { alert("目前該分類都在休息中喔！請取消勾選「僅抽營業中」試試！"); return; }
-const idx = Math.floor(Math.random() * list.length);
-const item = list[idx];
-const open = isOpenNow(item);
-const btn = document.getElementById("spinBtn");
-const box = document.getElementById("resBox");
-btn.disabled = true; btn.innerText = "高速滾動中..."; box.style.display = "none";
-let step = 0;
-const timer = setInterval(function() {
-step++;
-playBeep(520, "triangle", 0.04, 0);
-const r = shopsV2[step % shopsV2.length];
-if (step <= 10) document.getElementById("s1").innerText = r.dish;
-if (step === 11) { document.getElementById("s1").innerText = item.dish; playBeep(392, "sine", 0.15, 0); }
-if (step <= 18) document.getElementById("s2").innerText = r.shop;
-if (step === 19) { document.getElementById("s2").innerText = item.shop; playBeep(494, "sine", 0.15, 0); }
-if (step <= 25) document.getElementById("s3").innerText = (step % 2 === 0) ? "🟢 營業中" : "🔴 休息中";
-if (step >= 26) {
-clearInterval(timer);
-document.getElementById("s3").innerText = open ? "🟢 營業中" : "🔴 休息中";
-playBeep(587, "sine", 0.15, 0);
-btn.disabled = false; btn.innerText = "再轉一次！";
-box.className = open ? "result-card" : "result-card closed";
-if (open) {
-playBeep(523, "triangle", 0.25, 0.1); playBeep(659, "triangle", 0.25, 0.2); playBeep(784, "triangle", 0.35, 0.3);
-document.getElementById("resText").innerText = "🎉 中獎！【" + item.area + "】" + item.shop;
-document.getElementById("resAction").innerHTML = '<a class="btn-map" href="google.com' + encodeURIComponent("台中市北屯區 " + item.shop) + '" target="_blank">📍 Google 地圖導航';
-} else {
-playBeep(311, "sawtooth", 0.25, 0.1); playBeep(246, "sawtooth", 0.35, 0.3);
-document.getElementById("resText").innerText = "🔴 殘念休息中！【" + item.area + "】" + item.shop;
-document.getElementById("resAction").innerHTML = '沒開門不算，再轉一次吧！';
+  const list = getList();
+  if (list.length === 0) { alert("目前該分類都在休息中喔！請取消勾選「僅抽營業中」試試！"); return; }
+  const idx = Math.floor(Math.random() * list.length);
+  const item = list[idx];
+  const open = isOpenNow(item);
+  const btn = document.getElementById("spinBtn");
+  const box = document.getElementById("resBox");
+  btn.disabled = true; btn.innerText = "高速滾動中..."; box.style.display = "none";
+  let step = 0;
+  const timer = setInterval(function() {
+    step++;
+    playBeep(520, "triangle", 0.04, 0);
+    const r = shopsV2[step % shopsV2.length];
+    if (step <= 10) document.getElementById("s1").innerText = r.dish;
+    if (step === 11) { document.getElementById("s1").innerText = item.dish; playBeep(392, "sine", 0.15, 0); }
+    if (step <= 18) document.getElementById("s2").innerText = r.shop;
+    if (step === 19) { document.getElementById("s2").innerText = item.shop; playBeep(494, "sine", 0.15, 0); }
+    if (step <= 25) document.getElementById("s3").innerText = (step % 2 === 0) ? "🟢 營業中" : "🔴 休息中";
+    if (step >= 26) {
+      clearInterval(timer);
+      document.getElementById("s3").innerText = open ? "🟢 營業中" : "🔴 休息中";
+      playBeep(587, "sine", 0.15, 0);
+      btn.disabled = false; btn.innerText = "再轉一次！";
+      box.className = open ? "result-card" : "result-card closed";
+      if (open) {
+        playBeep(523, "triangle", 0.25, 0.1); playBeep(659, "triangle", 0.25, 0.2); playBeep(784, "triangle", 0.35, 0.3);
+        document.getElementById("resText").innerText = "🎉 中獎！【" + item.area + "】" + item.shop;
+        document.getElementById("resAction").innerHTML = '<a class="btn-map" href="https://google.com' + encodeURIComponent("台中市北屯區 " + item.shop) + '" target="_blank">📍 Google 地圖導航</a>';
+      } else {
+        playBeep(311, "sawtooth", 0.25, 0.1); playBeep(246, "sawtooth", 0.35, 0.3);
+        document.getElementById("resText").innerText = "🔴 殘念休息中！【" + item.area + "】" + item.shop;
+        document.getElementById("resAction").innerHTML = '<div style="margin-top:6px;color:#ff7675;font-size:12px;">沒開門不算，再轉一次吧！</div>';
+      }
+      document.getElementById("resHours").innerText = "必點：" + item.dish;
+      box.style.display = "block";
+    }
+  }, 85);
 }
-document.getElementById("resHours").innerText = "必點：" + item.dish;
-box.style.display = "block";
-}
-}, 85);
-}
+</script>
+</body>
+</html>
