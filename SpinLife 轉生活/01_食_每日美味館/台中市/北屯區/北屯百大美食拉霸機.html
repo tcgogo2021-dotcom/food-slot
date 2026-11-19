@@ -212,18 +212,44 @@ const shopsV6 = [
 ];
 let snd = true, ac = null;
 function togSnd() { snd = !snd; document.getElementById("sndBtn").innerText = snd ? "🔊 音效開" : "🔇 靜音"; }
-function playBeep(f, type, dur, delay) {
-  if (!snd) return;
+function getAC() {
+  if (!snd) return null;
+  if (!ac) { const A = window.AudioContext || window.webkitAudioContext; if (A) ac = new A(); }
+  if (ac && ac.state === "suspended") ac.resume();
+  return ac;
+}
+function playBeep(f, type, dur, delay, vol) {
+  const ctx = getAC(); if (!ctx) return;
   try {
-    if (!ac) { const A = window.AudioContext || window.webkitAudioContext; if (A) ac = new A(); }
-    if (!ac) return;
-    if (ac.state === "suspended") ac.resume();
-    const o = ac.createOscillator(), g = ac.createGain();
-    o.type = type; o.frequency.setValueAtTime(f, ac.currentTime + delay);
-    g.gain.setValueAtTime(0.12, ac.currentTime + delay);
-    g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + delay + dur);
-    o.connect(g); g.connect(ac.destination);
-    o.start(ac.currentTime + delay); o.stop(ac.currentTime + delay + dur);
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, ctx.currentTime + delay);
+    g.gain.setValueAtTime(vol || 0.14, ctx.currentTime + delay);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + dur);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(ctx.currentTime + delay); o.stop(ctx.currentTime + delay + dur);
+  } catch (e) {}
+}
+function playJackpotSound() {
+  const notes = [523.25, 659.25, 783.99, 1046.5, 783.99, 1046.5];
+  const times = [0, 0.09, 0.18, 0.27, 0.42, 0.54];
+  for (let i = 0; i < notes.length; i++) playBeep(notes[i], "square", 0.22, times[i], 0.13);
+  for (let k = 0; k < 10; k++) playBeep(1800 + (k % 3) * 450, "sine", 0.08, 0.65 + k * 0.06, 0.11);
+}
+function playWahLose() {
+  const ctx = getAC(); if (!ctx) return;
+  try {
+    const tones = [349.23, 329.63, 311.13, 293.66];
+    for (let i = 0; i < tones.length; i++) {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = "sawtooth";
+      const t0 = ctx.currentTime + i * 0.24;
+      o.frequency.setValueAtTime(tones[i], t0);
+      if (i === 3) o.frequency.linearRampToValueAtTime(220, t0 + 0.55);
+      g.gain.setValueAtTime(0.12, t0);
+      g.gain.exponentialRampToValueAtTime(0.001, t0 + (i === 3 ? 0.6 : 0.22));
+      o.connect(g); g.connect(ctx.destination);
+      o.start(t0); o.stop(t0 + (i === 3 ? 0.6 : 0.22));
+    }
   } catch (e) {}
 }
 function isOpenNow(s) {
@@ -258,9 +284,9 @@ function rollStrip(el, arr, finText, ms, stopFreq, cb) {
   h += '<div class="reel-item">' + finText + '</div>';
   el.innerHTML = h; el.style.transition = "none"; el.style.transform = "translateY(0px)";
   let cnt = 0, max = Math.floor(ms / 110);
-  const iv = setInterval(function() { playBeep(520, "triangle", 0.04, 0); if (++cnt >= max) clearInterval(iv); }, 110);
+  const iv = setInterval(function() { playBeep(440 + (cnt % 4) * 110, "triangle", 0.05, 0, 0.09); if (++cnt >= max) clearInterval(iv); }, 110);
   setTimeout(function() { el.style.transition = "transform " + ms + "ms cubic-bezier(0.14, 0.86, 0.24, 1.02)"; el.style.transform = "translateY(" + (-(arr.length * 106)) + "px)"; }, 30);
-  setTimeout(function() { clearInterval(iv); playBeep(stopFreq, "sine", 0.16, 0); if (cb) cb(); }, ms + 40);
+  setTimeout(function() { clearInterval(iv); playBeep(stopFreq, "sine", 0.16, 0, 0.16); if (cb) cb(); }, ms + 40);
 }
 function fireConfetti() {
   const c = document.getElementById("confettiCanvas"), ctx = c.getContext("2d"); c.width = window.innerWidth; c.height = window.innerHeight;
@@ -296,12 +322,12 @@ function spinV6() {
     for (let j = 0; j < 5; j++) { const d = item.dishes[j]; tags += (d === hitDish) ? '<span class="dtag hit">★ ' + d + '</span>' : '<span class="dtag">' + d + '</span>'; }
     document.getElementById("resTags").innerHTML = tags;
     if (open) {
-      playBeep(523, "triangle", 0.25, 0.1); playBeep(659, "triangle", 0.25, 0.2); playBeep(784, "triangle", 0.35, 0.3);
+      playJackpotSound();
       m.classList.add("win-glow"); fireConfetti();
       document.getElementById("resText").innerText = (item.vip ? "👑 創始VIP推薦！【" : "🎉 中獎！【") + item.area + "】" + item.shop;
       document.getElementById("resAction").innerHTML = '<a class="btn-map" href="https://google.com' + encodeURIComponent("台中市北屯區 " + item.shop) + '" target="_blank">📍 Google 地圖導航</a><button class="btn-share" onclick="shareResult(\'' + item.shop + '\',\'' + item.area + '\',\'' + hitDish + '\')">📲 複製戰果揪友</button>';
     } else {
-      playBeep(311, "sawtooth", 0.25, 0.1); playBeep(246, "sawtooth", 0.35, 0.3);
+      playWahLose();
       document.getElementById("resText").innerText = "🔴 殘念休息中！【" + item.area + "】" + item.shop;
       document.getElementById("resAction").innerHTML = '<div style="margin-top:6px;color:#ff7675;font-size:12px;">沒開門不算，再轉一次吧！</div>';
     }
