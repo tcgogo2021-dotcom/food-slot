@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpinLife 轉生活｜台中市西屯區・百大美食拉霸機</title>
+<style>
+  * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Microsoft JhengHei", sans-serif; }
+  body { margin: 0; padding: 12px 6px; background: linear-gradient(135deg, #141424 0%, #1a2238 100%); color: #fff; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
+  .top-bar { width: 100%; max-width: 960px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 6px; gap: 4px; }
+  .home-btn { background: #ffd700; color: #1a1a2e; font-size: 12px; font-weight: 900; padding: 4px 10px; border-radius: 20px; text-decoration: none; white-space: nowrap; }
+  .clock-badge { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,215,0,0.4); color: #ffe066; font-size: 12px; font-weight: bold; padding: 4px 10px; border-radius: 20px; }
+  .snd-btn { background: rgba(255,255,255,0.15); border: 1px solid #ffd700; color: #fff; font-size: 12px; padding: 4px 10px; border-radius: 20px; cursor: pointer; white-space: nowrap; }
+  .header { text-align: center; margin-bottom: 10px; }
+  .header h1 { margin: 0; font-size: 20px; color: #ffd700; text-shadow: 0 2px 10px rgba(255,215,0,0.4); }
+  .header p { margin: 3px 0 0; font-size: 11px; color: #b0b8d1; }
+  .main-arena { display: flex; flex-direction: row; align-items: stretch; justify-content: center; gap: 6px; width: 100%; max-width: 960px; }
+  .ad-column { flex: 0 0 21%; max-width: 175px; min-width: 72px; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; }
+  .ad-card { flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,215,0,0.4); border-radius: 10px; padding: 6px 4px; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; text-decoration: none; color: #fff; min-height: 72px; }
+  .ad-tag { font-size: 9px; font-weight: bold; padding: 1px 5px; border-radius: 6px; margin-bottom: 3px; background: #ffd700; color: #1a1a2e; }
+  .ad-title { font-size: 11px; font-weight: bold; line-height: 1.2; margin-bottom: 2px; }
+  .ad-sub { font-size: 9px; color: #ffe066; }
+  .center-stage { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; }
+  .filter-panel { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,215,0,0.3); border-radius: 12px; padding: 10px; width: 100%; margin-bottom: 10px; }
+  select { width: 100%; padding: 8px; border-radius: 8px; border: none; background: #fff; color: #1a1a2e; font-size: 13px; font-weight: bold; outline: none; }
+  .open-row { margin-top: 8px; display: flex; flex-direction: column; align-items: flex-start; gap: 5px; }
+  .machine { background: #e94560; padding: 14px 8px; border-radius: 18px; width: 100%; border: 3px solid #ffd700; box-shadow: 0 8px 20px rgba(0,0,0,0.5); }
+  .machine.win-glow { animation: winPulse 0.6s ease-in-out 3; }
+  @keyframes winPulse { 0%, 100% { box-shadow: 0 0 15px #ffd700; } 50% { box-shadow: 0 0 38px #fff, 0 0 55px #ffd700; } }
+  .slots { display: flex; gap: 5px; background: #0f3460; padding: 10px 6px; border-radius: 10px; }
+  .slot-win { flex: 1; background: #fff; color: #1a1a2e; border-radius: 8px; height: 106px; position: relative; overflow: hidden; box-shadow: inset 0 8px 10px -6px rgba(0,0,0,0.4), inset 0 -8px 10px -6px rgba(0,0,0,0.4); }
+  .slot-label { font-size: 9px; color: #fff; background: rgba(15,52,96,0.9); padding: 1px 6px; border-radius: 6px; position: absolute; top: 4px; left: 50%; transform: translateX(-50%); font-weight: bold; z-index: 5; white-space: nowrap; }
+  .reel-strip { position: absolute; top: 0; left: 0; width: 100%; will-change: transform; }
+  .reel-item { height: 106px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 16px 3px 4px; font-size: 13px; font-weight: 900; line-height: 1.2; color: #1a1a2e; }
+  .btn-spin { width: 100%; margin-top: 14px; padding: 14px; font-size: 16px; font-weight: bold; color: #1a1a2e; background: #ffd700; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 0 #b39700; }
+  .btn-spin:disabled { background: #888; box-shadow: none; color: #ccc; }
+  .result-card { display: none; margin-top: 12px; background: rgba(255,255,255,0.12); border: 1.5px solid #ffd700; border-radius: 12px; padding: 12px; width: 100%; text-align: center; }
+  .result-card.closed { border-color: #ff6b6b; background: rgba(255,75,75,0.15); }
+  .dish-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; margin: 8px 0; }
+  .dtag { background: rgba(255,255,255,0.15); padding: 2px 7px; border-radius: 10px; font-size: 11px; }
+  .dtag.hit { background: #ffd700; color: #1a1a2e; font-weight: bold; }
+  .act-row { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .btn-map { display: inline-block; background: #00b894; color: #fff; text-decoration: none; padding: 8px 14px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+  .btn-share { background: #0984e3; color: #fff; border: none; padding: 8px 14px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; }
+  .footer-biz { margin-top: 16px; text-align: center; font-size: 11px; color: #8c96b5; }
+  .footer-biz a { color: #ffd700; text-decoration: underline; font-weight: bold; }
+  #confettiCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
+</style>
+</head>
+<body>
+<canvas id="confettiCanvas"></canvas>
+<div class="top-bar">
+  <a class="home-btn" href="../../../../index.html">🏠 回總部大廳</a>
+  <span class="clock-badge" id="liveClock">🕒 --:--</span>
+  <button class="snd-btn" id="sndBtn" onclick="togSnd()">🔊 音效開</button>
+</div>
+<div class="header">
+  <h1>🎰 台中市西屯區・百大美食拉霸機</h1>
+  <p>5 大精選分類 × 每類限量 20 席 × 嚴選 500 道招牌菜</p>
+</div>
+<div class="main-arena">
+  <div class="ad-column">
+    <a class="ad-card" href="https://google.com" target="_blank"><span class="ad-tag">VIP 1</span><div class="ad-title">茶六燒肉 朝富</div><div class="ad-sub">七期人氣燒肉名店</div></a>
+    <a class="ad-card" href="https://google.com" target="_blank"><span class="ad-tag">VIP 2</span><div class="ad-title">刁民酸菜魚 逢甲</div><div class="ad-sub">秘罈酸菜魚霸主</div></a>
+    <a class="ad-card" href="javascript:void(0)" onclick="location.href=encodeURI('../../../99_公司總部與招商資料/轉生活創業與招商簡報.html')" style="background:linear-gradient(135deg,#2c1e05,#1a1a2e); border:1.5px solid #ffd700; padding:4px;"><div style="background:#ffd700;color:#1a1a2e;font-size:10px;font-weight:900;padding:2px 6px;border-radius:6px;margin-bottom:3px;line-height:1.15;">🔥 旺鋪<br>招商中</div><div class="ad-title" style="color:#ffd700;">西屯創始席位</div><div class="ad-sub">點擊看招商方案</div></a>
+    <a class="ad-card" href="javascript:void(0)" onclick="location.href=encodeURI('../../../99_公司總部與招商資料/轉生活創業與招商簡報.html')" style="background:linear-gradient(135deg,#2c1e05,#1a1a2e); border:1.5px solid #ffd700; padding:4px;"><div style="background:#ffd700;color:#1a1a2e;font-size:10px;font-weight:900;padding:2px 6px;border-radius:6px;margin-bottom:3px;line-height:1.15;">🔥 旺鋪<br>招商中</div><div class="ad-title" style="color:#ffd700;">逢甲黃金席位</div><div class="ad-sub">高精準在地導流</div></a>
+    <a class="ad-card" href="javascript:void(0)" onclick="location.href=encodeURI('../../../99_公司總部與招商資料/轉生活創業與招商簡報.html')" style="background:linear-gradient(135deg,#2c1e05,#1a1a2e); border:1.5px solid #ffd700; padding:4px;"><div style="background:#ffd700;color:#1a1a2e;font-size:10px;font-weight:900;padding:2px 6px;border-radius:6px;margin-bottom:3px;line-height:1.15;">🔥 旺鋪<br>招商中</div><div class="ad-title" style="color:#ffd700;">七期特約席位</div><div class="ad-sub">歡迎名店進駐</div></a>
+  </div>
+  <div class="center-stage">
+    <div class="filter-panel">
+      <select id="catSelect" onchange="updateCount()">
+        <option value="all">🎲 1. 美食隨機抽（全區 100 家總池）</option>
+        <option value="人氣小吃">🥢 2. 人氣小吃（限量 20 家）</option>
+        <option value="台味合菜">🇹🇼 3. 台味合菜（限量 20 家）</option>
+        <option value="鍋物燒烤">🍲 4. 鍋物燒烤（限量 20 家）</option>
+        <option value="異國美饌">🌍 5. 異國美饌（限量 20 家）</option>
+        <option value="咖啡午茶">☕ 6. 咖啡午茶（限量 20 家）</option>
+      </select>
+      <div class="open-row">
+        <label style="display:flex; align-items:center; gap:5px; font-size:12px; color:#ffe066; font-weight:bold; cursor:pointer;"><input type="checkbox" id="openCheck" onchange="updateCount()" style="width:15px;height:15px;"> 🟢 僅抽目前營業中</label>
+        <span id="countText" style="font-size:11px; color:#b0b8d1; align-self:flex-end;">統計中...</span>
+      </div>
+    </div>
+    <div class="machine" id="machineBox">
+      <div class="slots">
+        <div class="slot-win"><span class="slot-label">第一軸・菜色</span><div class="reel-strip" id="st1"><div class="reel-item">🍽️<br>準備開轉</div></div></div>
+        <div class="slot-win"><span class="slot-label">第二軸・店家</span><div class="reel-strip" id="st2"><div class="reel-item">🏪<br>西屯好店</div></div></div>
+        <div class="slot-win"><span class="slot-label">第三軸・狀態</span><div class="reel-strip" id="st3"><div class="reel-item">⏰<br>即時對時</div></div></div>
+      </div>
+      <button class="btn-spin" id="spinBtn" onclick="spinXitun()">西屯美食，開轉！</button>
+    </div>
+    <div class="result-card" id="resBox">
+      <div id="resText" style="font-weight:bold;font-size:14px;"></div>
+      <div id="resHours" style="font-size:12px;color:#ccc;margin-top:4px;"></div>
+      <div class="dish-tags" id="resTags"></div>
+      <div class="act-row" id="resAction"></div>
+    </div>
+  </div>
+  <div class="ad-column">
+    <a class="ad-card" href="https://google.com" target="_blank"><span class="ad-tag">VIP 6</span><div class="ad-title">激旨燒鳥 逢甲</div><div class="ad-sub">串燒配生啤首選</div></a>
+    <a class="ad-card" href="https://google.com" target="_blank"><span class="ad-tag">VIP 7</span><div class="ad-title">法月當代料理</div><div class="ad-sub">七期精緻法式饗宴</div></a>
+    <a class="ad-card" href="javascript:void(0)" onclick="location.href=encodeURI('../../../99_公司總部與招商資料/轉生活創業與招商簡報.html')" style="background:linear-gradient(135deg,#2c1e05,#1a1a2e); border:1.5px solid #ffd700; padding:4px;"><div style="background:#ffd700;color:#1a1a2e;font-size:10px;font-weight:900;padding:2px 6px;border-radius:6px;margin-bottom:3px;line-height:1.15;">🔥 旺鋪<br>招商中</div><div class="ad-title" style="color:#ffd700;">青海創始席位</div><div class="ad-sub">一鍵導航吸客</div></a>
+    <a class="ad-card" href="javascript:void(0)" onclick="location.href=encodeURI('../../../99_公司總部與招商資料/轉生活創業與招商簡報.html')" style="background:linear-gradient(135deg,#2c1e05,#1a1a2e); border:1.5px solid #ffd700; padding:4px;"><div style="background:#ffd700;color:#1a1a2e;font-size:10px;font-weight:900;padding:2px 6px;border-radius:6px;margin-bottom:3px;line-height:1.15;">🔥 旺鋪<br>招商中</div><div class="ad-title" style="color:#ffd700;">限量廣告席位</div><div class="ad-sub">每類僅限20席</div></a>
+    <a class="ad-card" href="javascript:void(0)" onclick="location.href=encodeURI('../../../99_公司總部與招商資料/轉生活創業與招商簡報.html')" style="background:linear-gradient(135deg,#2c1e05,#1a1a2e); border:1.5px solid #ffd700; padding:4px;"><div style="background:#ffd700;color:#1a1a2e;font-size:10px;font-weight:900;padding:2px 6px;border-radius:6px;margin-bottom:3px;line-height:1.15;">🔥 旺鋪<br>招商中</div><div class="ad-title" style="color:#ffd700;">特約合作席位</div><div class="ad-sub">點擊看招商方案</div></a>
+  </div>
+</div>
+<div class="footer-biz">營運示範站：台中市西屯區｜<a href="javascript:void(0)" onclick="location.href=encodeURI('../../../99_公司總部與招商資料/轉生活創業與招商簡報.html')">📊 查看創始商家招商簡報</a></div>
+<script>
+const shopsXitun = [
+  { vip: false, w: 1, cat: "人氣小吃", shop: "逢甲明倫蛋餅", area: "逢甲商圈", open: 15, close: 24.5, dishes: ["招牌甜辣醬蛋餅", "胡椒粉蛋餅", "醬油蛋餅", "辣椒粉蛋餅", "雙蛋蛋餅"] },
+  { vip: false, w: 1, cat: "人氣小吃", shop: "逢甲官芝霖大腸包小腸", area: "逢甲商圈", open: 12, close: 24.5, dishes: ["原味大腸包小腸", "蒜味大腸包小腸", "黑胡椒口味", "芥末口味", "辣味大腸包小腸"] },
+  { vip: false, w: 1, cat: "人氣小吃", shop: "逢甲日船章魚小丸子", area: "逢甲商圈", open: 15, close: 24.5, dishes: ["原味柴魚章魚燒", "芥末海苔章魚燒", "起司章魚燒", "明太子章魚燒", "辣味章魚燒"] },
+  { vip: false, w: 1, cat: "人氣小吃", shop: "逢甲溫家地瓜球", area: "逢甲商圈", open: 16.5, close: 23.5, dishes: ["手工現炸地瓜球", "梅粉地瓜球", "蜜地瓜", "綜合地瓜球", "大份地瓜球"] },
+  { vip: false, w: 1, cat: "人氣小吃", shop: "逢甲一心素食臭豆腐", area: "逢甲商圈", open: 16, close: 23, dishes: ["脆皮臭豆腐", "古早味麵線糊", "台式泡菜", "麻辣臭豆腐", "綜合雙拼"] },
+  { vip: false, w: 1, cat: "人氣小吃", shop: "逢甲海邊小屋乾燒蛤", area: "逢甲商圈", open: 17, close: 22.5, dishes: ["原味吐沙乾燒蛤", "蒜香乾燒蛤", "黑胡椒乾燒蛤", "塔香乾燒蛤", "檸檬乾燒蛤"] },
+  { vip: false, w: 1, cat: "人氣小吃", shop: "逢甲黃金右腿左腿", area: "逢甲商圈", open: 16, close: 23.5, dishes: ["起司焗烤無骨雞腿", "咔啦脆皮雞腿排", "莎莎醬雞腿", "蜂蜜芥末雞腿", "泰式酸辣雞腿"] },
+  { vip: false, w: 1, cat: "人氣小吃", shop: "西屯路阿財米糕", area: "西屯路二段", open: 10, close: 20, dishes: ["招牌筒仔米糕", "古早味肉羹湯", "魯肉飯", "乾意麵", "滷蛋貢丸"] },
+  { vip: false, w: 1, cat: "人氣小吃", shop: "青海路水湳市場鴨肉飯", area: "青海路二段", open: 11, close: 20.5, dishes: ["煙燻鴨肉飯", "當歸鴨麵線", "鴨油米血糕", "鴨肉切盤", "下水湯"] },
+  { vip: false, w: 1, cat: "人氣小吃", shop: "漢口路阿嬤肉圓", area: "漢口路二段", open: 11, close: 19.5, dishes: ["低溫油泡肉圓", "四神湯", "綜合丸子湯", "甜不辣", "米糕"] },
+  { vip: false, w: 1, cat: "人氣小吃", shop: "逢甲大甲芋頭城", area: "逢甲商圈", open: 12, close: 24.5, dishes: ["芋圓綜合冰", "蜜芋頭牛奶冰", "紅豆芋圓湯", "仙草凍芋圓", "薏仁芋圓"] },
+  { vip: false, w: 1, cat: "人氣小吃", shop: "西屯路傳統炒麵豬血湯", area: "西屯路三段", open: 6, close: 13.5, dishes: ["台中傳統炒麵", "招牌豬血湯", "綜合大腸湯", "東泉辣椒醬拌麵", "滷肉飯"] },
+  { vip: false, w: 1, cat: "人氣小吃", shop: "逢甲按摩雞排", area: "逢甲商圈", open: 16, close: 24, dishes: ["招牌按摩大雞排", "無骨鹽酥雞", "酥炸甜不辣", "百頁豆腐", "甘梅地瓜"] },
+  { vip: false, w: 1, cat: "人氣小吃", shop: "逢甲御品元冰火湯圓", area: "逢甲商圈", open: 17, close: 24, dishes: ["桂花綜合湯圓冰", "酒釀加蛋湯圓", "花生芝麻湯圓", "檸檬桂花冰", "熱紅豆湯圓"] },
+  { vip: false, w: 1, cat: "人氣小吃", shop: "上石路手工水餃酸辣湯", area: "上石路商圈", open: 11, close: 20.5, dishes: ["高麗菜鮮肉水餃", "韭菜水餃", "招牌酸辣湯", "滷味拼盤", "燙青菜"] },
+  { vip: false, w: 1, cat: "人氣小吃", shop: "逢甲短腿阿鹿餅乾", area: "逢甲商圈", open: 16, close: 23, dishes: ["可可亞曲奇餅乾", "原味奶酥曲奇", "抹茶曲奇餅乾", "起司曲奇", "綜合禮盒"] },
+  { vip: false, w: 1, cat: "人氣小吃", shop: "黎明路老牌牛肉麵", area: "黎明路三段", open: 11, close: 20.5, dishes: ["紅燒半筋半肉麵", "清燉牛肉麵", "牛肉湯餃", "滷牛肚拼盤", "涼拌小黃瓜"] },
+  { vip: false, w: 1, cat: "人氣小吃", shop: "逢甲金牌巨無霸臭豆腐", area: "逢甲商圈", open: 16, close: 24, dishes: ["巨無霸脆皮臭豆腐", "麻辣鴨血臭豆腐", "獨門蒜泥醬豆腐", "台式泡菜", "大腸麵線"] },
+  { vip: false, w: 1, cat: "人氣小吃", shop: "河南路嘉義火雞肉飯", area: "河南路二段", open: 10.5, close: 21, dishes: ["火雞肉片飯", "招牌雞魯飯", "半熟荷包蛋", "下水湯", "白菜滷"] },
+  { vip: false, w: 1, cat: "人氣小吃", shop: "逢甲小三元湯包", area: "逢甲商圈", open: 15, close: 23.5, dishes: ["爆汁鮮肉湯包", "絲瓜蝦仁湯包", "蟹黃湯包", "酸辣湯", "紅茶豆漿"] },
+  { vip: false, w: 1, cat: "台味合菜", shop: "逢甲海產熱炒總匯", area: "逢甲商圈", open: 17, close: 25.5, dishes: ["宮保雞丁", "鳳梨蝦球", "三杯中卷", "客家小炒", "清蒸鱸魚"] },
+  { vip: false, w: 1, cat: "台味合菜", shop: "西屯路鵝肉大王", area: "西屯路二段", open: 16, close: 24, dishes: ["鹽水鵝肉切盤", "招牌鵝油拌飯", "鵝腸下水湯", "滷桂竹筍", "炒蛤蜊"] },
+  { vip: false, w: 1, cat: "台味合菜", shop: "青海路港式燒臘快餐", area: "青海路二段", open: 10.5, close: 20, dishes: ["脆皮燒肉三寶飯", "蜜汁叉燒飯", "玫瑰油雞腿飯", "廣式鴨腿飯", "例湯"] },
+  { vip: false, w: 1, cat: "台味合菜", shop: "市政路新台菜餐廳", area: "市政路商圈", open: 11.5, close: 21.5, dishes: ["古早味紅蟳米糕", "脆皮放山雞", "金沙中卷", "老菜脯雞湯", "芋泥鴨"] },
+  { vip: false, w: 1, cat: "台味合菜", shop: "漢口路排骨飯老店", area: "漢口路二段", open: 10.5, close: 20.5, dishes: ["古早味炸排骨飯", "蜜汁大雞腿飯", "香酥鱈魚飯", "控肉便當", "味噌湯"] },
+  { vip: false, w: 1, cat: "台味合菜", shop: "河南路砂鍋魚頭專門", area: "河南路二段", open: 11.5, close: 21.5, dishes: ["招牌砂鍋魚頭", "櫻花蝦高麗菜", "金沙炸豆腐", "古早味魯肉飯", "冬瓜茶"] },
+  { vip: false, w: 1, cat: "台味合菜", shop: "西屯路深夜清粥小菜", area: "西屯路二段", open: 17, close: 26, dishes: ["地瓜稀飯", "古早味菜脯蛋", "紅燒三層肉", "滷虱目魚肚", "炒空心菜"] },
+  { vip: false, w: 1, cat: "台味合菜", shop: "逢甲北平烤鴨一鴨二吃", area: "逢甲商圈", open: 10.5, close: 20, dishes: ["片皮櫻桃烤鴨", "甜麵醬蔥段", "大火爆炒鴨架", "荷葉餅", "滷鴨翅"] },
+  { vip: false, w: 1, cat: "台味合菜", shop: "中科商圈客家小炒館", area: "西屯路三段", open: 11, close: 21, dishes: ["正宗客家小炒", "薑絲炒大腸", "梅干扣肉", "客家鹹湯圓", "福菜肉片湯"] },
+  { vip: false, w: 1, cat: "台味合菜", shop: "黎明路池上木片便當", area: "黎明路二段", open: 10.5, close: 20, dishes: ["招牌木片便當", "香酥炸雞腿飯", "古早味控肉飯", "香煎鯖魚飯", "排骨飯"] },
+  { vip: false, w: 1, cat: "台味合菜", shop: "朝富路台式海鮮酒家", area: "朝富路商圈", open: 11.5, close: 22, dishes: ["清蒸石斑魚", "避風塘炒蟹", "蒜泥鮮蝦粉絲煲", "海鮮炒麵", "佛跳牆"] },
+  { vip: false, w: 1, cat: "台味合菜", shop: "福星路港式茶餐廳", area: "福星路商圈", open: 11, close: 21.5, dishes: ["鮮蝦雲吞撈麵", "蜜汁叉燒包", "臘味蘿蔔糕", "冰火菠蘿油", "絲襪奶茶"] },
+  { vip: false, w: 1, cat: "台味合菜", shop: "西屯深夜海鮮砂鍋粥", area: "青海路二段", open: 17.5, close: 25.5, dishes: ["鮮蝦干貝砂鍋粥", "鮑魚雞肉粥", "清炒水蓮", "老皮嫩肉", "炸花枝丸"] },
+  { vip: false, w: 1, cat: "台味合菜", shop: "台灣大道甕缸雞餐廳", area: "台灣大道三段", open: 11, close: 21.5, dishes: ["招牌甕缸雞", "雞油燜竹筍", "酥炸溪蝦", "清炒山蘇", "雞油拌飯"] },
+  { vip: false, w: 1, cat: "台味合菜", shop: "文心路台味辦桌菜", area: "文心路三段", open: 11, close: 21, dishes: ["筍乾封肉", "糖醋排骨", "海鮮羹", "白斬土雞", "炒米粉"] },
+  { vip: false, w: 1, cat: "台味合菜", shop: "逢甲眷村私房麵食館", area: "逢甲商圈", open: 11.5, close: 21, dishes: ["紅燒獅子頭", "蔥燒鯽魚", "眷村炒餅", "酸白菜牛肉", "番茄蛋花湯"] },
+  { vip: false, w: 1, cat: "台味合菜", shop: "中科台式鐵板燒快炒", area: "國安一路", open: 11, close: 21.5, dishes: ["黑胡椒沙朗牛排", "香煎雞腿排", "塔香蛤蜊", "九層塔蛋", "炒豆芽高麗菜"] },
+  { vip: false, w: 1, cat: "台味合菜", shop: "至善路古早味控肉飯", area: "至善路商圈", open: 10.5, close: 20.5, dishes: ["肥瘦相間控肉飯", "腳庫飯", "古早味白菜滷", "滷筍乾", "味噌湯"] },
+  { vip: false, w: 1, cat: "台味合菜", shop: "惠來路精緻台菜私廚", area: "惠來路二段", open: 11.5, close: 21.5, dishes: ["三杯土雞腿", "菜脯煎蛋", "蔭豉鮮蚵", "麻油松阪豬", "剝皮辣椒雞湯"] },
+  { vip: false, w: 1, cat: "台味合菜", shop: "福科路平價熱炒100", area: "福科路商圈", open: 17, close: 25, dishes: ["蔥爆牛肉", "椒鹽龍珠", "苦瓜鹹蛋", "蒜泥白肉", "炒海瓜子"] },
+  { vip: true, w: 3, cat: "鍋物燒烤", shop: "茶六燒肉堂 朝富店", area: "朝富路商圈", open: 11, close: 26, dishes: ["極黑和牛套餐", "松阪豬肉", "山藥烤物", "鮭魚味噌湯", "雪花冰"] },
+  { vip: true, w: 3, cat: "鍋物燒烤", shop: "刁民酸菜魚 逢甲店", area: "福星路商圈", open: 11.5, close: 26, dishes: ["秘罈酸菜魚", "初戀番茄魚", "沙漏酥魚皮", "硬硬的炸雞雞", "神級奶茶"] },
+  { vip: true, w: 3, cat: "鍋物燒烤", shop: "激旨燒鳥 逢甲總店", area: "文華路商圈", open: 17, close: 24.5, dishes: ["豬五花包麻糬", "牛肉包起司串", "明太子雞肉串", "生啤酒", "免費雞白湯"] },
+  { vip: false, w: 1, cat: "鍋物燒烤", shop: "屋馬燒肉 園邸店", area: "公益路二段", open: 11, close: 24, dishes: ["日本A5和牛拼盤", "伊比利豬梅花", "屋馬主廚沙拉", "干貝海鮮粥", "雞湯"] },
+  { vip: false, w: 1, cat: "鍋物燒烤", shop: "屋馬燒肉 中港店", area: "台灣大道三段", open: 11, close: 24, dishes: ["極盛和牛套餐", "厚切牛舌", "韓式泡菜", "海鮮粥", "哈根達斯"] },
+  { vip: false, w: 1, cat: "鍋物燒烤", shop: "老井極上燒肉 福科店", area: "福科路商圈", open: 11, close: 24, dishes: ["極上和牛套餐", "炙燒鮭魚壽司", "松露和牛釜飯", "厚切牛舌", "白桃醋飲"] },
+  { vip: false, w: 1, cat: "鍋物燒烤", shop: "森森燒肉 黎明店", area: "黎明路二段", open: 11.5, close: 23.5, dishes: ["A5和牛雙人套餐", "伊比利豬", "自助甜點沙拉吧", "咖哩飯", "雞湯"] },
+  { vip: false, w: 1, cat: "鍋物燒烤", shop: "輕井澤鍋物 市政店", area: "文心路二段", open: 11, close: 26, dishes: ["和風培根牛肉鍋", "四川麻辣鴨血鍋", "梅花豬肉鍋", "滑嫩雞柳鍋", "紅茶冰沙"] },
+  { vip: false, w: 1, cat: "鍋物燒烤", shop: "海底撈火鍋 台中大遠百", area: "台灣大道三段", open: 11, close: 27, dishes: ["麻辣清油火鍋", "三鮮火鍋", "招牌撈派滑牛肉", "撈麵表演", "蝦滑"] },
+  { vip: false, w: 1, cat: "鍋物燒烤", shop: "築間幸福鍋物 逢甲店", area: "福星路商圈", open: 11, close: 28, dishes: ["招牌石頭湯底", "霜降牛肉鍋", "海鮮總匯鍋", "松阪豬肉鍋", "自助蔬菜吧"] },
+  { vip: false, w: 1, cat: "鍋物燒烤", shop: "萬客什鍋 青海店", area: "青海路二段", open: 11.5, close: 28, dishes: ["萬客燒酒雞鍋", "剝皮辣椒烏骨雞鍋", "雲朵白糖粿", "麻油炸蛋", "雪花牛"] },
+  { vip: false, w: 1, cat: "鍋物燒烤", shop: "肉多多火鍋 台中逢甲店", area: "福星路商圈", open: 11.5, close: 27.5, dishes: ["爆炒川府麻辣鍋", "浮誇肉蛋糕", "爆炒蒜頭雞白湯", "自助蔬菜吧", "霜淇淋"] },
+  { vip: false, w: 1, cat: "鍋物燒烤", shop: "燒肉眾精緻炭火燒肉", area: "文心路三段", open: 12, close: 24, dishes: ["日本A5和牛吃到飽", "炭烤天使紅蝦", "厚切牛舌", "韓式泡菜", "烤麻糬"] },
+  { vip: false, w: 1, cat: "鍋物燒烤", shop: "逢甲三媽臭臭鍋", area: "福星路商圈", open: 11, close: 24, dishes: ["招牌大腸臭臭鍋", "海鮮豆腐鍋", "韓式泡菜鍋", "四川麻辣鍋", "鴨血煲"] },
+  { vip: false, w: 1, cat: "鍋物燒烤", shop: "西屯路炭火薑母鴨", area: "西屯路二段", open: 16, close: 25, dishes: ["古法炭火薑母鴨", "爆漿鴨肉丸", "凍豆腐", "高山高麗菜", "麻油麵線"] },
+  { vip: false, w: 1, cat: "鍋物燒烤", shop: "青海路正宗羊肉爐", area: "青海路二段", open: 16.5, close: 24.5, dishes: ["當歸帶皮羊肉爐", "手抓羊大骨", "涮羊肉片", "羊油麵線", "腐乳醬"] },
+  { vip: false, w: 1, cat: "鍋物燒烤", shop: "七期頂級和牛燒肉會所", area: "市政北二路", open: 17, close: 24, dishes: ["極上和牛肋眼", "海膽和牛握壽司", "松露和牛釜飯", "厚切牛舌", "清酒"] },
+  { vip: false, w: 1, cat: "鍋物燒烤", shop: "中科石頭小火鍋", area: "西屯路三段", open: 11, close: 22.5, dishes: ["爆炒蒜香牛肉鍋", "濃醇牛奶起司鍋", "海鮮總匯鍋", "滷鴨血", "冬瓜檸檬"] },
+  { vip: false, w: 1, cat: "鍋物燒烤", shop: "逢甲歡樂星串燒吧", area: "文華路商圈", open: 17, close: 24.5, dishes: ["明太子雞腿串", "培根干貝串", "鹽烤秋刀魚", "烤甜不辣", "生啤酒"] },
+  { vip: false, w: 1, cat: "鍋物燒烤", shop: "河南路個人麻辣燙", area: "河南路二段", open: 16.5, close: 24, dishes: ["招牌麻辣鴨血", "老油條", "手工魚餃", "雪花牛肉片", "王子麵"] },
+  { vip: true, w: 3, cat: "異國美饌", shop: "法月當代料理", area: "惠文路商圈", open: 11.5, close: 21.5, dishes: ["法式主廚季節套餐", "香煎鴨胸", "松露濃湯", "法式手工甜點", "餐前氣泡飲"] },
+  { vip: false, w: 1, cat: "異國美饌", shop: "金色三麥 台中市政店", area: "市政路商圈", open: 11.5, close: 24, dishes: ["現釀蜂蜜啤酒", "經典大拼盤", "西班牙海鮮燉飯", "椒麻雞", "德國豬腳"] },
+  { vip: false, w: 1, cat: "異國美饌", shop: "藏壽司 台中中港店", area: "台灣大道三段", open: 11, close: 22, dishes: ["炙燒鮭魚肚", "北海道大帆立貝", "鮮蝦天婦羅手卷", "茶碗蒸", "豆乳甜甜圈"] },
+  { vip: false, w: 1, cat: "異國美饌", shop: "一蘭拉麵 台中朝富店", area: "朝富路商圈", open: 0, close: 24, dishes: ["天然豚骨湯拉麵", "秘製赤紅醬汁", "半熟鹽味蛋", "加麵替玉", "抹茶杏仁豆腐"] },
+  { vip: false, w: 1, cat: "異國美饌", shop: "鼎泰豐 台中大遠百店", area: "台灣大道三段", open: 11, close: 21.5, dishes: ["黃金十八摺小籠包", "蝦仁蛋炒飯", "紅油抄手", "酸辣湯", "芋泥小籠包"] },
+  { vip: false, w: 1, cat: "異國美饌", shop: "添好運 台中大遠百店", area: "台灣大道三段", open: 11, close: 21.5, dishes: ["酥皮焗叉燒包", "晶瑩鮮蝦餃", "香煎蘿蔔糕", "鮑汁悶鳳爪", "楊枝甘露"] },
+  { vip: false, w: 1, cat: "異國美饌", shop: "瓦城泰國料理 新光三越", area: "台灣大道三段", open: 11, close: 21.5, dishes: ["原味月亮蝦餅", "泰式打拋豬", "檸檬清蒸魚", "綠咖哩椰汁雞", "摩摩喳喳"] },
+  { vip: false, w: 1, cat: "異國美饌", shop: "逢甲韓式炸雞專賣店", area: "福星路商圈", open: 16, close: 24, dishes: ["洋釀半半炸雞", "蜂蜜蒜味炸雞", "起司辣炒年糕", "海苔拳頭飯", "醃蘿蔔"] },
+  { vip: false, w: 1, cat: "異國美饌", shop: "青海路義式手作披薩", area: "青海路二段", open: 11.5, close: 21.5, dishes: ["瑪格麗特皇后披薩", "松露野菇義大利麵", "義式烤雞翅", "凱撒沙拉", "提拉米蘇"] },
+  { vip: false, w: 1, cat: "異國美饌", shop: "西屯路越南生牛肉河粉", area: "西屯路二段", open: 11, close: 20.5, dishes: ["生牛肉河粉", "越式炸春捲", "燒肉法國麵包", "涼拌木瓜絲", "滴漏咖啡"] },
+  { vip: false, w: 1, cat: "異國美饌", shop: "中科美式手工牛肉堡", area: "國安一路", open: 11.5, close: 21.5, dishes: ["花生醬培根牛肉堡", "雙層起司堡", "松露細薯條", "香草奶昔", "水牛城辣翅"] },
+  { vip: false, w: 1, cat: "異國美饌", shop: "朝富路日式居酒屋", area: "朝富路商圈", open: 17.5, close: 25, dishes: ["明太子烤山藥", "鹽烤松阪豬", "午仔魚一夜干", "鮭魚烤飯糰", "生啤酒"] },
+  { vip: false, w: 1, cat: "異國美饌", shop: "逢甲印度咖哩烤餅屋", area: "文華路商圈", open: 11.5, close: 21.5, dishes: ["奶油雞肉咖哩", "蒜味烤餅 Naan", "坦都里烤雞", "香料羊肉咖哩", "印度拉茶"] },
+  { vip: false, w: 1, cat: "異國美饌", shop: "市政路高空牛排館", area: "市政路商圈", open: 11.5, close: 22, dishes: ["乾式熟成肋眼牛排", "波士頓龍蝦", "法式洋蔥湯", "松露薯泥", "熔岩巧克力"] },
+  { vip: false, w: 1, cat: "異國美饌", shop: "漢口路韓式嫩豆腐煲", area: "漢口路二段", open: 11.5, close: 21.5, dishes: ["海陸綜合豆腐煲", "泡菜豬肉石鍋拌飯", "海鮮煎餅", "韓式炸雞", "柚子茶"] },
+  { vip: false, w: 1, cat: "異國美饌", shop: "黎明路平價義大利麵", area: "黎明路二段", open: 11, close: 21, dishes: ["奶油培根義大利麵", "青醬蛤蜊義大利麵", "番茄肉醬焗烤飯", "酥皮濃湯", "紅茶"] },
+  { vip: false, w: 1, cat: "異國美饌", shop: "文心路日式炸豬排定食", area: "文心路三段", open: 11, close: 21.5, dishes: ["厚切里肌豬排定食", "起司藍帶豬排", "唐揚炸雞定食", "茶碗蒸", "高麗菜絲"] },
+  { vip: false, w: 1, cat: "異國美饌", shop: "逢甲墨西哥塔可捲餅", area: "福星路商圈", open: 15, close: 23, dishes: ["手撕豬肉塔可餅", "起司牛肉捲餅", "莎莎醬玉米片", "酪梨醬", "可樂"] },
+  { vip: false, w: 1, cat: "異國美饌", shop: "秋紅谷景觀餐酒館", area: "朝富路商圈", open: 17, close: 25.5, dishes: ["黑松露野菇燉飯", "香煎干貝義大利麵", "精釀生啤酒", "炸物拼盤", "特調飲品"] },
+  { vip: false, w: 1, cat: "異國美饌", shop: "中科日式烏龍麵專門店", area: "西屯路三段", open: 11, close: 21, dishes: ["明太子拌烏龍麵", "牛肉湯烏龍麵", "炸蝦天婦羅", "炸地瓜", "豆皮壽司"] },
+  { vip: false, w: 1, cat: "咖啡午茶", shop: "春水堂 台中大遠百店", area: "台灣大道三段", open: 11, close: 21.5, dishes: ["世界第一杯珍珠奶茶", "招牌功夫麵", "頂級烏龍豆干米血", "蘿蔔糕", "愛玉檸檬"] },
+  { vip: false, w: 1, cat: "咖啡午茶", shop: "宮原眼科第四信用合作社", area: "市政路商圈", open: 10, close: 21, dishes: ["多球精選冰淇淋", "日出鳳梨酥", "巧克力聖代", "現烤鬆餅", "東方美人茶"] },
+  { vip: false, w: 1, cat: "咖啡午茶", shop: "星巴克 台中市政門市", area: "市政路商圈", open: 7, close: 22, dishes: ["經典美式咖啡", "焦糖瑪奇朵", "抹茶那堤", "牛肉可頌", "紐約起司蛋糕"] },
+  { vip: false, w: 1, cat: "咖啡午茶", shop: "逢甲木瓜牛奶大王", area: "文華路商圈", open: 12, close: 25, dishes: ["招牌木瓜牛奶", "西瓜牛奶", "酪梨布丁牛奶", "綠豆沙牛奶", "烤厚片吐司"] },
+  { vip: false, w: 1, cat: "咖啡午茶", shop: "七期法式千層蛋糕沙龍", area: "惠中路一段", open: 11.5, close: 20, dishes: ["法式綜合水果千層", "小山園抹茶千層", "焦香巴斯克乳酪", "海鹽拿鐵", "大吉嶺紅茶"] },
+  { vip: false, w: 1, cat: "咖啡午茶", shop: "逢甲黑糖波霸鮮奶", area: "福星路商圈", open: 11, close: 24, dishes: ["黑糖波霸鮮奶", "翡翠檸檬綠茶", "芝士奶蓋烏龍", "滿杯水果茶", "四季春"] },
+  { vip: false, w: 1, cat: "咖啡午茶", shop: "青海路質感早午餐拼盤", area: "青海路二段", open: 8, close: 16, dishes: ["唐揚雞可頌拼盤", "經典班尼迪克蛋", "鮮奶茶", "薯泥生菜沙拉", "楓糖法式吐司"] },
+  { vip: false, w: 1, cat: "咖啡午茶", shop: "西屯路古早味花生豆花", area: "西屯路二段", open: 12, close: 22.5, dishes: ["綜合粉圓花生豆花", "紅豆小湯圓", "嫩仙草凍", "黑糖剉冰", "綠豆蒜"] },
+  { vip: false, w: 1, cat: "咖啡午茶", shop: "中科文青手沖咖啡館", area: "國安一路", open: 9, close: 19, dishes: ["耶加雪菲手沖", "西西里檸檬咖啡", "昭和焦糖布丁", "檸檬磅蛋糕", "卡布奇諾"] },
+  { vip: false, w: 1, cat: "咖啡午茶", shop: "逢甲舒芙蕾厚鬆餅", area: "文華路商圈", open: 13, close: 22, dishes: ["焦糖布蕾舒芙蕾", "草莓生乳鬆餅", "伯爵鮮奶茶", "宇治抹茶歐蕾", "水果茶"] },
+  { vip: false, w: 1, cat: "咖啡午茶", shop: "秋紅谷旁精品烘焙坊", area: "朝富路商圈", open: 8.5, close: 20.5, dishes: ["海鹽奶油捲", "法式可頌", "肉桂捲", "美式黑咖啡", "燕麥奶拿鐵"] },
+  { vip: false, w: 1, cat: "咖啡午茶", shop: "黎明路傳統粉漿蛋餅", area: "黎明路二段", open: 5.5, close: 12, dishes: ["古早味粉漿蛋餅", "豬排總匯吐司", "黑胡椒鐵板麵", "大冰奶", "蘿蔔糕加蛋"] },
+  { vip: false, w: 1, cat: "咖啡午茶", shop: "漢口路古早味綠豆沙", area: "漢口路二段", open: 10.5, close: 21.5, dishes: ["招牌綠豆沙牛奶", "珍珠綠豆沙", "紅豆沙牛奶", "古早味紅茶冰", "仙草茶"] },
+  { vip: false, w: 1, cat: "咖啡午茶", shop: "逢甲爆漿車輪餅紅豆餅", area: "福星路商圈", open: 14, close: 22, dishes: ["爆漿奶油車輪餅", "萬丹紅豆餅", "起司薯泥餅", "珍珠奶茶餅", "芋頭餅"] },
+  { vip: false, w: 1, cat: "咖啡午茶", shop: "市政北二路網美下午茶", area: "市政北二路", open: 11, close: 19.5, dishes: ["英式三層下午茶", "草莓塔", "玫瑰拿鐵", "水果氣泡飲", "司康佐果醬"] },
+  { vip: false, w: 1, cat: "咖啡午茶", shop: "西屯路手作貝果專賣", area: "西屯路三段", open: 8, close: 17, dishes: ["藍莓乳酪貝果", "煙燻鮭魚起司貝果", "美式黑咖啡", "鮮奶茶", "肉桂捲"] },
+  { vip: false, w: 1, cat: "咖啡午茶", shop: "逢甲黃金地瓜球午茶", area: "文華路商圈", open: 15.5, close: 23.5, dishes: ["雙色QQ地瓜球", "梅粉地瓜球", "甘梅薯條", "古早味冬瓜茶", "檸檬愛玉"] },
+  { vip: false, w: 1, cat: "咖啡午茶", shop: "中科園區鮮果茶飲店", area: "西屯路三段", open: 10, close: 22, dishes: ["滿杯百香水果茶", "港式楊枝甘露", "白甘蔗青茶", "四季春珍波椰", "柳橙綠"] },
+  { vip: false, w: 1, cat: "咖啡午茶", shop: "文心路日式鯛魚燒", area: "文心路三段", open: 13, close: 20.5, dishes: ["萬丹紅豆鯛魚燒", "香濃卡士達鯛魚燒", "抹茶白玉鯛魚燒", "起司玉米燒", "麥茶"] },
+  { vip: false, w: 1, cat: "咖啡午茶", shop: "上石路老宅甜點工作室", area: "上石路商圈", open: 12, close: 19, dishes: ["法式檸檬塔", "達克瓦茲禮盒", "可麗露", "手沖單品咖啡", "鍋煮奶茶"] }
+];
+let snd = true, ac = null;
+function togSnd() { snd = !snd; document.getElementById("sndBtn").innerText = snd ? "🔊 音效開" : "🔇 靜音"; }
+function getAC() {
+  if (!snd) return null;
+  if (!ac) { const A = window.AudioContext || window.webkitAudioContext; if (A) ac = new A(); }
+  if (ac && ac.state === "suspended") ac.resume();
+  return ac;
+}
+function playBeep(f, type, dur, delay, vol) {
+  const ctx = getAC(); if (!ctx) return;
+  try {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, ctx.currentTime + delay);
+    g.gain.setValueAtTime(vol || 0.14, ctx.currentTime + delay);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + dur);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(ctx.currentTime + delay); o.stop(ctx.currentTime + delay + dur);
+  } catch (e) {}
+}
+function playJackpotSound() {
+  const notes = [523.25, 659.25, 783.99, 1046.5, 783.99, 1046.5], times = [0, 0.09, 0.18, 0.27, 0.42, 0.54];
+  for (let i = 0; i < notes.length; i++) playBeep(notes[i], "square", 0.22, times[i], 0.13);
+  for (let k = 0; k < 10; k++) playBeep(1800 + (k % 3) * 450, "sine", 0.08, 0.65 + k * 0.06, 0.11);
+}
+function playWahLose() {
+  const ctx = getAC(); if (!ctx) return;
+  try {
+    const tones = [349.23, 329.63, 311.13, 293.66];
+    for (let i = 0; i < tones.length; i++) {
+      const o = ctx.createOscillator(), g = ctx.createGain(); o.type = "sawtooth";
+      const t0 = ctx.currentTime + i * 0.24; o.frequency.setValueAtTime(tones[i], t0);
+      if (i === 3) o.frequency.linearRampToValueAtTime(220, t0 + 0.55);
+      g.gain.setValueAtTime(0.12, t0); g.gain.exponentialRampToValueAtTime(0.001, t0 + (i === 3 ? 0.6 : 0.22));
+      o.connect(g); g.connect(ctx.destination); o.start(t0); o.stop(t0 + (i === 3 ? 0.6 : 0.22));
+    }
+  } catch (e) {}
+}
+function isOpenNow(s) {
+  const now = new Date(), cur = now.getHours() + now.getMinutes() / 60;
+  return s.close > 24 ? (cur >= s.open || cur < (s.close - 24)) : (cur >= s.open && cur < s.close);
+}
+function updateClock() {
+  const n = new Date();
+  const hh = n.getHours() < 10 ? "0" + n.getHours() : "" + n.getHours();
+  const mm = n.getMinutes() < 10 ? "0" + n.getMinutes() : "" + n.getMinutes();
+  document.getElementById("liveClock").innerText = "🕒 " + hh + ":" + mm;
+}
+setInterval(updateClock, 10000); updateClock();
+function getList() {
+  const c = document.getElementById("catSelect").value, only = document.getElementById("openCheck").checked, res = [];
+  for (let i = 0; i < shopsXitun.length; i++) if ((c === "all" || shopsXitun[i].cat === c) && (!only || isOpenNow(shopsXitun[i]))) res.push(shopsXitun[i]);
+  return res;
+}
+function updateCount() {
+  const list = getList();
+  document.getElementById("countText").innerText = "符合：" + list.length + " 家店・" + (list.length * 5) + " 道菜";
+}
+updateCount();
+function pickWeighted(list) {
+  const pool = [];
+  for (let i = 0; i < list.length; i++) { const w = list[i].w || 1; for (let k = 0; k < w; k++) pool.push(list[i]); }
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+function rollStrip(el, arr, finText, ms, stopFreq, cb) {
+  let h = "";
+  for (let i = 0; i < arr.length; i++) h += '<div class="reel-item">' + arr[i] + '</div>';
+  h += '<div class="reel-item">' + finText + '</div>';
+  el.innerHTML = h; el.style.transition = "none"; el.style.transform = "translateY(0px)";
+  let cnt = 0, max = Math.floor(ms / 110);
+  const iv = setInterval(function() { playBeep(440 + (cnt % 4) * 110, "triangle", 0.05, 0, 0.09); if (++cnt >= max) clearInterval(iv); }, 110);
+  setTimeout(function() { el.style.transition = "transform " + ms + "ms cubic-bezier(0.14, 0.86, 0.24, 1.02)"; el.style.transform = "translateY(" + (-(arr.length * 106)) + "px)"; }, 30);
+  setTimeout(function() { clearInterval(iv); playBeep(stopFreq, "sine", 0.16, 0, 0.16); if (cb) cb(); }, ms + 40);
+}
+function fireConfetti() {
+  const c = document.getElementById("confettiCanvas"), ctx = c.getContext("2d"); c.width = window.innerWidth; c.height = window.innerHeight;
+  const cols = ["#ffd700", "#ff4757", "#2ed573", "#1e90ff", "#ffa502"], pts = [];
+  for (let i = 0; i < 75; i++) pts.push({ x: c.width/2, y: c.height/2, vx: (Math.random()-0.5)*14, vy: (Math.random()-0.7)*14, s: 6, col: cols[i%5], a: 1 });
+  function loop() {
+    ctx.clearRect(0, 0, c.width, c.height); let ok = false;
+    for (let i = 0; i < pts.length; i++) { const p = pts[i]; if (p.a > 0) { ok = true; p.x += p.vx; p.y += p.vy; p.vy += 0.35; p.a -= 0.02; ctx.globalAlpha = Math.max(0, p.a); ctx.fillStyle = p.col; ctx.fillRect(p.x, p.y, p.s, p.s); } }
+    if (ok) requestAnimationFrame(loop); else ctx.clearRect(0, 0, c.width, c.height);
+  }
+  loop();
+}
+function shareResult(shop, area, dish) {
+  const txt = "🎰 我剛在【SpinLife 轉生活・西屯美食拉霸機】抽中了：【" + area + "】" + shop + "（必點：" + dish + "）！一起來吃吧👉 " + location.href;
+  if (navigator.clipboard) navigator.clipboard.writeText(txt).then(function() { alert("✅ 已複製戰果文字！快貼到 LINE 群組揪朋友一起吃吧！"); }); else alert(txt);
+}
+function spinXitun() {
+  const list = getList();
+  if (list.length === 0) { alert("目前該分類都在休息中喔！請取消勾選「僅抽營業中」試試！"); return; }
+  const item = pickWeighted(list), hitDish = item.dishes[Math.floor(Math.random() * 5)], open = isOpenNow(item);
+  const btn = document.getElementById("spinBtn"), box = document.getElementById("resBox"), m = document.getElementById("machineBox");
+  btn.disabled = true; btn.innerText = "轉輪高速滾動中..."; box.style.display = "none"; m.classList.remove("win-glow");
+  const a1 = [], a2 = [], a3 = [];
+  for (let i = 0; i < 12; i++) { const r = shopsXitun[Math.floor(Math.random() * shopsXitun.length)]; a1.push("🍽️<br>" + r.dishes); }
+  for (let i = 0; i < 18; i++) { const r = shopsXitun[Math.floor(Math.random() * shopsXitun.length)]; a2.push("🏪<br>" + r.shop); }
+  for (let i = 0; i < 24; i++) a3.push(i % 2 === 0 ? "🟢<br>營業中" : "🔴<br>休息中");
+  rollStrip(document.getElementById("st1"), a1, "🍽️<br>" + hitDish, 1300, 392, null);
+  rollStrip(document.getElementById("st2"), a2, "🏪<br>" + item.shop, 1950, 494, null);
+  rollStrip(document.getElementById("st3"), a3, open ? "🟢<br>營業中！" : "🔴<br>休息中", 2600, 587, function() {
+    btn.disabled = false; btn.innerText = open ? "手氣超旺，再轉一次！" : "殘念休息中，再轉一次！";
+    box.className = open ? "result-card" : "result-card closed";
+    let tags = "";
+    for (let j = 0; j < 5; j++) { const d = item.dishes[j]; tags += (d === hitDish) ? '<span class="dtag hit">★ ' + d + '</span>' : '<span class="dtag">' + d + '</span>'; }
+    document.getElementById("resTags").innerHTML = tags;
+    if (open) {
+      playJackpotSound();
+      m.classList.add("win-glow"); fireConfetti();
+      document.getElementById("resText").innerText = (item.vip ? "👑 創始VIP推薦！【" : "🎉 中獎！【") + item.area + "】" + item.shop;
+      document.getElementById("resAction").innerHTML = '<a class="btn-map" href="https://google.com' + encodeURIComponent("台中市西屯區 " + item.shop) + '" target="_blank">📍 Google 地圖導航</a><button class="btn-share" onclick="shareResult(\'' + item.shop + '\',\'' + item.area + '\',\'' + hitDish + '\')">📲 複製戰果揪友</button>';
+    } else {
+      playWahLose();
+      document.getElementById("resText").innerText = "🔴 殘念休息中！【" + item.area + "】" + item.shop;
+      document.getElementById("resAction").innerHTML = '<div style="margin-top:6px;color:#ff7675;font-size:12px;">沒開門不算，再轉一次吧！</div>';
+    }
+    document.getElementById("resHours").innerText = "收錄 5 道招牌菜色（★為本次抽中）：";
+    box.style.display = "block";
+  });
+}
+</script>
+</body>
+</html>
