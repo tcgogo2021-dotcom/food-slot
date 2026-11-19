@@ -44,8 +44,18 @@
       <div class="hall-desc">精選在地百大名店與銅板小吃，即時對時營業狀態，3 秒轉出今天吃什麼！</div>
     </div>
     <div class="city-box">
-      <div class="city-lbl">📍 選擇營運示範站點：</div>
-      <a class="btn-go" href="SpinLife 轉生活/01_食_每日美味館/台中市/北屯區/北屯百大美食拉霸機.html">🎰 進入【台中市・北屯區】美食拉霸機</a>
+         <div class="city-box">
+      <div class="city-lbl">📍 選擇城市與營運行政區：</div>
+      <select id="citySel" onchange="updDist()" style="width:100%;padding:8px;border-radius:8px;border:none;font-weight:bold;margin-bottom:6px;background:#fff;color:#1a1a2e;font-size:13px;">
+        <option value="台中市">🏙️ 台中市（第一示範城市）</option>
+      </select>
+      <select id="distSel" style="width:100%;padding:8px;border-radius:8px;border:none;font-weight:bold;margin-bottom:8px;background:#fff;color:#1a1a2e;font-size:13px;">
+        <option value="SpinLife 轉生活/01_食_每日美味館/台中市/北屯區/北屯百大美食拉霸機.html">📍 北屯區（已上線・100家）</option>
+        <option value="SpinLife 轉生活/01_食_每日美味館/台中市/西屯區/西屯百大美食拉霸機.html">📍 西屯區（已上線・100家）</option>
+        <option value="SpinLife 轉生活/01_食_每日美味館/台中市/南屯區/南屯百大美食拉霸機.html">📍 南屯區（建置中・100家）</option>
+      </select>
+      <button class="btn-go" style="border:none;cursor:pointer;" onclick="location.href=encodeURI(document.getElementById('distSel').value)">🎰 立即啟動該區美食拉霸機</button>
+    </div>
      <a class="btn-go" style="margin-top:8px;" href="javascript:void(0)" onclick="location.href=encodeURI('SpinLife 轉生活/01_食_每日美味館/台中市/西屯區/西屯百大美食拉霸機.html')">🎰 進入【台中市・西屯區】美食拉霸機</a>
 
     </div>
