@@ -3,53 +3,53 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SpinLife 轉生活｜全生活創意行銷廣告遊戲平台</title>
+<title>SpinLife 轉生活創意行銷廣告公司｜全國生活娛樂導流入口大廳</title>
 <style>
   * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Microsoft JhengHei", sans-serif; }
-  body { margin: 0; padding: 18px 12px 32px; background: linear-gradient(135deg, #0f1021 0%, #1b243b 100%); color: #fff; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-  .hero { text-align: center; max-width: 760px; margin-bottom: 22px; padding: 20px 14px; background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,215,0,0.45); border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
-  .corp-tag { display: inline-block; background: linear-gradient(90deg, #ff6b6b, #e94560); color: #fff; font-size: 11px; font-weight: bold; padding: 4px 12px; border-radius: 20px; margin-bottom: 8px; }
-  .hero h1 { margin: 0; font-size: 26px; color: #ffd700; letter-spacing: 1px; }
-  .hero .sub { margin: 6px 0 0; font-size: 13px; color: #d0d8f0; line-height: 1.5; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 14px; width: 100%; max-width: 760px; }
-  .hall-card { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; }
-  .hall-card.active { border: 2px solid #ffd700; background: rgba(255,215,0,0.08); box-shadow: 0 6px 20px rgba(255,215,0,0.15); }
+  body { margin: 0; padding: 18px 12px 36px; background: linear-gradient(135deg, #0f1021 0%, #1b2440 100%); color: #fff; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+  .hero { text-align: center; max-width: 860px; margin-bottom: 20px; }
+  .brand-pill { display: inline-block; background: rgba(255, 215, 0, 0.15); border: 1px solid #ffd700; color: #ffd700; font-size: 12px; font-weight: bold; padding: 4px 14px; border-radius: 20px; margin-bottom: 8px; }
+  .hero h1 { margin: 0; font-size: 26px; color: #ffd700; text-shadow: 0 3px 14px rgba(255, 215, 0, 0.45); letter-spacing: 1px; }
+  .hero p { margin: 8px 0 0; font-size: 13px; color: #c8d0e8; line-height: 1.5; }
+  .grid-6 { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 14px; width: 100%; max-width: 960px; }
+  .hall-card { background: rgba(255, 255, 255, 0.07); border: 1.5px solid rgba(255, 255, 255, 0.16); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s; }
+  .hall-card.live { border-color: #ffd700; background: linear-gradient(145deg, rgba(233, 69, 96, 0.22), rgba(255, 215, 0, 0.12)); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4); }
   .hall-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .hall-title { font-size: 18px; font-weight: 900; color: #fff; }
-  .hall-card.active .hall-title { color: #ffd700; }
-  .spec-badge { font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 8px; background: rgba(15,52,96,0.9); color: #74b9ff; border: 1px solid rgba(116,185,255,0.4); }
-  .status-live { background: #00b894; color: #fff; font-size: 11px; font-weight: bold; padding: 2px 8px; border-radius: 12px; display: inline-block; margin-bottom: 8px; }
-  .status-soon { background: rgba(255,255,255,0.15); color: #bbb; font-size: 11px; padding: 2px 8px; border-radius: 12px; display: inline-block; margin-bottom: 8px; }
-  .hall-desc { font-size: 12px; color: #c8d0e8; line-height: 1.45; margin-bottom: 12px; }
-  .city-box { background: rgba(0,0,0,0.25); border-radius: 10px; padding: 10px; }
-  .city-lbl { font-size: 11px; color: #ffe066; font-weight: bold; margin-bottom: 6px; }
-  .btn-go { display: block; width: 100%; text-align: center; background: linear-gradient(to bottom, #ffe066, #ffd700); color: #1a1a2e; text-decoration: none; font-weight: 900; font-size: 14px; padding: 10px; border-radius: 25px; box-shadow: 0 3px 0 #b39700; }
-  .btn-soon { display: block; width: 100%; text-align: center; background: rgba(255,255,255,0.1); color: #999; border: 1px dashed rgba(255,255,255,0.25); font-size: 12px; padding: 8px; border-radius: 25px; cursor: pointer; }
-  .footer { margin-top: 26px; text-align: center; font-size: 11px; color: #8c96b5; line-height: 1.6; }
-  .footer span { color: #ffd700; text-decoration: underline; cursor: pointer; }
+  .hall-card.live .hall-title { color: #ffd700; }
+  .spec-badge { font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 10px; background: rgba(255, 255, 255, 0.15); color: #ffe066; }
+  .hall-desc { font-size: 12px; color: #b8c2dc; line-height: 1.5; margin-bottom: 12px; }
+  .city-box { background: rgba(0, 0, 0, 0.28); border-radius: 10px; padding: 10px; }
+  .city-lbl { font-size: 11px; color: #ffd700; font-weight: bold; margin-bottom: 6px; }
+  .btn-go { display: block; width: 100%; text-align: center; background: #ffd700; color: #1a1a2e; font-size: 14px; font-weight: 900; padding: 10px; border-radius: 25px; text-decoration: none; box-shadow: 0 3px 0 #b39700; }
+  .status-soon { display: inline-block; font-size: 11px; color: #9aa5c4; background: rgba(255,255,255,0.08); padding: 4px 10px; border-radius: 12px; }
+  .biz-bar { margin-top: 24px; width: 100%; max-width: 960px; background: rgba(255, 215, 0, 0.1); border: 1px solid rgba(255, 215, 0, 0.4); border-radius: 14px; padding: 14px; text-align: center; }
+  .biz-bar h3 { margin: 0 0 6px; font-size: 15px; color: #ffd700; }
+  .biz-bar p { margin: 0 0 10px; font-size: 12px; color: #d0d8ee; }
+  .biz-links { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+  .btn-deck { background: #00b894; color: #fff; text-decoration: none; font-size: 13px; font-weight: bold; padding: 8px 16px; border-radius: 20px; }
+  .btn-line { background: #06c755; color: #fff; text-decoration: none; font-size: 13px; font-weight: bold; padding: 8px 16px; border-radius: 20px; }
+  .footer { margin-top: 18px; font-size: 11px; color: #7f8ab0; text-align: center; }
 </style>
 </head>
 <body>
 <div class="hero">
-  <span class="corp-tag">轉生活創意行銷廣告公司・官方總部</span>
-  <h1>🎰 SpinLife 轉生活</h1>
-  <div class="sub">專為生活上的一切所需而做出創意行銷廣告的遊戲<br>轉動食、衣、住、行、育、樂，每天發現城市新驚喜！</div>
+  <span class="brand-pill">🎰 SpinLife 轉生活創意行銷廣告公司</span>
+  <h1>全國生活娛樂導流入口大廳</h1>
+  <p>解決現代人「不知道吃什麼、去哪玩、買什麼」的選擇困難症<br>打造「食・衣・住・行・育・樂」六大遊戲化生活決策矩陣</p>
 </div>
-
-<div class="grid">
-  <div class="hall-card active">
+<div class="grid-6">
+  <div class="hall-card live">
     <div>
-      <div class="hall-top"><span class="hall-title">🍜【食】每日美味館</span><span class="spec-badge">1×3 極速機</span></div>
-      <span class="status-live">🔥 正式營運中</span>
-      <div class="hall-desc">精選在地百大名店與銅板小吃，即時對時營業狀態，3 秒轉出今天吃什麼！</div>
+      <div class="hall-top"><span class="hall-title">🍜【食】每日美味館</span><span class="spec-badge">3 軸拉霸機</span></div>
+      <div class="hall-desc">解決三餐宵夜選擇困難！一鍵轉出「招牌菜色 × 在地好店 × 即時營業狀態」，點擊直達 Google 地圖導航。</div>
     </div>
     <div class="city-box">
-         <div class="city-box">
-      <div class="city-lbl">📍 選擇城市與營運行政區：</div>
-      <select id="citySel" onchange="updDist()" style="width:100%;padding:8px;border-radius:8px;border:none;font-weight:bold;margin-bottom:6px;background:#fff;color:#1a1a2e;font-size:13px;">
-        <option value="台中市">🏙️ 台中市（第一示範城市）</option>
+      <div class="city-lbl">📍 選擇城市與營運行政區（全 8 區上線）：</div>
+      <select id="citySel" style="width:100%;padding:8px;border-radius:8px;border:none;font-weight:bold;margin-bottom:6px;background:#fff;color:#1a1a2e;font-size:13px;">
+        <option value="台中市">🏙️ 台中市（第一示範城市・800家）</option>
       </select>
-            <select id="distSel" style="width:100%;padding:8px;border-radius:8px;border:none;font-weight:bold;margin-bottom:8px;background:#fff;color:#1a1a2e;font-size:13px;">
+      <select id="distSel" style="width:100%;padding:8px;border-radius:8px;border:none;font-weight:bold;margin-bottom:8px;background:#fff;color:#1a1a2e;font-size:13px;">
         <option value="SpinLife 轉生活/01_食_每日美味館/台中市/北屯區/北屯百大美食拉霸機.html">📍 北屯區（已上線・100家）</option>
         <option value="SpinLife 轉生活/01_食_每日美味館/台中市/西屯區/西屯百大美食拉霸機.html">📍 西屯區（已上線・100家）</option>
         <option value="SpinLife 轉生活/01_食_每日美味館/台中市/南屯區/南屯百大美食拉霸機.html">📍 南屯區（已上線・100家）</option>
@@ -60,59 +60,52 @@
         <option value="SpinLife 轉生活/01_食_每日美味館/台中市/南區/南區百大美食拉霸機.html">📍 南區（已上線・100家）</option>
       </select>
       <button class="btn-go" style="border:none;cursor:pointer;" onclick="location.href=encodeURI(document.getElementById('distSel').value)">🎰 立即啟動該區美食拉霸機</button>
-   </div>
+    </div>
   </div>
-
   <div class="hall-card">
     <div>
       <div class="hall-top"><span class="hall-title">👗【衣】風格穿搭館</span><span class="spec-badge">3×3 九宮格連線</span></div>
-      <span class="status-soon">✨ 招商籌備中</span>
-      <div class="hall-desc">上衣 × 褲裙 × 鞋包九宮格連線配對，連成一線立即解鎖品牌整套穿搭優惠券！</div>
+      <div class="hall-desc">集合在地服飾店、美髮沙龍、美甲美睫與眼鏡行。轉出 3 連線即解鎖店家專屬折扣券與造型靈感。</div>
     </div>
-    <button class="btn-soon" onclick="alert('【02_衣_風格穿搭館】即將啟動！歡迎服飾、美髮、美甲店家洽談創始合作！')">預約創始商家席位</button>
+    <div><span class="status-soon">✨ 招商籌備中</span></div>
   </div>
-
   <div class="hall-card">
     <div>
-      <div class="hall-top"><span class="hall-title">🏨【住】居家旅宿館</span><span class="spec-badge">5×5 旗艦矩陣</span></div>
-      <span class="status-soon">✨ 招商籌備中</span>
-      <div class="hall-desc">特色旅宿、居家美學與生活家電大禮包，五軸豪華連線轉出質感好生活！</div>
+      <div class="hall-top"><span class="hall-title">🏠【住】居家生活館</span><span class="spec-badge">幸運大轉盤</span></div>
+      <div class="hall-desc">嚴選居家清潔、水電冷氣維修、寵物美容與特色民宿，一鍵轉出附近即時服務與專屬預約優惠。</div>
     </div>
-    <button class="btn-soon" onclick="alert('【03_住_居家旅宿館】即將啟動！歡迎民宿、居家生活品牌洽談合作！')">預約創始商家席位</button>
+    <div><span class="status-soon">✨ 招商籌備中</span></div>
   </div>
-
   <div class="hall-card">
     <div>
-      <div class="hall-top"><span class="hall-title">🚗【行】城市漫遊館</span><span class="spec-badge">3×5 經典豪華機</span></div>
-      <span class="status-soon">✨ 招商籌備中</span>
-      <div class="hall-desc">週末景點、汽車美容洗車與交通路線配對，一鍵轉出說走就走的輕旅行！</div>
+      <div class="hall-top"><span class="hall-title">🚗【行】愛車順行館</span><span class="spec-badge">翻牌刮刮樂</span></div>
+      <div class="hall-desc">涵蓋洗車美容、輪胎保養、機車行與加油站，日常順路刮出免費打蠟、機油折扣與咖啡兌換券。</div>
     </div>
-    <button class="btn-soon" onclick="alert('【04_行_城市漫遊館】即將啟動！歡迎汽車美容、旅遊服務品牌洽談合作！')">預約創始商家席位</button>
+    <div><span class="status-soon">✨ 招商籌備中</span></div>
   </div>
-
   <div class="hall-card">
     <div>
-      <div class="hall-top"><span class="hall-title">📚【育】靈感充電館</span><span class="spec-badge">3×3 九宮格連線</span></div>
-      <span class="status-soon">✨ 招商籌備中</span>
-      <div class="hall-desc">親子才藝、健身運動、技能講座與獨立書店，讓學習像玩遊戲一樣充滿期待！</div>
+      <div class="hall-top"><span class="hall-title">📚【育】成長探索館</span><span class="spec-badge">3 軸拉霸機</span></div>
+      <div class="hall-desc">網羅才藝教室、運動健身房、語言中心與親子共學空間，轉出週末體驗課程與免費試聽禮遇。</div>
     </div>
-    <button class="btn-soon" onclick="alert('【05_育_靈感充電館】即將啟動！歡迎才藝教室、健身房、書局洽談合作！')">預約創始商家席位</button>
+    <div><span class="status-soon">✨ 招商籌備中</span></div>
   </div>
-
   <div class="hall-card">
     <div>
-      <div class="hall-top"><span class="hall-title">🎡【樂】休閒玩樂館</span><span class="spec-badge">3×5 經典豪華機</span></div>
-      <span class="status-soon">✨ 招商籌備中</span>
-      <div class="hall-desc">咖啡廳、按摩舒壓、電影院與密室逃脫，飯後休閒娛樂一轉即刻出發！</div>
+      <div class="hall-top"><span class="hall-title">🎡【樂】休閒玩樂館</span><span class="spec-badge">3×3 九宮格連線</span></div>
+      <div class="hall-desc">網羅密室逃脫、KTV、桌遊店、溫泉與親子樂園，週末揪團不知去哪玩？一鍵連線決定今日行程！</div>
     </div>
-    <button class="btn-soon" onclick="alert('【06_樂_休閒玩樂館】即將啟動！歡迎咖啡館、按摩養生館、娛樂場館洽談合作！')">預約創始商家席位</button>
+    <div><span class="status-soon">✨ 招商籌備中</span></div>
   </div>
 </div>
-
-<div class="footer">
-  © 轉生活創意行銷廣告公司（SpinLife）｜專為生活上的一切所需而做出創意行銷廣告的遊戲<br>
-<div style="margin-bottom:10px;"><a href="javascript:void(0)" onclick="location.href=encodeURI('SpinLife 轉生活/99_公司總部與招商資料/轉生活創業與招商簡報.html')" style="display:inline-block; background:#00b894; color:#fff; text-decoration:none; padding:8px 18px; border-radius:20px; font-weight:bold; font-size:13px;">📊 開啟《SpinLife 轉生活》創業與招商簡報</a></div>
- <a href="https://lin.ee/9jDwxqQ" target="_blank" style="color:#ffd700; font-weight:bold; text-decoration:underline;">💬 商家廣告刊登與異業合作洽詢（點擊加 LINE 聯繫）</a>
+<div class="biz-bar">
+  <h3>🤝 商家合作與創始席位招募（每區每類限量 20 席・廣告看板限量 10 席）</h3>
+  <p>誠摯邀請各地優質品牌進駐！歡迎在地商家洽談曝光合作，或業務夥伴了解高分潤創業方案。</p>
+  <div class="biz-links">
+    <a class="btn-deck" href="javascript:void(0)" onclick="location.href=encodeURI('SpinLife 轉生活/99_公司總部與招商資料/轉生活創業與招商簡報.html')">📊 開啟隨身招商簡報（10頁）</a>
+    <a class="btn-line" href="https://line.me" target="_blank">💬 加創辦人 LINE 洽談合作</a>
+  </div>
 </div>
+<div class="footer">© SpinLife 轉生活創意行銷廣告公司｜全國在地生活決策娛樂平台</div>
 </body>
 </html>
