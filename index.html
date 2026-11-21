@@ -111,5 +111,26 @@
   </div>
 </div>
 <div class="footer">© SpinLife 轉生活創意行銷廣告公司｜全國在地生活決策娛樂平台</div>
+ <script>
+(function(){
+  const baseTotal = 18650;
+  fetch('https://counterapi.dev')
+    .then(r => r.json())
+    .then(d => { document.getElementById('totalNum').innerText = (baseTotal + (d.count || 1)).toLocaleString(); })
+    .catch(() => { document.getElementById('totalNum').innerText = (baseTotal + Math.floor(Math.random()*50)).toLocaleString(); });
+
+  function updateOnline() {
+    const h = new Date().getHours();
+    let base = 65;
+    if (h >= 11 && h <= 13) base = 240;
+    else if (h >= 17 && h <= 20) base = 285;
+    else if (h >= 21 || h <= 1) base = 160;
+    const live = base + Math.floor(Math.random() * 28) - 10;
+    document.getElementById('onlineNum').innerText = live;
+  }
+  updateOnline();
+  setInterval(updateOnline, 6000);
+})();
+</script>
 </body>
 </html>
